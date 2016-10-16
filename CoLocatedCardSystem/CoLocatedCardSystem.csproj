@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{8D7A7616-0A91-4194-A1B7-7462CA5FFD4D}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CoLocatedCardSystem</RootNamespace>
+    <AssemblyName>CoLocatedCardSystem</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>CoLocatedCardSystem_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\data\phonelog.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\data\titanic.csv" />
+    <Content Include="Assets\data\vast2006.preload">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\data\vast2006_one.preload">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Assets\data\Voter Registry.csv" />
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CollaborationWindow\CollaborationWindowMainPage.xaml.cs">
+      <DependentUpon>CollaborationWindowMainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CollaborationWindow\DocumentModule\Document.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\DocumentController.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\DocumentList.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\ENTITY_TYPE.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\NLP\IrregularMarker.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\NLP\PorterStemmer.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\ProcessedDocument.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\NLP\PunctuationMarker.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\RawDocument.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\NLP\Stemmer.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\NLP\StopwordMarker.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\Token.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\WordType.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\Attaching\AttachingGesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\Attaching\AttachingListener.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCard.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayerBase.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayer1.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayer2.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayer3.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardList.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\CardPositionStatus.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\CardStatus.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\LiveCardList.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\ContentTouchView.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\ScatterPlot.xaml.cs">
+      <DependentUpon>ScatterPlot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\Glow.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowController.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowGroup.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowInfo.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowList.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayerController.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
+    <Compile Include="CollaborationWindow\Layers\PlotLayer\PlotLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\PlotLayer\PlotLayerController.cs" />
+    <Compile Include="CollaborationWindow\TableModule\AttributeHelper.cs" />
+    <Compile Include="CollaborationWindow\TableModule\DataAttribute.cs" />
+    <Compile Include="CollaborationWindow\TableModule\ATTRIBUTETYPE.cs" />
+    <Compile Include="CollaborationWindow\TableModule\DataCell.cs" />
+    <Compile Include="CollaborationWindow\TableModule\DataRow.cs" />
+    <Compile Include="CollaborationWindow\TableModule\DataTable.cs" />
+    <Compile Include="CollaborationWindow\TableModule\TableController.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\DeletingBox\DeletingBoxGesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\DeletingBox\DeletingBoxListener.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\Gesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureController.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureEventArgs.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureList.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureListener.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureListenerController.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureListenerList.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\Sorting\SortingGesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\GestureStatus.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\Sorting\SortingListener.cs" />
+    <Compile Include="CollaborationWindow\CentralControllers.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\Card.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\CardController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\CardInfo.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\CardLayoutGenerator.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardLayers\ItemCardLayer1.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardLayers\ItemCardLayer2.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardLayers\ItemCardLayerBase.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardList.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCard.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardList.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCard.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer1.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer2.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer3.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer4.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayerBase.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\PlotCard.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\PlotCardController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\PlotCardList.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBox.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBoxController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBoxInfo.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBoxList.cs" />
+    <Compile Include="CollaborationWindow\Layers\BaseLayer\BaseLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\BaseLayer\BaseLayerController.cs" />
+    <Compile Include="CollaborationWindow\Layers\CardLayer\CardLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\CardLayer\CardLayerController.cs" />
+    <Compile Include="CollaborationWindow\Layers\LinkingLayer\LinkingLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\LinkingLayer\LinkingLayerController.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\DeleteButton.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuBar.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuBarInfo.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuLayerController.cs" />
+    <Compile Include="CollaborationWindow\Layers\SortingBoxLayer\SortingBoxLayer.cs" />
+    <Compile Include="CollaborationWindow\Layers\SortingBoxLayer\SortingBoxLayerController.cs" />
+    <Compile Include="CollaborationWindow\CollaborationWindowLifeEventControl.cs" />
+    <Compile Include="CollaborationWindow\Tool\Coordination.cs" />
+    <Compile Include="CollaborationWindow\Tool\FilePath.cs" />
+    <Compile Include="CollaborationWindow\Tool\Screen.cs" />
+    <Compile Include="CollaborationWindow\Tool\UIHelper.cs" />
+    <Compile Include="CollaborationWindow\TouchModule\Touch.cs" />
+    <Compile Include="CollaborationWindow\TouchModule\TouchController.cs" />
+    <Compile Include="CollaborationWindow\TouchModule\TouchList.cs" />
+    <Compile Include="CollaborationWindow\TouchModule\TOUCH_STATUS.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml.cs">
+      <DependentUpon>CollaborationWindowSecondaryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecondaryWindow\Tool\SecondaryScreen.cs" />
+    <Compile Include="SecondaryWindow\SecondaryWindowLifeEventControl.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserInfo.cs" />
+    <Compile Include="WindowConfiguration.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="CoLocatedCardSystem_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\data\stop_words.txt" />
+    <Content Include="Assets\data\vast2006.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\data\vast2006_short.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\menu_bg.png" />
+    <Content Include="GenericParsing.dll" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="CollaborationWindow\CollaborationWindowMainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CollaborationWindow\InteractionModule\Card\PlotCard\ScatterPlot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ControlWindow\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VirtualKeyboard\VirtualKeyboard.csproj">
+      <Project>{AE0C085E-2AF7-4428-90C8-7E8994E377B1}</Project>
+      <Name>VirtualKeyboard</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

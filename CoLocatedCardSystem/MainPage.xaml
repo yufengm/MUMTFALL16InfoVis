@@ -1,0 +1,27 @@
+﻿<Page
+    x:Class="CoLocatedCardSystem.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CoLocatedCardSystem"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,-664,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="0.8*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Table File: " FontSize="25" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"/>
+        <TextBox x:Name="CSVFileDirTextBlock" Text="Assets\data\phonelog.csv" Height="80" Width="700" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Text File: " FontSize="25" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
+        <TextBox x:Name="JSONFileDirTextBlock" Text="Assets\data\vast2006_one.preload" Height="80" Width="700" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
+        <Button x:Name="startButton" Content="Start" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top" Height="88" Width="1014" Click="startButton_Click" Grid.ColumnSpan="2" Grid.Row="2"/>
+    </Grid>
+</Page>

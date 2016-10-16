@@ -1,0 +1,28 @@
+﻿<UserControl
+    x:Class="CoLocatedCardSystem.CollaborationWindow.InteractionModule.ScatterPlot"
+    xmlns:Charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CoLocatedCardSystem.CollaborationWindow.InteractionModule.Card.PlotCard"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Border BorderBrush="Black"
+        BorderThickness="1"
+        CornerRadius="0">
+        <Charting:Chart  
+        x:Name="ScatterChart"  
+        HorizontalAlignment="Left"  
+        VerticalAlignment="Top">
+            <Charting:Chart.LegendStyle>
+                <Style TargetType="FrameworkElement">
+                    <Setter Property="Width" Value="0" />
+                </Style>
+            </Charting:Chart.LegendStyle>
+            <Charting:ScatterSeries Margin="0"  
+                IndependentValuePath="X"  
+                DependentValuePath="Y"  
+                IsSelectionEnabled="True"/>
+        </Charting:Chart>
+    </Border>
+</UserControl>
