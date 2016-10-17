@@ -38,9 +38,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                         }
                     }
                 }
-            if (attrCardList.Count > 1) {
-                gestureListenerController.Controllers.CardController.PlotCardController.AddCard(attrCardList.ToArray());
-            }
+            //if (attrCardList.Count > 1) {
+            //    gestureListenerController.Controllers.CardController.PlotCardController.AddCard(attrCardList.ToArray());
+            //}
         }
     }
 }

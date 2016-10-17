@@ -28,6 +28,11 @@ namespace CoLocatedCardSystem.SecondaryWindow
         public CollaborationWindowSecondaryPage()
         {
             this.InitializeComponent();
+            this.Loaded += CollaborationWindowSecondaryPage_Loaded;
+        }
+
+        private void CollaborationWindowSecondaryPage_Loaded(object sender, RoutedEventArgs e)
+        {
             Init();
         }
 
@@ -43,6 +48,10 @@ namespace CoLocatedCardSystem.SecondaryWindow
             //Container.Height = this.Height;
             ApplicationView.PreferredLaunchViewSize = new Size(this.Width, this.Height);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+            this.WordCloud.Width = this.Width;
+            this.WordCloud.Height = this.Height;
+            string src = "ms-appx-web:///Assets/d3/wordcloud.html";
+            this.WordCloud.Navigate(new Uri(src));
         }
     }
 }
