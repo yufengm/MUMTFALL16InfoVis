@@ -10,7 +10,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {
     class GlowInfo
     {
-        private Size glowSize = new Size(180 * Screen.SCALE_FACTOR, 140 * Screen.SCALE_FACTOR);
+        private Size glowSize = new Size(130 * Screen.SCALE_FACTOR, 97.5 * Screen.SCALE_FACTOR);
         private Point glowPosition = new Point(0, 0);
         private double glowScale = 1;
         private double glowRotation = 0;

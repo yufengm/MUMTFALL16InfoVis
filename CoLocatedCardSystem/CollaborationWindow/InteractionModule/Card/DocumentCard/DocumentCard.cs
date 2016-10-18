@@ -124,11 +124,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 ShowLayer(2);
             }
-            else if (scale > 1 && scale <= 2 && currentLayer != 1)
+            else if (scale > 1.3 && scale <= 2 && currentLayer != 1)
             {
                 ShowLayer(1);
             }
-            else if (scale <= 1 && currentLayer != 0)
+            else if (scale <= 1.3 && currentLayer != 0)
             {
                 ShowLayer(0);
             }

@@ -18,7 +18,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
     {
         ScrollViewer scrollViewer;
         StackPanel stackPanel;
-        Size blockSize = new Size(200 * Screen.SCALE_FACTOR, 160 * Screen.SCALE_FACTOR);
+        Size blockSize = new Size(160 * Screen.SCALE_FACTOR, 130 * Screen.SCALE_FACTOR);
         DocumentCard[] currentSearchResult = null;
         Button hideButton;
         int currentStart = 0;
@@ -206,7 +206,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         }
         protected override void PointerUp(object sender, PointerRoutedEventArgs e)
         {
-            MoveTo(new Point(100 * Screen.SCALE_FACTOR, 80 * Screen.SCALE_FACTOR));
+            MoveTo(new Point(80 * Screen.SCALE_FACTOR, 65 * Screen.SCALE_FACTOR));
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
             cardController.PointerUp(localPoint, globalPoint);

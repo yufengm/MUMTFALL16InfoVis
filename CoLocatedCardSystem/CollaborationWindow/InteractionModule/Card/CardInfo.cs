@@ -10,7 +10,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class CardInfo
     {
-        protected Size cardSize = new Size(160 * Screen.SCALE_FACTOR, 120 * Screen.SCALE_FACTOR);
+        protected Size cardSize = new Size(120 * Screen.SCALE_FACTOR, 90 * Screen.SCALE_FACTOR);
         protected Color cardColor = Colors.Red;
         protected Point cardPosition = new Point(0, 0);
         protected double cardScale = 1;
