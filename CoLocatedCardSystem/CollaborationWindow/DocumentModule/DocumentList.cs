@@ -48,13 +48,5 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         internal Document[] GetDocument() {
             return list.Values.ToArray();
         }
-        /// <summary>
-        /// Get the serialized json of all the documents
-        /// </summary>
-        /// <returns></returns>
-        internal String[] GetJsonDocument() {
-            String[] slist = list.Values.Select(d => d.ToJson()).ToArray();
-            return slist;
-        }
     }
 }

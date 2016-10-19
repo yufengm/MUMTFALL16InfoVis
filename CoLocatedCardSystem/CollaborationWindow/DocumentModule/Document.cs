@@ -13,13 +13,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
     {
         string docID;
         RawDocument rawDocument;
-        ProcessedDocument processedDocument;
+        ProcessedDocument[] processedDocument;
         private class JDocument
         {
-            public string Title = "";
-            public string Time = "";
             public string DocID = "";
-            public string[] serializedProcessedDocument;
+            public string Name = "";
+            public string[] Time;
+            public string[] Rating;
+            public string[] Jpg;
+            public string[][] SerializedProcessedDocument;
         }
         public string DocID
         {
@@ -34,25 +36,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
-        internal ProcessedDocument ProcessedDocument
+        internal ProcessedDocument[] ProcessedDocument
         {
             get
             {
                 return processedDocument;
             }
+
+            set
+            {
+                processedDocument = value;
+            }
         }
-        /// <summary>
-        /// Convert the processed document to json array.
-        /// </summary>
-        /// <returns></returns>
-        internal string ToJson()
-        {
-            JDocument jdoc = new JDocument();
-            jdoc.DocID = docID;
-            //jdoc.serializedRawDocument = serializedRawDocument;
-            //jdoc.serializedProcessedDocument = serializedProcessedDocument;
-            return JsonConvert.SerializeObject(jdoc);
-        }
+
         /// <summary>
         /// Get json object from string
         /// </summary>
@@ -63,62 +59,34 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             this.docID = tempDoc.DocID;
             rawDocument = new RawDocument();
             rawDocument.Id = tempDoc.DocID;
-            rawDocument.Title = tempDoc.Title;
-            rawDocument.DocTime = tempDoc.Time;
-            rawDocument.Content = tempDoc.serializedProcessedDocument;
-            processedDocument = new ProcessedDocument();
-            Token[] tList = new Token[tempDoc.serializedProcessedDocument.Length];
-            for (int i = 0; i < tempDoc.serializedProcessedDocument.Length; i++)
+            rawDocument.Name = tempDoc.Name;
+            rawDocument.ReviewTime = tempDoc.Time;
+            rawDocument.SerializedProcessedDocument = tempDoc.SerializedProcessedDocument;
+            processedDocument = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
+            for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)
             {
-                Token t = JsonConvert.DeserializeObject<Token>(tempDoc.serializedProcessedDocument[i]);
-                t.AssignTypeFromJson();
-                switch (t.WordType) {
-                    case WordType.DATE:
-                        rawDocument.Date.Add(t);
-                        break;
-                    case WordType.LOCACTION:
-                        rawDocument.Location.Add(t);
-                        break;
-                    case WordType.MONEY:
-                        rawDocument.Money.Add(t);
-                        break;
-                    case WordType.ORGANIZATION:
-                        rawDocument.Organization.Add(t);
-                        break;
-                    case WordType.PERSON:
-                        rawDocument.Person.Add(t);
-                        break;
+                Token[] tList = new Token[tempDoc.SerializedProcessedDocument[i].Length];
+                for (int j = 0; j < tempDoc.SerializedProcessedDocument[i].Length; j++)
+                {
+                    Token t = JsonConvert.DeserializeObject<Token>(tempDoc.SerializedProcessedDocument[i][j]);
+                    t.AssignTypeFromJson();
+                    tList[j] = t;
                 }
-                tList[i] = t;
+                processedDocument[i] = new ProcessedDocument();
+                processedDocument[i].List = tList;
+                Debug.WriteLine(processedDocument.Count());
             }
-            this.processedDocument.List = tList;
+
         }
+
         /// <summary>
         /// Get the title of the article
         /// </summary>
         /// <returns></returns>
-        internal string GetTitle()
+        internal string GetName()
         {
-            return rawDocument.Title;
+            return rawDocument.Name;
         }
-        /// <summary>
-        /// Get the time when the article is published
-        /// </summary>
-        /// <returns></returns>
-        internal string GetRawTime()
-        {
-            return rawDocument.DocTime;
-        }
-        /// <summary>
-        /// Check if the article mention a person
-        /// </summary>
-        /// <param name="people"></param>
-        /// <returns></returns>
-        internal bool HasPeople(string people)
-        {
-            return false;
-        }
-
 
         /// <summary>
         /// Check if the document content a word
@@ -129,25 +97,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         {
             bool isContainContent = rawDocument.IsContainContent(content);       
             return isContainContent;
-        }
-
-        /// <summary>
-        /// Check if the article mentions a location
-        /// </summary>
-        /// <param name="location"></param>
-        /// <returns></returns>
-        internal bool HasLocation(string location)
-        {
-            return false;
-        }
-        /// <summary>
-        /// Check if the article mentions an organization
-        /// </summary>
-        /// <param name="organization"></param>
-        /// <returns></returns>
-        internal bool HasOrganization(string organization)
-        {
-            return false;
         }
     }
 }

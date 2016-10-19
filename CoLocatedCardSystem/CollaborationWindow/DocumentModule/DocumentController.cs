@@ -25,9 +25,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// <param name="jsonFilePath"></param>
         public async Task Init(String jsonFilePath)
         {
-            StorageFolder assetsFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;           
+            StorageFolder assetsFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
             StorageFile file = await assetsFolder.GetFileAsync(jsonFilePath);
-            Debug.WriteLine(jsonFilePath);
             using (var inputStream = await file.OpenReadAsync())
             using (var classicStream = inputStream.AsStreamForRead())
             using (var streamReader = new StreamReader(classicStream))

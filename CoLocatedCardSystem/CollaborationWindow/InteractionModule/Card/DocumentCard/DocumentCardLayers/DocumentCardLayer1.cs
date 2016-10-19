@@ -30,13 +30,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             await base.SetArticle(doc);
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,() =>
             {
-                titleTextBlock.Text = doc.GetTitle();
-                if (doc.GetTitle().Length > 25)
+                titleTextBlock.Text = doc.GetName();
+                if (doc.GetName().Length > 25)
                 {
                     titleTextBlock.FontSize = 11;
 
                 }
-                if (doc.GetTitle().Length > 50)
+                if (doc.GetName().Length > 50)
                 {
                     titleTextBlock.FontSize = 9;
                 }

@@ -10,15 +10,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
     class RawDocument
     {
         string id;
-        string title;
-        string docTime;
-        string[] content;
-        List<Token> date = new List<Token>();
-        List<Token> location = new List<Token>();
-        List<Token> money = new List<Token>();
-        List<Token> organization = new List<Token>();
-        List<Token> person = new List<Token>();
-        List<Token> time = new List<Token>();
+        string name = "";
+        string[] reviewTime;
+        string[] rating;
+        string[] jpg;
+        string[][] serializedProcessedDocument;
 
         public string ToJson() {
             return JsonConvert.SerializeObject(this);
@@ -34,167 +30,78 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             {
                 id = value;
             }
-        }
+        }           
 
-        public string Title
+        public string Name
         {
             get
             {
-                return title;
+                return name;
             }
 
             set
             {
-                title = value;
+                name = value;
             }
         }
 
-
-        public string[] Content
+        public string[] ReviewTime
         {
             get
             {
-                return content;
+                return reviewTime;
             }
 
             set
             {
-                content = value;
+                reviewTime = value;
             }
         }
-        
 
-        public string DocTime
+        public string[] Rating
         {
             get
             {
-                return docTime;
+                return rating;
             }
 
             set
             {
-                docTime = value;
+                rating = value;
             }
         }
 
-        internal List<Token> Date
+        public string[] Jpg
         {
             get
             {
-                return date;
+                return jpg;
             }
 
             set
             {
-                date = value;
+                jpg = value;
             }
         }
 
-        internal List<Token> Location
+        public string[][] SerializedProcessedDocument
         {
             get
             {
-                return location;
+                return serializedProcessedDocument;
             }
 
             set
             {
-                location = value;
-            }
-        }
-
-        internal List<Token> Money
-        {
-            get
-            {
-                return money;
-            }
-
-            set
-            {
-                money = value;
-            }
-        }
-
-        internal List<Token> Organization
-        {
-            get
-            {
-                return organization;
-            }
-
-            set
-            {
-                organization = value;
-            }
-        }
-
-        internal List<Token> Person
-        {
-            get
-            {
-                return person;
-            }
-
-            set
-            {
-                person = value;
-            }
-        }
-
-        internal List<Token> Time
-        {
-            get
-            {
-                return time;
-            }
-
-            set
-            {
-                time = value;
+                serializedProcessedDocument = value;
             }
         }
 
         internal bool IsContainContent(string content)
         {
             ProcessedDocument tempPD = new ProcessedDocument();
-            tempPD.InitTokens(content);
-            foreach (Token tki in tempPD.List) {
-                foreach (Token tkj in person) {
-                    if (tkj.StemmedWord.Contains(tki.StemmedWord)) {
-                        return true;
-                    }
-                }
-                foreach (Token tkj in date)
-                {
-                    if (tkj.StemmedWord.Contains(tki.StemmedWord))
-                    {
-                        return true;
-                    }
-                }
-                foreach (Token tkj in money)
-                {
-                    if (tkj.StemmedWord.Contains(tki.StemmedWord))
-                    {
-                        return true;
-                    }
-                }
-                foreach (Token tkj in location)
-                {
-                    if (tkj.StemmedWord.Contains(tki.StemmedWord))
-                    {
-                        return true;
-                    }
-                }
-                foreach (Token tkj in time)
-                {
-                    if (tkj.StemmedWord.Contains(tki.StemmedWord))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            tempPD.InitTokens(content);          
+            return true;
         }
     }
 }

@@ -86,7 +86,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 double textSize = 4;
                 StackPanel horiPanel = new StackPanel();
                 horiPanel.Orientation = Orientation.Horizontal;
-                foreach (Token token in doc.ProcessedDocument.List)
+                foreach (Token token in doc.ProcessedDocument[0].List)
                 {
                     if (mode == LoadMode.KeyWord)
                     {

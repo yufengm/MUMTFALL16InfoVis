@@ -25,6 +25,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
+
         /// <summary>
         /// Initialize the token list with the content. Processed with token makers.
         /// </summary>

@@ -21,7 +21,7 @@
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Table File: " FontSize="25" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0"/>
         <TextBox x:Name="CSVFileDirTextBlock" Text="Assets\data\phonelog.csv" Height="80" Width="700" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1"/>
         <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Text File: " FontSize="25" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0"/>
-        <TextBox x:Name="JSONFileDirTextBlock" Text="Assets\data\vast2006_one.preload" Height="80" Width="700" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
+        <TextBox x:Name="JSONFileDirTextBlock" Text="Assets\data\review.preload" Height="80" Width="700" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"/>
         <Button x:Name="startButton" Content="Start" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top" Height="88" Width="1014" Click="startButton_Click" Grid.ColumnSpan="2" Grid.Row="2"/>
     </Grid>
 </Page>
