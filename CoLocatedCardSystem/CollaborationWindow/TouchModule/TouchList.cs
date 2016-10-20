@@ -65,20 +65,29 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             DateTime dateTime = DateTime.Now;
             lock (list)
             {
-                foreach (KeyValuePair<uint, Touch> pair in list)
+                try
                 {
-                    if (pair.Value.GetStatus() == TOUCH_STATUS.RELEASED
-                        && (dateTime - pair.Value.EndTime).TotalMilliseconds >= 1000)
+                    foreach (KeyValuePair<uint, Touch> pair in list)
                     {
-                        tobeRemoved.Add(pair.Key);
+                        if (pair.Value.GetStatus() == TOUCH_STATUS.RELEASED
+                            && (dateTime - pair.Value.EndTime).TotalMilliseconds >= 1000)
+                        {
+                            tobeRemoved.Add(pair.Key);
+                        }
                     }
                 }
+                catch (Exception ex) {
+                    Debug.WriteLine("error");
+                }
             }
-            foreach (uint key in tobeRemoved)
+            lock (tobeRemoved)
             {
-                if (list.Keys.Contains(key))
+                foreach (uint key in tobeRemoved)
                 {
-                    list.Remove(key);
+                    if (list.Keys.Contains(key))
+                    {
+                        list.Remove(key);
+                    }
                 }
             }
         }

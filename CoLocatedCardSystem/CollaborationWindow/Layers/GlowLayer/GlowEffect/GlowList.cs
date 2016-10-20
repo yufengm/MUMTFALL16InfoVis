@@ -89,7 +89,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             GlowGroup result = null;
             foreach (GlowGroup group in glowGroups)
             {
-                if (group.HasCard(cardID))
+                if (group!=null&&group.HasCard(cardID))
                 {
                     result = group;
                 }
