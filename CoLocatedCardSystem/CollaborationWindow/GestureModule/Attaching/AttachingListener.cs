@@ -26,18 +26,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
             {
                 attrCardList.Add((e.Senders[0] as AttributeCard));
             }
-            GlowGroup[] groups = e.Senders[1] as GlowGroup[];
-            if (groups != null)
-                foreach (GlowGroup gg in groups)
-                {
-                    foreach (string cardID in gg.GetCardID())
-                    {
-                        AttributeCard card = gestureListenerController.Controllers.CardController.AttributeCardController.GetCard(cardID);
-                        if (card!=null) {
-                            attrCardList.Add(card);
-                        }
-                    }
-                }
+            //GlowGroup[] groups = e.Senders[1] as GlowGroup[];
+            //if (groups != null)
+            //    foreach (GlowGroup gg in groups)
+            //    {
+            //        foreach (string cardID in gg.GetCardID())
+            //        {
+            //            AttributeCard card = gestureListenerController.Controllers.CardController.AttributeCardController.GetCard(cardID);
+            //            if (card!=null) {
+            //                attrCardList.Add(card);
+            //            }
+            //        }
+            //    }
             //if (attrCardList.Count > 1) {
             //    gestureListenerController.Controllers.CardController.PlotCardController.AddCard(attrCardList.ToArray());
             //}

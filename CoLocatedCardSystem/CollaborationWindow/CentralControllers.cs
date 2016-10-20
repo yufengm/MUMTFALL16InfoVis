@@ -189,11 +189,11 @@ namespace CoLocatedCardSystem.CollaborationWindow
             cardController.Init();
             cardController.InitDocCard(documentController.GetDocument());
             //await cardController.InitItemCard(tableController.GetItem());
-            await cardController.InitAttributeCard(tableController.GetAttribute());
-            Card[] cards = cardController.AttributeCardController.GetCard();
-            foreach (Card c in cards) {
-                cardController.MoveCardToTable(c,typeof(AttributeCard));
-            }
+            //await cardController.InitAttributeCard(tableController.GetAttribute());
+            //Card[] cards = cardController.AttributeCardController.GetCard();
+            //foreach (Card c in cards) {
+            //    cardController.MoveCardToTable(c,typeof(AttributeCard));
+            //}
             //cardLayerController.LoadCards(cards);
             //Load the sorting box and add them to the sorting box layer
             sortingBoxController.Init();

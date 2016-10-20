@@ -74,7 +74,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 }
                 processedDocument[i] = new ProcessedDocument();
                 processedDocument[i].List = tList;
-                Debug.WriteLine(processedDocument.Count());
             }
 
         }
