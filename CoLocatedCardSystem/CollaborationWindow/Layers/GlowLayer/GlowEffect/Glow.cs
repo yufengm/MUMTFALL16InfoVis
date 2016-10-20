@@ -17,7 +17,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
     class Glow : Canvas
     {
         Rectangle rectangle;
-        double scale = 1.3;
+        double scale = 1;
         Point position = new Point(0, 0);
         double rotation = 0;
         GlowController glowController;
@@ -115,7 +115,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         {
             this.position = position;
             this.rotation = rotation;
-            this.scale = scale + 0.5;
+            this.scale = scale;
             UpdateTransform();
         }
 
@@ -127,8 +127,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 ScaleTransform st = new ScaleTransform();
-                st.ScaleX = scale;
-                st.ScaleY = scale;
+                st.ScaleX = scale*1.2;
+                st.ScaleY = scale*1.3;
                 RotateTransform rt = new RotateTransform();
                 rt.Angle = rotation;
                 TranslateTransform tt = new TranslateTransform();
