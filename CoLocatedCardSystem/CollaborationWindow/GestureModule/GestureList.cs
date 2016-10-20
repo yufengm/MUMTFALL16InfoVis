@@ -26,9 +26,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         /// <param name="gesture"></param>
         internal void RemoveGesture(Gesture gesture)
         {
-            if (list.Contains(gesture))
+            lock (list)
             {
-                list.Remove(gesture);
+                if (list.Contains(gesture))
+                {
+                    list.Remove(gesture);
+                }
             }
         }
         /// <summary>

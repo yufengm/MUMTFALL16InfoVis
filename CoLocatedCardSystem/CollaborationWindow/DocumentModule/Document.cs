@@ -17,13 +17,52 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         private class JDocument
         {
             public string DocID = "";
-            public string Name = "";
-            public string[] Time;
-            public string[] Rating;
-            public string[] Jpg;
-            public string[][] SerializedProcessedDocument;
+            public string name = "";
+            public string[] time;
+            public string[] rating;
+            public string[] jpg;
+            public string[][] serializedProcessedDocument;
+
+            internal string Name
+            {
+                get
+                {
+                    return name;
+                }
+
+                set
+                {
+                    name = value;
+                }
+            }
+
+            internal string[] Time
+            {
+                get
+                {
+                    return time;
+                }
+
+                set
+                {
+                    time = value;
+                }
+            }
+
+            internal string[][] SerializedProcessedDocument
+            {
+                get
+                {
+                    return serializedProcessedDocument;
+                }
+
+                set
+                {
+                    serializedProcessedDocument = value;
+                }
+            }
         }
-        public string DocID
+        internal string DocID
         {
             get
             {
@@ -49,6 +88,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
+        internal RawDocument RawDocument
+        {
+            get
+            {
+                return rawDocument;
+            }
+
+            set
+            {
+                rawDocument = value;
+            }
+        }
+
         /// <summary>
         /// Get json object from string
         /// </summary>
@@ -61,6 +113,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             rawDocument.Id = tempDoc.DocID;
             rawDocument.Name = tempDoc.Name;
             rawDocument.ReviewTime = tempDoc.Time;
+            rawDocument.Jpg = tempDoc.jpg;
             rawDocument.SerializedProcessedDocument = tempDoc.SerializedProcessedDocument;
             processedDocument = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
             for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)

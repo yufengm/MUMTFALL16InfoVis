@@ -5,9 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
@@ -33,6 +36,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.Width = width;
             this.controller = controller;
             this.card = card;
+            //this.ManipulationMode = Windows.UI.Xaml.Input.ManipulationModes.None;
             await InitUI(doc,mode);
         }
         /// <summary>
@@ -83,64 +87,109 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 double currentHight = 0;
                 double currentWidth = 0;
                 this.BorderThickness = new Thickness(0);
-                double textSize = 4;
+                double textSize = 3;
                 StackPanel horiPanel = new StackPanel();
                 horiPanel.Orientation = Orientation.Horizontal;
-                foreach (Token token in doc.ProcessedDocument[0].List)
-                {
-                    if (mode == LoadMode.KeyWord)
+                int rIndex = 0;
+                
+                foreach (ProcessedDocument pd in doc.ProcessedDocument) {
+                    if (mode == LoadMode.ALL)
                     {
-                        if (token.WordType == WordType.STOPWORD ||
-                        token.WordType == WordType.REGULAR ||
-                        token.WordType == WordType.PUNCTUATION ||
-                        token.WordType == WordType.IRREGULAR ||
-                        token.WordType == WordType.DEFAULT)
+                        horiPanel = new StackPanel();
+                        horiPanel.Width = this.Width;
+                        horiPanel.Height = 20;
+                        horiPanel.Orientation = Orientation.Horizontal;
+                        string[] jpgs = doc.RawDocument.Jpg[rIndex].Split(',');
+                        foreach (string jpgfile in jpgs) {
+                            BitmapImage bitmapImage = new BitmapImage(new Uri(@"ms-appx:///Assets/review/" + jpgfile));
+                            if (bitmapImage != null) {
+                                Image img = new Image();
+                                img.Source = bitmapImage;
+                                Size addjustedSize = new Size();
+                                if (bitmapImage.PixelWidth > bitmapImage.PixelHeight)
+                                {//horizontal picture
+                                    addjustedSize.Width = horiPanel.Width / 3;
+                                    addjustedSize.Height = bitmapImage.PixelHeight * horiPanel.Width / 3 / bitmapImage.PixelWidth;
+                                }
+                                else {//vertical picture
+                                    addjustedSize.Width = bitmapImage.PixelWidth * horiPanel.Height/bitmapImage.PixelHeight;
+                                    addjustedSize.Height = horiPanel.Height;
+                                }
+                                UIHelper.InitializeUI(new Point(0, 0),
+                                    0,
+                                    1,
+                                    addjustedSize,
+                                    img);
+                                horiPanel.Children.Add(img);
+                            }
+                        }
+                        rIndex++;
+                        currentWidth = horiPanel.Width;
+                        currentHight += horiPanel.Height;
+                        this.Children.Add(horiPanel);
+                    }
+                    horiPanel = new StackPanel();
+                    horiPanel.Width = this.Width;
+                    horiPanel.Height = 0;
+                    horiPanel.Orientation = Orientation.Horizontal;
+                    currentWidth = horiPanel.Width;
+                    currentHight += 20;
+                    this.Children.Add(horiPanel);
+                    foreach (Token token in pd.List)
+                    {
+                        if (mode == LoadMode.KeyWord)
                         {
+                            if (token.WordType == WordType.STOPWORD ||
+                            token.WordType == WordType.REGULAR ||
+                            token.WordType == WordType.PUNCTUATION ||
+                            token.WordType == WordType.IRREGULAR ||
+                            token.WordType == WordType.DEFAULT)
+                            {
+                                continue;
+                            }
+                        }
+                        else if (mode == LoadMode.Highlight)
+                        {
+                            if (!card.HighlightedTokens.Contains(token))
+                            {
+                                continue;
+                            }
+                        }
+                        Size boxSize = UIHelper.GetBoundingSize(token.OriginalWord, textSize);
+                        if (token.WordType == WordType.LINEBREAK)
+                        {
+                            horiPanel = new StackPanel();
+                            horiPanel.Width = this.Width;
+                            horiPanel.Height = boxSize.Height;
+                            horiPanel.Orientation = Orientation.Horizontal;
+                            currentWidth = boxSize.Width;
+                            currentHight += boxSize.Height;
+                            this.Children.Add(horiPanel);
                             continue;
                         }
-                    }
-                    else if (mode == LoadMode.Highlight) {
-                        if (!card.HighlightedTokens.Contains(token))
+                        if (horiPanel.Height < boxSize.Height)
                         {
-                            continue;
+                            horiPanel.Height = boxSize.Height;
                         }
-                    }
-                    Size boxSize = UIHelper.GetBoundingSize(token.OriginalWord, textSize);
-                    if (token.WordType == WordType.LINEBREAK) {
-                        horiPanel = new StackPanel();
-                        horiPanel.Width = this.Width;
-                        horiPanel.Height = boxSize.Height;
-                        horiPanel.Orientation = Orientation.Horizontal;
-                        currentWidth = boxSize.Width;
-                        currentHight += boxSize.Height;
-                        this.Children.Add(horiPanel);
-                        continue;
-                    }
-                    if (currentHight == 0) {
-                        currentHight = boxSize.Height;
-                        horiPanel = new StackPanel();
-                        horiPanel.Width = this.Width;
-                        horiPanel.Height = boxSize.Height;
-                        horiPanel.Orientation = Orientation.Horizontal;
-                        this.Children.Add(horiPanel);
-                    }
-                    currentWidth += boxSize.Width;
-                    if (currentWidth > this.Width) {
-                        horiPanel = new StackPanel();
-                        horiPanel.Width = this.Width;
-                        horiPanel.Height = boxSize.Height;
-                        horiPanel.Orientation = Orientation.Horizontal;
-                        currentWidth = boxSize.Width;
-                        currentHight += boxSize.Height;
-                        this.Children.Add(horiPanel);
-                    }
-                    Tile tile = new Tile();
-                    tile.Init(controller,card, token, textSize, boxSize);
-                    list.Add(tile);
-                    horiPanel.Children.Add(tile);
-                    if (card.HighlightedTokens.Contains(token))
-                    {
-                        tile.HighLight();
+                        currentWidth += boxSize.Width;
+                        if (currentWidth > this.Width)
+                        {
+                            horiPanel = new StackPanel();
+                            horiPanel.Width = this.Width;
+                            horiPanel.Height = boxSize.Height;
+                            horiPanel.Orientation = Orientation.Horizontal;
+                            currentWidth = boxSize.Width;
+                            currentHight += boxSize.Height;
+                            this.Children.Add(horiPanel);
+                        }
+                        Tile tile = new Tile();
+                        tile.Init(controller, card, token, textSize, boxSize);
+                        list.Add(tile);
+                        horiPanel.Children.Add(tile);
+                        if (card.HighlightedTokens.Contains(token))
+                        {
+                            tile.HighLight();
+                        }
                     }
                 }
                 this.Height = currentHight;

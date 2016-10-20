@@ -37,12 +37,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.textSize = textSize;
             this.boxSize = boxSize;
             this.docCard = docCard;
-            if (token.WordType == WordType.IRREGULAR ||
-                token.WordType == WordType.LINEBREAK ||
-                token.WordType == WordType.PUNCTUATION ||
-                token.WordType == WordType.REGULAR ||
-                token.WordType == WordType.STOPWORD ||
-                token.WordType == WordType.DEFAULT)
+            if (token.WordType !=WordType.REGULAR)
             {
                 this.isKeyWord = false;
             }
