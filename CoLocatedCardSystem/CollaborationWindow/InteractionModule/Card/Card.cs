@@ -238,7 +238,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                  UpdateSize();
                  if (backgroundRect != null)
                  {
-                     corners = new Point[] {
+                    corners = new Point[] {
                     new Point(-backgroundRect.Width/2, -backgroundRect.Height/2),
                     new Point(backgroundRect.Width/2, -backgroundRect.Height/2),
                     new Point(backgroundRect.Width/2, backgroundRect.Height/2),

@@ -11,6 +11,15 @@ namespace DocProcess
     {
         Dictionary<string, ProcessedDocument> fileList = new Dictionary<string, ProcessedDocument>();
         Dictionary<string, string> entityList = new Dictionary<string, string>();
+
+        internal Dictionary<string, ProcessedDocument> FileList
+        {
+            get
+            {
+                return fileList;
+            }
+        }
+
         internal void Load(String dir)
         {
             List<string[]> items = new List<string[]>();

@@ -15,7 +15,7 @@ namespace DocProcess
             DocumentList mdir = new DocumentList();
             mdir.Load(dir);
             string fileName = "review.preload";
-            // This text is added only once to the file.
+            string folder = "review";
 
             // Create a file to write to.
             using (StreamWriter sw = File.CreateText(fileName))
@@ -30,7 +30,27 @@ namespace DocProcess
                     sw.WriteLine(pd.ToJson());
                 }
             }
+
+            updatePics(mdir);
             Console.ReadLine();
+        }
+
+        private static void updatePics(DocumentList list)
+        {
+            foreach (ProcessedDocument pd in list.FileList.Values) {
+                foreach (string s in pd.Jpg)
+                {
+                    string[] files = s.Split(',');
+                    foreach (string name in files)
+                    {
+                        string sourceFile = @"reviewpics\"+name;
+                        string destinationFile = @"selected\"+name;
+
+                        // To move a file or folder to a new location:
+                        System.IO.File.Move(sourceFile, destinationFile);
+                    }
+                }
+            }
         }
     }
 }
