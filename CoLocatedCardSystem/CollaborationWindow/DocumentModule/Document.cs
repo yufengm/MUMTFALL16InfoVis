@@ -13,7 +13,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
     {
         string docID;
         RawDocument rawDocument;
-        ProcessedDocument[] processedDocument;
+        ProcessedDocument[] processedDocuments;
         private class JDocument
         {
             public string DocID = "";
@@ -79,12 +79,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         {
             get
             {
-                return processedDocument;
+                return processedDocuments;
             }
 
             set
             {
-                processedDocument = value;
+                processedDocuments = value;
             }
         }
 
@@ -115,7 +115,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             rawDocument.ReviewTime = tempDoc.Time;
             rawDocument.Jpg = tempDoc.jpg;
             rawDocument.SerializedProcessedDocument = tempDoc.SerializedProcessedDocument;
-            processedDocument = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
+            processedDocuments = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
             for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)
             {
                 Token[] tList = new Token[tempDoc.SerializedProcessedDocument[i].Length];
@@ -125,8 +125,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                     t.AssignTypeFromJson();
                     tList[j] = t;
                 }
-                processedDocument[i] = new ProcessedDocument();
-                processedDocument[i].List = tList;
+                processedDocuments[i] = new ProcessedDocument();
+                processedDocuments[i].List = tList;
             }
 
         }
@@ -147,8 +147,38 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// <returns></returns>
         internal bool HasWord(string content)
         {
-            bool isContainContent = rawDocument.IsContainContent(content);       
-            return isContainContent;
+            if (content.Trim().Length == 0) {
+                return false;
+            }
+            ProcessedDocument tempPD = new ProcessedDocument();
+            tempPD.InitTokens(content);
+            foreach (ProcessedDocument pd in processedDocuments) {
+                foreach (Token tk in tempPD.List) {
+                    if (pd.IsContainToken(tk)!=null) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        internal IEnumerable<Token> GetToken(string content){
+            List<Token> result = new List<Token>();
+            if (content.Trim().Length == 0)
+            {
+                return result;
+            }
+            ProcessedDocument tempPD = new ProcessedDocument();
+            tempPD.InitTokens(content);
+            foreach (ProcessedDocument pd in processedDocuments)
+            {
+                foreach (Token tk in tempPD.List)
+                {
+                    Token sameToken = pd.IsContainToken(tk);
+                    result.Add(sameToken);
+                }
+            }
+            return result;
         }
     }
 }

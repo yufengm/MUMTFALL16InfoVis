@@ -67,53 +67,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             tb.VerticalAlignment = VerticalAlignment.Bottom;
             tb.Width = boxSize.Width;
             tb.Height = boxSize.Height;
-
-            TextBlock note = new TextBlock();
-            note.FontSize = 1.5;
-            note.Padding = new Thickness(0);
             
-            switch (token.WordType)
-            {
-                case WordType.DATE:
-                    tb.Foreground = new SolidColorBrush(Colors.Blue);
-                    note.Text = "DAT";
-                    break;
-                case WordType.PERSON:
-                    tb.Foreground = new SolidColorBrush(Colors.Red);
-                    note.Text = "PER";
-                    break;
-                case WordType.MONEY:
-                    tb.Foreground = new SolidColorBrush(Colors.DarkSalmon);
-                    note.Text = "MON";
-                    break;
-                case WordType.ORGANIZATION:
-                    tb.Foreground = new SolidColorBrush(Colors.Green);
-                    note.Text = "ORG";
-                    break;
-                case WordType.LOCACTION:
-                    tb.Foreground = new SolidColorBrush(Colors.DarkGoldenrod);
-                    note.Text = "LOC";
-                    break;
-                case WordType.TIME:
-                    tb.Foreground = new SolidColorBrush(Colors.LightBlue);
-                    note.Text = "TIM";
-                    break;
-            }
             this.Width = boxSize.Width;
             this.Height = boxSize.Height;
             this.Children.Add(tb);            
             if (isKeyWord)
             {
                 this.Tapped += Tile_Tapped;
-                UIHelper.InitializeUI(new Point(0, -0.5), 0, 1, new Size(20,10), note);
-                note.Foreground = tb.Foreground;
-                this.Children.Add(note);
             }
         }
 
         private void Tile_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
             if (isHighlighted)
             {
                 docCard.RemoveHighLightWord(token);

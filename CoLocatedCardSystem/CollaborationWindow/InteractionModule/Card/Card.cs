@@ -95,6 +95,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
+
         /// <summary>
         /// Initialize the card infomation. Since there are too many cards, loading
         /// them all at once is slow. Only load the card UI when adding to the layers.

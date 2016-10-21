@@ -90,7 +90,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal override void DisableTouch()
         {
             base.DisableTouch();
-            contentView.IsHitTestVisible = true;
+            contentView.IsHitTestVisible = false;
 
         }
         internal override void EnableTouch()
@@ -102,7 +102,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Highlight tokens
         /// </summary>
         /// <param name="token"></param>
-        internal async void HightLight(Token token)
+        internal override async void HighlightToken(Token token)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -113,7 +113,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Dehighlight tokens
         /// </summary>
         /// <param name="token"></param>
-        internal async void DeHightLight(Token token)
+        internal override async void DehighlightToken(Token token)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {

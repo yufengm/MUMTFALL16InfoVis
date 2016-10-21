@@ -62,17 +62,5 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             this.Controllers.TouchController.TouchDown(localPoint, globalPoint, tile, type);
         }
-
-        internal void Highlight(string cardID, Token token)
-        {
-            DocumentCard card = list.GetCard(cardID);
-            card.AddHighLightWord(token);
-        }
-
-        internal void DeHighLight(string cardID, Token token)
-        {
-            DocumentCard card = list.GetCard(cardID);
-            card.RemoveHighLightWord(token);
-        }
     }
 }

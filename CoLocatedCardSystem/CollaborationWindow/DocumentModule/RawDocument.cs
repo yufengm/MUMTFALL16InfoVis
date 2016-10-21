@@ -96,12 +96,5 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 serializedProcessedDocument = value;
             }
         }
-
-        internal bool IsContainContent(string content)
-        {
-            ProcessedDocument tempPD = new ProcessedDocument();
-            tempPD.InitTokens(content);          
-            return true;
-        }
     }
 }

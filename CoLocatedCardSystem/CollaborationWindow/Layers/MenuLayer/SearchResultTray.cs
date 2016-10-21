@@ -138,6 +138,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 await ShowCard(currentStart, currentEnd);
             }
         }
+        /// <summary>
+        /// Shuo the card from start to end (exd.)
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         private async Task ShowCard(int start, int end)
         {
             if (start >= 0 && start < currentSearchResult.Length && end > 0 && end <= currentSearchResult.Length && end > start)
@@ -167,86 +173,5 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             }
         }
 
-    }
-    class ResultCard : DocumentCard
-    {
-        /// <summary>
-        /// A fake card added to the tray just to show the search result. The move of the card is restricted to the block.
-        /// </summary>
-        Canvas block = null;
-        MenuLayerController menuLayerController = null;
-        public Canvas Block
-        {
-            get
-            {
-                return block;
-            }
-
-            set
-            {
-                block = value;
-            }
-        }
-
-        internal MenuLayerController MenuLayerController
-        {
-            get
-            {
-                return menuLayerController;
-            }
-
-            set
-            {
-                menuLayerController = value;
-            }
-        }
-
-        internal ResultCard(CardController cardController) : base(cardController)
-        {
-        }
-        protected override void PointerUp(object sender, PointerRoutedEventArgs e)
-        {
-            MoveTo(new Point(80 * Screen.SCALE_FACTOR, 65 * Screen.SCALE_FACTOR));
-            PointerPoint localPoint = e.GetCurrentPoint(this);
-            PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            cardController.PointerUp(localPoint, globalPoint);
-        }
-        protected override void PointerDown(object sender, PointerRoutedEventArgs e)
-        {
-            PointerPoint localPoint = e.GetCurrentPoint(this);
-            PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            cardController.PointerDown(localPoint, globalPoint, this, typeof(ResultCard));
-        }
-        protected override void Card_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            double translate = 0;
-            if (owner == User.ALEX)
-            {
-                translate = -e.Delta.Translation.X;
-            }
-            else if (owner == User.BEN)
-            {
-                translate = e.Delta.Translation.Y;
-            }
-            else if (owner == User.CHRIS)
-            {
-                translate = e.Delta.Translation.X;
-            }
-            else if (owner == User.DANNY)
-            {
-                translate = -e.Delta.Translation.Y;
-            }
-            if (this.position.Y + translate >= 0
-                && this.position.Y + translate < 80 * Screen.SCALE_FACTOR)
-            {
-                this.position.Y += translate;
-                UpdateTransform();
-            }
-            else if (this.position.Y + translate < 0)
-            {
-                block.Children.Remove(this);
-                menuLayerController.AddPulledCard(this);
-            }
-        }
     }
 }

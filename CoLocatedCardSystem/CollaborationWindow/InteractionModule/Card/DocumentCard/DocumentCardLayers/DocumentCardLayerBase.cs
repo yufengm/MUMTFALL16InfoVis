@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    class DocumentCardLayerBase:Canvas
+    class DocumentCardLayerBase : Canvas
     {
         protected DocumentCard attachedCard = null;
         protected DocumentCardController cardController;
@@ -16,24 +16,34 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Load the document to the card
         /// </summary>
         /// <param name="doc"></param>
-        internal virtual async Task SetArticle(Document doc) {
+        internal virtual async Task SetArticle(Document doc)
+        {
 
         }
-        public DocumentCardLayerBase(DocumentCardController cardController, DocumentCard card) {
+        public DocumentCardLayerBase(DocumentCardController cardController, DocumentCard card)
+        {
             attachedCard = card;
             this.cardController = cardController;
         }
 
-        internal virtual async void Init() {
+        internal virtual async void Init()
+        {
 
         }
 
-        internal virtual async void DisableTouch() {
-
+        internal virtual async void DisableTouch()
+        {
         }
 
-        internal virtual async void EnableTouch() {
+        internal virtual async void EnableTouch()
+        {
+        }
 
+        internal virtual async void HighlightToken(Token token)
+        {
+        }
+        internal virtual async void DehighlightToken(Token token)
+        {
         }
     }
 }

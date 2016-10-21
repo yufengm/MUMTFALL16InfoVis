@@ -64,7 +64,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// <param name="content"></param>
         internal void SearchDocumentCard(User owner, string content)
         {
-            DocumentCard[] cards = controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, content);
+            DocumentCard[] cards = 
+                controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, content);
+            foreach (DocumentCard card in cards) {
+                card.InitialHighlight(content);
+            }
             list[owner].ShowCardsInSearchResultTray(cards);
         }
         /// <summary>

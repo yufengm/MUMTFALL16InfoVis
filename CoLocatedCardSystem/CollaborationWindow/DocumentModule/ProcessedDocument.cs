@@ -82,15 +82,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        private bool IsContainToken(Token newToken)
+        internal Token IsContainToken(Token newToken)
         {
             foreach (Token tk in List)
             {
                 if (tk.EqualContent(newToken)) {
-                    return true;
+                    return tk;
                 }
             }
-            return false;
+            return null;
         }
     }
 }

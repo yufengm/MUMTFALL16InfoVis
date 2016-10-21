@@ -70,15 +70,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         }
         internal bool EqualContent(Token token)
         {
-            if (token.StemmedWord.Contains(this.StemmedWord))
-            {
-                return true;
-            }
-            else
-            {
-                if (token.OriginalWord.ToLower().Equals(this.OriginalWord.ToLower()))
+            if (token.wordType == WordType.REGULAR) {
+                if (token.StemmedWord.Equals(this.StemmedWord))
                 {
                     return true;
+                }
+                else
+                {
+                    if (token.OriginalWord.ToLower().Equals(this.OriginalWord.ToLower()))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;

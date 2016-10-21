@@ -145,6 +145,7 @@
     <Compile Include="CollaborationWindow\InteractionModule\Card\LiveCardList.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\ContentTouchView.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\Card\ResultCard\ResultCard.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\Glow.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowController.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowGroup.cs" />

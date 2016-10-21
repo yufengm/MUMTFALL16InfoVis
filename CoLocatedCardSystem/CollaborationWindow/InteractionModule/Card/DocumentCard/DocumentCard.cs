@@ -82,17 +82,29 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             });
         }
         /// <summary>
+        /// Initialize the hightlight words
+        /// </summary>
+        /// <param name="content"></param>
+        internal void InitialHighlight(string content)
+        {
+            var tokens = document.GetToken(content);
+            foreach (Token tk in tokens) {
+                highlightedTokens.Add(tk);
+            }
+        }
+
+        /// <summary>
         /// Add a high light word
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="words"></param>
         internal void AddHighLightWord(Token token)
         {
             if (!highlightedTokens.Contains(token))
             {
                 highlightedTokens.Add(token);
-                (layers[1] as DocumentCardLayer2).HightLight(token);
-                (layers[2] as DocumentCardLayer3).HightLight(token);
-                (layers[3] as DocumentCardLayer4).HightLight(token);
+                foreach (var layer in layers) {
+                    layer.HighlightToken(token);
+                }
             }
         }
         /// <summary>
@@ -104,9 +116,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             if (highlightedTokens.Contains(token))
             {
                 highlightedTokens.Remove(token);
-                (layers[1] as DocumentCardLayer2).DeHightLight(token);
-                (layers[2] as DocumentCardLayer3).DeHightLight(token);
-                (layers[3] as DocumentCardLayer4).DeHightLight(token);
+                foreach (var layer in layers) {
+                    layer.DehighlightToken(token);
+                }
             }
         }
 
@@ -167,9 +179,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         protected override void Card_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {
             base.Card_ManipulationStarting(sender, e);
-            foreach (var layer in layers)
+            if (this.PointerCaptures!=null&&this.PointerCaptures.Count > 1)
             {
-                layer.DisableTouch();
+                foreach (var layer in layers)
+                {
+                    layer.DisableTouch();
+                }
             }
         }
         protected override void Card_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
