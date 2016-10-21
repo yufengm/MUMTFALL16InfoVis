@@ -35,14 +35,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             }
         }
         /// <summary>
-        /// Get a copy of all the touch points
-        /// </summary>
-        /// <returns></returns>
-        public List<Touch> GetAllTouches()
-        {
-            return list.GetAllTouches();
-        }
-        /// <summary>
         /// Add a new touch to the touch list. Two parameters control the pointertye. 
         /// Touch will always be captured. 
         /// Mouse and Pen can be configured.
@@ -67,16 +59,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
                         newTouch=list.AddTouchPoint(localPoint, globalPoint, sender, type);
                     break;
             }
+            DetectTouchDownGesture(newTouch);
             //For debug, output all touched items
             //if(newTouch!=null)
             //System.Diagnostics.Debug.WriteLine(type.Name+ "\t" + newTouch.StartPoint.ToString()+"\t"+ newTouch.StartTime.ToString());
         }
-        /// <summary>
-        /// Remove all the touch points end longer than n second
-        /// </summary>
-        internal void RemoveEndPoints()
+
+        private void DetectTouchDownGesture(Touch newTouch)
         {
-            list.RemoveEndTouchPoint();
+            Touch[] touchList = list.GetTouch();
+            Touch[] newTouchList = new Touch[] { newTouch };
+            controllers.GestureController.RemoveAttachingGesture.Detect(touchList, newTouchList);
         }
 
         /// <summary>
@@ -85,19 +78,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
         /// <param name="point"></param>
         public void TouchMove(PointerPoint localPoint, PointerPoint globalPoint)
         {
-            switch (localPoint.PointerDevice.PointerDeviceType)
+            lock (list.List)
             {
-                case Windows.Devices.Input.PointerDeviceType.Touch:
-                    list.UpdateTouchPoint(localPoint, globalPoint);
-                    break;
-                case Windows.Devices.Input.PointerDeviceType.Mouse:
-                    if (isMouseEnabled)
+                switch (localPoint.PointerDevice.PointerDeviceType)
+                {
+                    case Windows.Devices.Input.PointerDeviceType.Touch:
                         list.UpdateTouchPoint(localPoint, globalPoint);
-                    break;
-                case Windows.Devices.Input.PointerDeviceType.Pen:
-                    if (isPenEnabled)
-                        list.UpdateTouchPoint(localPoint, globalPoint);
-                    break;
+                        break;
+                    case Windows.Devices.Input.PointerDeviceType.Mouse:
+                        if (isMouseEnabled)
+                            list.UpdateTouchPoint(localPoint, globalPoint);
+                        break;
+                    case Windows.Devices.Input.PointerDeviceType.Pen:
+                        if (isPenEnabled)
+                            list.UpdateTouchPoint(localPoint, globalPoint);
+                        break;
+                }
             }
         }
         /// <summary>
@@ -106,20 +102,30 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
         /// <param name="point"></param>
         public void TouchUp(PointerPoint localPoint, PointerPoint globalPoint)
         {
+            Touch removedTouch=null;
             switch (localPoint.PointerDevice.PointerDeviceType)
             {
                 case Windows.Devices.Input.PointerDeviceType.Touch:
-                    list.RemoveTouchPoint(localPoint, globalPoint);
+                    removedTouch=list.RemoveTouchPoint(localPoint, globalPoint);
                     break;
                 case Windows.Devices.Input.PointerDeviceType.Mouse:
                     if (isMouseEnabled)
-                        list.RemoveTouchPoint(localPoint, globalPoint);
+                        removedTouch=list.RemoveTouchPoint(localPoint, globalPoint);
                     break;
                 case Windows.Devices.Input.PointerDeviceType.Pen:
                     if (isPenEnabled)
-                        list.RemoveTouchPoint(localPoint, globalPoint);
+                        removedTouch=list.RemoveTouchPoint(localPoint, globalPoint);
                     break;
             }
+            if(removedTouch!=null)
+                DetectTouchUpGesture(removedTouch);
+        }
+
+        private void DetectTouchUpGesture(Touch removedTouch)
+        {
+            Touch[] touchList = list.GetTouch();
+            Touch[] removedTouchList = new Touch[] { removedTouch };
+            controllers.GestureController.AttachingGesture.Detect(touchList, removedTouchList);
         }
     }
 }

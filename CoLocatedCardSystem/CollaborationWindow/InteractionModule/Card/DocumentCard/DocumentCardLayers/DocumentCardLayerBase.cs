@@ -27,5 +27,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal virtual async void Init() {
 
         }
+
+        internal virtual async void DisableTouch() {
+
+        }
+
+        internal virtual async void EnableTouch() {
+
+        }
     }
 }

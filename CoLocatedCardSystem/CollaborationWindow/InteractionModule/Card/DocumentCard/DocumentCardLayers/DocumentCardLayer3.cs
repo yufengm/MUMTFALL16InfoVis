@@ -59,6 +59,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 this.Children.Add(contentSV);
             });
         }
+        internal override void DisableTouch()
+        {
+            base.DisableTouch();
+            contentView.IsHitTestVisible = true;
+
+        }
+        internal override void EnableTouch()
+        {
+            base.EnableTouch();
+            contentView.IsHitTestVisible = true;
+        }
         /// <summary>
         /// Highlight tokens
         /// </summary>

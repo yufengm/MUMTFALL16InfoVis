@@ -9,7 +9,6 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Linking_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
-using CoLocatedCardSystem.CollaborationWindow.Layers.Plot_Layer;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {
@@ -24,12 +23,10 @@ namespace CoLocatedCardSystem.CollaborationWindow
         SortingBoxController sortingBoxController;
         TouchController touchController;
         GestureController gestureController;
-        GestureListenerController listenerController;
         GlowController glowController;
         BaseLayerController baseLayerController;
         CardLayerController cardLayerController;
         LinkingLayerController linkingLayerController;
-        PlotLayerController plotLayerController;
         MenuLayerController menuLayerController;
         SortingBoxLayerController sortingBoxLayerController;
         GlowLayerController glowLayerController;
@@ -75,13 +72,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
                 return gestureController;
             }
         }
-        internal GestureListenerController ListenerController
-        {
-            get
-            {
-                return listenerController;
-            }
-        }
+
         internal BaseLayerController BaseLayerController
         {
             get
@@ -142,14 +133,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             }
         }
 
-        internal PlotLayerController PlotLayerController
-        {
-            get
-            {
-                return plotLayerController;
-            }
-        }
-
 
         /// <summary>
         /// Initialize all documents
@@ -163,24 +146,20 @@ namespace CoLocatedCardSystem.CollaborationWindow
             sortingBoxController = new SortingBoxController(this);
             touchController = new TouchController(this);
             gestureController = new GestureController(this);
-            listenerController = new GestureListenerController(this);
             glowController = new GlowController(this);
             baseLayerController = new BaseLayerController(this);
             cardLayerController = new CardLayerController(this);
             sortingBoxLayerController = new SortingBoxLayerController(this);
-            plotLayerController = new PlotLayerController(this);
             menuLayerController = new MenuLayerController(this);
             glowLayerController = new GlowLayerController(this);
             //Initialize controllers
             touchController.Init();
             gestureController.Init();
-            listenerController.Init();
             glowController.Init();
             baseLayerController.Init(width, height);
             Coordination.Baselayer = baseLayerController.GetBaseLayer();//Set the base layer to the coordination helper
             cardLayerController.Init(width, height);
             sortingBoxLayerController.Init(width, height);
-            plotLayerController.Init(width, height);
             menuLayerController.Init(width, height);
             glowLayerController.Init(width, height);
             //Load the documents, cards and add them to the card layer
@@ -198,9 +177,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Load the sorting box and add them to the sorting box layer
             sortingBoxController.Init();
             SortingBoxLayerController.LoadBoxes(sortingBoxController.GetAllSortingBoxes());
-            //Start the gesture detection thread
-            gestureController.StartGestureDetection();
-
         }
 
         /// <summary>
@@ -210,8 +186,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
         {
             gestureController.Deinit();
             gestureController = null;
-            listenerController.Deinit();
-            listenerController = null;
             touchController.Deinit();
             touchController = null;
             sortingBoxController.Deinit();
@@ -227,8 +201,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             cardLayerController.Deinit();
             cardLayerController = null;
             sortingBoxLayerController.Deinit();
-            plotLayerController.Deinit();
-            plotLayerController = null;
             sortingBoxLayerController = null;
             menuLayerController.Deinit();
             menuLayerController = null;

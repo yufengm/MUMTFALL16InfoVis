@@ -137,23 +137,14 @@
     <Compile Include="CollaborationWindow\DocumentModule\NLP\StopwordMarker.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\Token.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\WordType.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\Attaching\AttachingGesture.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\Attaching\AttachingListener.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCard.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardController.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayerBase.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayer1.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayer2.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardLayers\AttributeCardLayer3.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\AttributeCard\AttributeCardList.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\AttachingGesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\Gesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\RemoveAttachingGesture.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardPositionStatus.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardStatus.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\LiveCardList.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\ContentTouchView.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\ScatterPlot.xaml.cs">
-      <DependentUpon>ScatterPlot.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\Glow.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowController.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowGroup.cs" />
@@ -163,8 +154,6 @@
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayerController.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
-    <Compile Include="CollaborationWindow\Layers\PlotLayer\PlotLayer.cs" />
-    <Compile Include="CollaborationWindow\Layers\PlotLayer\PlotLayerController.cs" />
     <Compile Include="CollaborationWindow\TableModule\AttributeHelper.cs" />
     <Compile Include="CollaborationWindow\TableModule\DataAttribute.cs" />
     <Compile Include="CollaborationWindow\TableModule\ATTRIBUTETYPE.cs" />
@@ -172,40 +161,22 @@
     <Compile Include="CollaborationWindow\TableModule\DataRow.cs" />
     <Compile Include="CollaborationWindow\TableModule\DataTable.cs" />
     <Compile Include="CollaborationWindow\TableModule\TableController.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\DeletingBox\DeletingBoxGesture.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\DeletingBox\DeletingBoxListener.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\Gesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\DeletingBoxGesture.cs" />
     <Compile Include="CollaborationWindow\GestureModule\GestureController.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\GestureEventArgs.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\GestureList.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\GestureListener.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\GestureListenerController.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\GestureListenerList.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\Sorting\SortingGesture.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\GestureStatus.cs" />
-    <Compile Include="CollaborationWindow\GestureModule\Sorting\SortingListener.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\SortingGesture.cs" />
     <Compile Include="CollaborationWindow\CentralControllers.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\Card.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardController.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardInfo.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardLayoutGenerator.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardLayers\ItemCardLayer1.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardLayers\ItemCardLayer2.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardLayers\ItemCardLayerBase.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardList.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCard.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardController.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardList.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCard.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer1.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer2.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer3.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayer4.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\DocumentCardLayerBase.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\ItemCard\ItemCardController.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\PlotCard.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\PlotCardController.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\PlotCard\PlotCardList.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBox.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBoxController.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\SortingBox\SortingBoxInfo.cs" />
@@ -1747,10 +1718,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="CollaborationWindow\CollaborationWindowMainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CollaborationWindow\InteractionModule\Card\PlotCard\ScatterPlot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

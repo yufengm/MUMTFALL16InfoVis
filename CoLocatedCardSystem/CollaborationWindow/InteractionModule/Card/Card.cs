@@ -139,8 +139,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 this.ManipulationMode = ManipulationModes.All;
                 this.ManipulationStarting += Card_ManipulationStarting;
                 this.ManipulationDelta += Card_ManipulationDelta;
+                this.ManipulationCompleted += Card_ManipulationCompleted;
             });
         }
+
         internal void Deinit()
         {
             this.PointerPressed -= PointerDown;
@@ -257,7 +259,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="e"></param>
         protected virtual void PointerDown(object sender, PointerRoutedEventArgs e)
         {
-            cardController.RemoveGlow(cardID);
         }
         /// <summary>
         /// Call back method for Pointer move
@@ -280,26 +281,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
             cardController.PointerUp(localPoint, globalPoint);
-        }
-        /// <summary>
-        /// Manipulate the card. Move if the manipulation is valid.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected virtual void Card_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            if (IsValideManipulation(e.Delta.Translation, e.Delta.Rotation, e.Delta.Scale))
-            {
-                this.position.X += e.Delta.Translation.X;
-                this.position.Y += e.Delta.Translation.Y;
-                this.rotation += e.Delta.Rotation;
-                this.cardScale *= e.Delta.Scale;
-                UpdateTransform();
-            }
-            else
-            {
-                e.Complete();
-            }
         }
 
         /// <summary>
@@ -337,6 +318,29 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         protected virtual void Card_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {
             cardController.MoveCardToTop(this);
+        }
+        /// <summary>
+        /// Manipulate the card. Move if the manipulation is valid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void Card_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            if (IsValideManipulation(e.Delta.Translation, e.Delta.Rotation, e.Delta.Scale))
+            {
+                this.position.X += e.Delta.Translation.X;
+                this.position.Y += e.Delta.Translation.Y;
+                this.rotation += e.Delta.Rotation;
+                this.cardScale *= e.Delta.Scale;
+                UpdateTransform();
+            }
+            else
+            {
+                e.Complete();
+            }
+        }
+        protected virtual void Card_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
         }
     }
 }

@@ -52,7 +52,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             Container.Children.Add(controllers.BaseLayerController.GetBaseLayer());
             Container.Children.Add(controllers.GlowLayerController.GetGlowLayer());
             Container.Children.Add(controllers.CardLayerController.GetCardLayer());
-            Container.Children.Add(controllers.PlotLayerController.GetPlotLayer());
             Container.Children.Add(controllers.SortingBoxLayerController.GetSortingBoxLayer());
             Container.Children.Add(controllers.MenuLayerController.GetMenuLayer());
         }

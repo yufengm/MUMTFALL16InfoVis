@@ -111,25 +111,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             this.startTime = DateTime.Now;
             this.touchStatus = TOUCH_STATUS.DOWN;
         }
-        /// <summary>
-        /// Generate a copy of the touch List
-        /// </summary>
-        /// <returns></returns>
-        internal Touch Copy()
-        {
-            Touch newTouch = new Touch();
-            newTouch.touchID = this.touchID;
-            newTouch.startPoint = this.startPoint;
-            newTouch.endPoint = this.endPoint;
-            newTouch.sender = this.sender;
-            newTouch.type = this.type;
-            newTouch.startTime = this.startTime;
-            newTouch.endTime = this.endTime;
-            newTouch.currentLocalPoint = this.currentLocalPoint;
-            newTouch.currentGlobalPoint = this.currentGlobalPoint;
-            newTouch.touchStatus = this.touchStatus;
-            return newTouch;
-        }
 
         /// <summary>
         /// Update a touch point

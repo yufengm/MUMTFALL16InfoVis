@@ -55,6 +55,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             base.Init(cardID, user);
             this.document = doc;
         }
+        /// <summary>
+        /// Load the document card ui
+        /// </summary>
+        /// <returns></returns>
         internal override async Task LoadUI()
         {
             await base.LoadUI();
@@ -133,6 +137,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 ShowLayer(0);
             }
         }
+        /// <summary>
+        /// Show the ith layer
+        /// </summary>
+        /// <param name="layerIndex"></param>
         private async void ShowLayer(int layerIndex)
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -154,6 +162,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
             cardController.PointerDown(localPoint, globalPoint, this, typeof(DocumentCard));
             base.PointerDown(sender, e);
+        }
+
+        protected override void Card_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
+        {
+            base.Card_ManipulationStarting(sender, e);
+            foreach (var layer in layers)
+            {
+                layer.DisableTouch();
+            }
+        }
+        protected override void Card_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+            base.Card_ManipulationCompleted(sender, e);
+            foreach (var layer in layers)
+            {
+                layer.EnableTouch();
+            }
         }
     }
 }

@@ -12,6 +12,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
     class TouchList
     {
         Dictionary<uint, Touch> list = new Dictionary<uint, Touch>();
+
+        public Dictionary<uint, Touch> List
+        {
+            get
+            {
+                return list;
+            }
+        }
+
         /// <summary>
         /// Add a touch point to the list;
         /// </summary>
@@ -55,41 +64,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             if (list.Keys.Contains(touchID))
             {
                 removedTouch = list[touchID].End(localPoint, globalPoint);
+                list.Remove(touchID);
             }
             return removedTouch;
-        }
-        //Remove all the touch points that endes for 1 or more second
-        internal void RemoveEndTouchPoint()
-        {
-            List<uint> tobeRemoved = new List<uint>();
-            DateTime dateTime = DateTime.Now;
-            lock (list)
-            {
-                try
-                {
-                    foreach (KeyValuePair<uint, Touch> pair in list)
-                    {
-                        if (pair.Value.GetStatus() == TOUCH_STATUS.RELEASED
-                            && (dateTime - pair.Value.EndTime).TotalMilliseconds >= 1000)
-                        {
-                            tobeRemoved.Add(pair.Key);
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    Debug.WriteLine("error");
-                }
-            }
-            lock (tobeRemoved)
-            {
-                foreach (uint key in tobeRemoved)
-                {
-                    if (list.Keys.Contains(key))
-                    {
-                        list.Remove(key);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -99,21 +76,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
         {
             list.Clear();
         }
-        /// <summary>
-        /// Get a copy of all touches in the touch list
-        /// </summary>
-        /// <returns></returns>
-        internal List<Touch> GetAllTouches()
+
+        internal Touch[] GetTouch()
         {
-            List<Touch> newList = new List<Touch>();
-            lock (list)
-            {
-                foreach (Touch t in list.Values)
-                {
-                    newList.Add(t.Copy());
-                }
-            }
-            return newList;
+            return list.Values.ToArray();
         }
     }
 }

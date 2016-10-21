@@ -12,38 +12,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     public class CardController
     {
         private CentralControllers controllers;
-        AttributeCardController attributeCardController = null;
-        ItemCardController itemCardController = null;
         DocumentCardController documentCardController = null;
-        PlotCardController plotCardController = null;
         LiveCardList liveCardList = null;
 
-        public AttributeCardController AttributeCardController
-        {
-            get
-            {
-                return attributeCardController;
-            }
-        }
-        public ItemCardController ItemCardController
-        {
-            get
-            {
-                return itemCardController;
-            }
-        }
         internal DocumentCardController DocumentCardController
         {
             get
             {
                 return documentCardController;
-            }
-        }
-        internal PlotCardController PlotCardController
-        {
-            get
-            {
-                return plotCardController;
             }
         }
 
@@ -60,18 +36,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         internal void Init()
         {
-            attributeCardController = new AttributeCardController(controllers);
-            itemCardController = new ItemCardController(controllers);
             documentCardController = new DocumentCardController(controllers);
-            plotCardController = new PlotCardController(controllers);
             liveCardList = new LiveCardList();
-            plotCardController.Init();
         }
         internal void Deinit() {
-            attributeCardController.Deinit();
-            itemCardController.Deinit();
             documentCardController.Deinit();
-            plotCardController.Deinit();
             liveCardList.Deinit();
         } 
         /// <summary>
@@ -86,30 +55,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        /// <summary>
-        /// Initialize the table cards
-        /// </summary>
-        /// <param name="docs"></param>
-        /// <returns></returns>                
-        internal async Task InitItemCard(DataRow[] items)
-        {
-            if (items != null)
-            {
-                await itemCardController.Init(items);
-            }
-        }
-        /// <summary>
-        /// Initialize the attribute cards
-        /// </summary>
-        /// <param name="docs"></param>
-        /// <returns></returns>                
-        internal async Task InitAttributeCard(DataAttribute[] attributes)
-        {
-            if (attributes != null)
-            {
-                await attributeCardController.Init(attributes);
-            }
-        }
         /// <summary>
         /// Update the ZIndex of the card. Move the card to the top.
         /// </summary>
