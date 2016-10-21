@@ -46,7 +46,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             TextBlock tb = new TextBlock { Text = text, FontSize = fontsize};
             tb.Padding = new Thickness(0.5,0.5,0.5,0);
             tb.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-            Size boundSize = new Size(tb.DesiredSize.Width*1.1,tb.DesiredSize.Height);
+            Size boundSize = new Size(tb.DesiredSize.Width*1.2,tb.DesiredSize.Height);
             return boundSize;
         }
     }

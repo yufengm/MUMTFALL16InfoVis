@@ -38,6 +38,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             }
         }
 
+        public string CardID
+        {
+            get
+            {
+                return cardID;
+            }
+
+            set
+            {
+                cardID = value;
+            }
+        }
+
         internal Glow(GlowController controller)
         {
             this.glowController = controller;

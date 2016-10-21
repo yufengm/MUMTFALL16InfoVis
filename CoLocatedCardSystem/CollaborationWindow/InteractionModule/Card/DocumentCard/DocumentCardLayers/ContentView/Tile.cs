@@ -62,8 +62,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             TextBlock tb = new TextBlock();
             tb.Text = token.OriginalWord;
             tb.FontSize = textSize;
-            tb.Padding = new Thickness(0);
-            tb.TextAlignment = TextAlignment.Justify;
+            tb.Padding = new Thickness(1,0,1,0);
+            tb.TextAlignment = TextAlignment.Center;
+            tb.VerticalAlignment = VerticalAlignment.Bottom;
             tb.Width = boxSize.Width;
             tb.Height = boxSize.Height;
 

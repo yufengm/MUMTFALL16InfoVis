@@ -52,21 +52,25 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     1,
                     new Size(this.Width, this.Height),
                     this);
+                Grid grid = new Grid();
                 // Create row definitions.
                 RowDefinition rowDefinition1 = new RowDefinition();
                 RowDefinition rowDefinition2 = new RowDefinition();
                 rowDefinition1.Height = new GridLength(1,GridUnitType.Star);
-                rowDefinition2.Height = new GridLength(4, GridUnitType.Star);
+                rowDefinition2.Height = new GridLength(6, GridUnitType.Star);
+
+                grid.RowDefinitions.Add(rowDefinition1);
+                grid.RowDefinitions.Add(rowDefinition2);
 
                 TextBlock label = new TextBlock();
                 label.Foreground = new SolidColorBrush(Colors.Black);
                 label.Padding = new Thickness(0);
                 label.LineHeight = 1;
                 label.TextWrapping = TextWrapping.Wrap;
-                label.FontSize = 8;
+                label.FontSize = 4;
                 label.FontStretch = FontStretch.Normal;
                 label.Text = "High light:";
-                this.Children.Add(label);
+                grid.Children.Add(label);
                 Grid.SetRow(label, 0);
 
                 ScrollViewer contentSV = new ScrollViewer();
@@ -77,9 +81,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 contentSV.Content = contentView;
                 contentSV.Padding = new Thickness(0);
                 contentSV.Margin = new Thickness(0);
-                this.Children.Add(contentSV);
+                grid.Children.Add(contentSV);
                 Grid.SetRow(contentSV, 1);
                 contentSV.VerticalAlignment = VerticalAlignment.Top;
+                this.Children.Add(grid);
             });
         }
         /// <summary>

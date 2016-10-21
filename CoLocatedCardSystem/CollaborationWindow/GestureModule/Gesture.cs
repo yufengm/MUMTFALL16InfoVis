@@ -102,35 +102,48 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         /// <param name="touchList"></param>
         internal void UpdateAssociatedTouches(List<Touch> touchList)
         {
-            List<Touch> removedTouches = new List<Touch>();
-            for (int aSize = associatedTouches.Count(), i = 0; i < aSize; i++) {
-                bool isLive = false;
-                for (int nSize = touchList.Count(), j = 0; j < nSize; j++)
+            lock (touchList)
+            {
+                List<Touch> removedTouches = new List<Touch>();
+                for (int aSize = associatedTouches.Count(), i = 0; i < aSize; i++)
                 {
-                    //if the associated touch is in the new touch list, update the associated touch
-                    if (associatedTouches[i].TouchID == touchList[j].TouchID) {
-                        isLive = true;
-                        associatedTouches[i] = touchList[j];
+                    bool isLive = false;
+                    for (int nSize = touchList.Count(), j = 0; j < nSize; j++)
+                    {
+                        //if the associated touch is in the new touch list, update the associated touch
+                        if (associatedTouches[i].TouchID == touchList[j].TouchID)
+                        {
+                            isLive = true;
+                            associatedTouches[i] = touchList[j];
+                        }
+                    }
+                    if (!isLive || associatedTouches[i] == null)
+                    {
+                        removedTouches.Add(associatedTouches[i]);
                     }
                 }
-                if (!isLive) {
-                    removedTouches.Add(associatedTouches[i]);
+                //Remove the touch from the associated touch list if not exist in the touchList
+                foreach (Touch t in removedTouches)
+                {
+                    if (associatedTouches.Count() > 0 && associatedTouches.Contains(t))
+                        associatedTouches.Remove(t);
                 }
-            }
-            //Remove the touch from the associated touch list if not exist in the touchList
-            foreach (Touch t in removedTouches) {
-                associatedTouches.Remove(t);
-            }
-            //Remove the touch used by this gesture from the associated touchlist
-            List<Touch> touchToRemove = new List<Touch>();
-            foreach (Touch touch in touchList) {
-                var usedTouch= associatedTouches.Where(t => t.TouchID == touch.TouchID);
-                if (usedTouch.Count() != 0) {
-                    touchToRemove.Add(touch);
+                //Remove the touch used by this gesture from the associated touchlist
+                List<Touch> touchToRemove = new List<Touch>();
+                lock (associatedTouches) {
+                    foreach (Touch touch in touchList)
+                    {
+                        var usedTouch = associatedTouches.Where(t => t != null && t.TouchID == touch.TouchID);
+                        if (usedTouch.Count() != 0)
+                        {
+                            touchToRemove.Add(touch);
+                        }
+                    }
                 }
-            }
-            foreach (Touch touch in touchToRemove) {
-                touchList.Remove(touch);
+                foreach (Touch touch in touchToRemove)
+                {
+                    touchList.Remove(touch);
+                }
             }
         }
         /// <summary>

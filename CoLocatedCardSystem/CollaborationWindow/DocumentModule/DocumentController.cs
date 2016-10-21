@@ -35,7 +35,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 {
                     string line = streamReader.ReadLine();
                     Document doc = new Document();
-                    Debug.WriteLine("here");
                     doc.Deserialize(line);
                     list.AddDocument(doc);
                 }

@@ -56,7 +56,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             ImageBrush brush = new ImageBrush();
             brush.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/menu_bg.png"));
             this.Background = brush;
-            this.Children.Add(createSortingBoxButton);
+            //this.Children.Add(createSortingBoxButton);
             this.Children.Add(deleteButton);
             this.Children.Add(searchButton);
             this.Children.Add(searchResultTray);

@@ -106,21 +106,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                                 Image img = new Image();
                                 img.Source = bitmapImage;
                                 Size addjustedSize = new Size();
-                                if (bitmapImage.PixelWidth > bitmapImage.PixelHeight)
-                                {//horizontal picture
-                                    addjustedSize.Width = horiPanel.Width / 3;
-                                    addjustedSize.Height = bitmapImage.PixelHeight * horiPanel.Width / 3 / bitmapImage.PixelWidth;
-                                }
-                                else {//vertical picture
-                                    addjustedSize.Width = bitmapImage.PixelWidth * horiPanel.Height/bitmapImage.PixelHeight;
+                                double tempHeight = (double)bitmapImage.PixelHeight * (horiPanel.Width / 3) / bitmapImage.PixelWidth;
+                                if (tempHeight > horiPanel.Height)
+                                {
+                                    addjustedSize.Width = (double)bitmapImage.PixelWidth * horiPanel.Height / bitmapImage.PixelHeight;
                                     addjustedSize.Height = horiPanel.Height;
+                                }
+                                else
+                                {
+                                    addjustedSize.Width = this.Width / 3;
+                                    addjustedSize.Height = tempHeight;
                                 }
                                 UIHelper.InitializeUI(new Point(0, 0),
                                     0,
                                     1,
                                     addjustedSize,
                                     img);
-                                horiPanel.Children.Add(img);
+                                 horiPanel.Children.Add(img);
                             }
                         }
                         rIndex++;
@@ -128,19 +130,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         currentHight += horiPanel.Height;
                         this.Children.Add(horiPanel);
                     }
+                    Size emptyBox = UIHelper.GetBoundingSize(" ", textSize);
                     horiPanel = new StackPanel();
                     horiPanel.Width = this.Width;
                     horiPanel.Height = 0;
                     horiPanel.Orientation = Orientation.Horizontal;
                     currentWidth = horiPanel.Width;
-                    currentHight += 20;
+                    currentHight += emptyBox.Height;
                     this.Children.Add(horiPanel);
                     foreach (Token token in pd.List)
                     {
                         if (mode == LoadMode.KeyWord)
                         {
                             if (token.WordType == WordType.STOPWORD ||
-                            token.WordType == WordType.REGULAR ||
                             token.WordType == WordType.PUNCTUATION ||
                             token.WordType == WordType.IRREGULAR ||
                             token.WordType == WordType.DEFAULT)
@@ -178,8 +180,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                             horiPanel.Width = this.Width;
                             horiPanel.Height = boxSize.Height;
                             horiPanel.Orientation = Orientation.Horizontal;
-                            currentWidth = boxSize.Width;
                             currentHight += boxSize.Height;
+                            currentWidth = boxSize.Width;
                             this.Children.Add(horiPanel);
                         }
                         Tile tile = new Tile();
@@ -191,6 +193,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                             tile.HighLight();
                         }
                     }
+                    horiPanel = new StackPanel();
+                    horiPanel.Width = this.Width;
+                    horiPanel.Height = emptyBox.Height;
+                    horiPanel.Orientation = Orientation.Horizontal;
+                    currentWidth = horiPanel.Width;
+                    currentHight += emptyBox.Height;
+                    this.Children.Add(horiPanel);
                 }
                 this.Height = currentHight;
             });

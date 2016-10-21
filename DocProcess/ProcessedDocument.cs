@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HtmlAgilityPack;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -136,9 +137,9 @@ namespace DocProcess
         }
         private void ProcessRegular(String text, List<Token> tokenList)
         {
-            string content = Regex.Replace(text, @"[^\u0000-\u007F]+", " ");
-            content = Regex.Replace(content, @"<br>", "\n");
-            content = Regex.Replace(content, @"</br>", "");
+            HtmlDocument htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(text);
+            string content = Regex.Replace(htmlDocument.DocumentNode.InnerText, @"[^\u0000-\u007F]+", " ");
             string stack = "";
             List<Token> tempList = new List<Token>();
             //Partition the content with the regular expression.

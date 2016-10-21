@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {
@@ -40,9 +41,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// Remove a glow from the glow layer
         /// </summary>
         /// <param name="glow"></param>
-        internal void RemoveGlowEffect(Glow glow)
+        internal async void RemoveGlowEffect(string cardID)
         {
-            glowLayer.RemoveGlow(glow);
+            await glowLayer.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            {
+                lock (glowLayer)
+                {
+                    List<Glow> list = new List<Glow>();
+                    foreach (Glow glow in glowLayer.Children) {
+                        if (glow.CardID.Equals(cardID)) {
+                            list.Add(glow);
+                        }
+                    }
+                    foreach (Glow glow in list) {
+                        glowLayer.RemoveGlow(glow);
+                    }
+                }
+            });
         }
         /// <summary>
         /// Add glow to layer
@@ -54,7 +69,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <returns></returns>
         internal async Task<Glow> AddGlow(CardStatus status, int colorIndex,  GlowController controller)
         {
-
             Glow glow = await glowLayer.AddGlow(status, colorIndex,  controller);
             return glow;
         }

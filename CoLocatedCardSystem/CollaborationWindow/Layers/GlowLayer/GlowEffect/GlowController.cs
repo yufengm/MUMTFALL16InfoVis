@@ -96,8 +96,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                     foreach (string id in gg.GetCardID())
                     {
                         newCardList.Add(id);
-                        RemoveGlowEffect(id);
                         list.RemoveGlow(id);
+                        RemoveGlowEffect(id);
                     }
                     list.RemoveGlowGroup(gg);
                 }
@@ -258,10 +258,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         internal void RemoveGlowEffect(string cardID)
         {
             Glow glow = list.RemoveGlow(cardID);
-            if (glow != null)
-            {
-                controllers.GlowLayerController.RemoveGlowEffect(glow);
-            }
+            controllers.GlowLayerController.RemoveGlowEffect(cardID);
         }
         /// <summary>
         /// If one color changed, update other connected glow color.

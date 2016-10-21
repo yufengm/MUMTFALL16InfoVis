@@ -174,29 +174,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             info.rotate = 180;
             return info;
         }
-        internal class CreateSortingBoxButtonAttr
-        {
-            Point position = new Point(50 * Screen.SCALE_FACTOR, 10 * Screen.SCALE_FACTOR);
-            Size size = new Size(150 * Screen.SCALE_FACTOR, 60 * Screen.SCALE_FACTOR);
-            public Point Position
-            {
-                get
-                {
-                    return position;
-                }
-            }
-            public Size Size
-            {
-                get
-                {
-                    return size;
-                }
-            }
-        }
+
         internal class KeyboardAttr
         {
-            Point position = new Point(-100 * Screen.SCALE_FACTOR, -300 * Screen.SCALE_FACTOR);
-            Size size = new Size(1000 * Screen.SCALE_FACTOR, 300 * Screen.SCALE_FACTOR);
+            Point position = new Point(0 * Screen.SCALE_FACTOR, -250 * Screen.SCALE_FACTOR);
+            Size size = new Size(800 * Screen.SCALE_FACTOR, 250 * Screen.SCALE_FACTOR);
             public Point Position
             {
                 get
@@ -214,8 +196,27 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         }
         internal class InputTextBox
         {
-            Point position = new Point(0 * Screen.SCALE_FACTOR, -345 * Screen.SCALE_FACTOR);
-            Size size = new Size(700 * Screen.SCALE_FACTOR, 30 * Screen.SCALE_FACTOR);
+            Point position = new Point(0 * Screen.SCALE_FACTOR, -310 * Screen.SCALE_FACTOR);
+            Size size = new Size(800 * Screen.SCALE_FACTOR, 30 * Screen.SCALE_FACTOR);
+            public Point Position
+            {
+                get
+                {
+                    return position;
+                }
+            }
+            public Size Size
+            {
+                get
+                {
+                    return size;
+                }
+            }
+        }
+        internal class CreateSortingBoxButtonAttr
+        {
+            Point position = new Point(50 * Screen.SCALE_FACTOR, 10 * Screen.SCALE_FACTOR);
+            Size size = new Size(150 * Screen.SCALE_FACTOR, 60 * Screen.SCALE_FACTOR);
             public Point Position
             {
                 get
