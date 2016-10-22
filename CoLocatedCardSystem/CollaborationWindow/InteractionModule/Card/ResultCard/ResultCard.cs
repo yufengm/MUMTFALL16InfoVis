@@ -5,14 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Input;
+using Windows.UI.Text;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class ResultCard:DocumentCard
     {
+        TextBlock titleTextBlock = new TextBlock();
         /// <summary>
         /// A fake card added to the tray just to show the search result. The move of the card is restricted to the block.
         /// </summary>
@@ -46,6 +52,42 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal ResultCard(CardController cardController) : base(cardController)
         {
+            
+        }
+        internal override async Task LoadUI()
+        {
+            await base.LoadUI();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                titleTextBlock.Width = this.Width;
+                titleTextBlock.Height = this.Height;
+                titleTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+                titleTextBlock.LineHeight = 1;
+                titleTextBlock.TextWrapping = TextWrapping.Wrap;
+                titleTextBlock.FontSize = 13;
+                titleTextBlock.TextAlignment = TextAlignment.Center;
+                titleTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
+                titleTextBlock.VerticalAlignment = VerticalAlignment.Center;
+                titleTextBlock.FontStretch = FontStretch.Normal;
+                titleTextBlock.FontWeight = FontWeights.Bold;
+                UIHelper.InitializeUI(
+                    new Point(-0.5 * this.Width, -0.5 * this.Height),
+                    0,
+                    1,
+                    new Size(this.Width, this.Height),
+                    titleTextBlock);
+                this.Children.Add(titleTextBlock);
+                titleTextBlock.Text = this.Document.GetName();
+                if (this.Document.GetName().Length > 25)
+                {
+                    titleTextBlock.FontSize = 11;
+
+                }
+                if (this.Document.GetName().Length > 50)
+                {
+                    titleTextBlock.FontSize = 9;
+                }
+            });
         }
         protected override void PointerUp(object sender, PointerRoutedEventArgs e)
         {

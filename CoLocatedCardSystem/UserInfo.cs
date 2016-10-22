@@ -103,7 +103,7 @@ namespace CoLocatedCardSystem
         {
             UserInfo userInfo = new UserInfo();
             userInfo.user = User.DANNY;
-            userInfo.isLive = true;
+            userInfo.isLive = false;
             return userInfo;
         }
     }

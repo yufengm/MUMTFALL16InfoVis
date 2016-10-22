@@ -15,6 +15,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         }
         internal override void Detect(Touch[] touchList, Touch[] targetList)
         {
+            if (targetList == null || targetList.Length == 0||touchList==null) {
+                return;
+            }
             base.Detect(touchList, targetList);
             try
             {
