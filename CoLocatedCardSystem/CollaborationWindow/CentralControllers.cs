@@ -152,6 +152,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             sortingBoxLayerController = new SortingBoxLayerController(this);
             menuLayerController = new MenuLayerController(this);
             glowLayerController = new GlowLayerController(this);
+            await StopwordMarker.Load();
             //Initialize controllers
             touchController.Init();
             gestureController.Init();
@@ -167,13 +168,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             await tableController.Init(FilePath.CSVFile);
             cardController.Init();
             cardController.InitDocCard(documentController.GetDocument());
-            //await cardController.InitItemCard(tableController.GetItem());
-            //await cardController.InitAttributeCard(tableController.GetAttribute());
-            //Card[] cards = cardController.AttributeCardController.GetCard();
-            //foreach (Card c in cards) {
-            //    cardController.MoveCardToTable(c,typeof(AttributeCard));
-            //}
-            //cardLayerController.LoadCards(cards);
             //Load the sorting box and add them to the sorting box layer
             sortingBoxController.Init();
             SortingBoxLayerController.LoadBoxes(sortingBoxController.GetAllSortingBoxes());

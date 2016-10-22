@@ -56,6 +56,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.document = doc;
         }
         /// <summary>
+        /// Dehighlight all words
+        /// </summary>
+        internal void DehighlightAll()
+        {
+            highlightedTokens.Clear();
+        }
+
+        /// <summary>
         /// Load the document card ui
         /// </summary>
         /// <returns></returns>
@@ -85,9 +93,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Initialize the hightlight words
         /// </summary>
         /// <param name="content"></param>
-        internal void InitialHighlight(string content)
+        internal void InitialHighlight(ProcessedDocument tempPD)
         {
-            var tokens = document.GetToken(content);
+            var tokens = document.GetToken(tempPD);
             foreach (Token tk in tokens) {
                 highlightedTokens.Add(tk);
             }

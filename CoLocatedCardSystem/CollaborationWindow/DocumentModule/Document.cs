@@ -145,37 +145,43 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        internal bool HasWord(string content)
+        internal bool HasWord(ProcessedDocument tempPD)
         {
-            if (content.Trim().Length == 0) {
+            if (tempPD.List.Count() == 0) {
                 return false;
             }
-            ProcessedDocument tempPD = new ProcessedDocument();
-            tempPD.InitTokens(content);
-            foreach (ProcessedDocument pd in processedDocuments) {
-                foreach (Token tk in tempPD.List) {
-                    if (pd.IsContainToken(tk)!=null) {
+            foreach (ProcessedDocument pd in processedDocuments)
+            {
+                foreach (Token tk in tempPD.List)
+                {
+                    if (tk.WordType == WordType.REGULAR && pd.IsContainToken(tk) != null)
+                    {
                         return true;
                     }
                 }
             }
             return false;
         }
-
-        internal IEnumerable<Token> GetToken(string content){
+        /// <summary>
+        /// Get all token that contains tokens in tempPD
+        /// </summary>
+        /// <param name="tempPD"></param>
+        /// <returns></returns>
+        internal IEnumerable<Token> GetToken(ProcessedDocument tempPD){
             List<Token> result = new List<Token>();
-            if (content.Trim().Length == 0)
+            if (tempPD.List.Count() == 0)
             {
                 return result;
             }
-            ProcessedDocument tempPD = new ProcessedDocument();
-            tempPD.InitTokens(content);
             foreach (ProcessedDocument pd in processedDocuments)
             {
                 foreach (Token tk in tempPD.List)
                 {
-                    Token sameToken = pd.IsContainToken(tk);
-                    result.Add(sameToken);
+                    if (tk.WordType == WordType.REGULAR)
+                    {
+                        Token sameToken = pd.IsContainToken(tk);
+                        result.Add(sameToken);
+                    }
                 }
             }
             return result;

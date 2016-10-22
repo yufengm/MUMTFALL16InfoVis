@@ -1,4 +1,5 @@
-﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using System;
 using System.Collections.Generic;
@@ -62,12 +63,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// </summary>
         /// <param name="owner"></param>
         /// <param name="content"></param>
-        internal void SearchDocumentCard(User owner, string content)
+        internal async void SearchDocumentCard(User owner, string content)
         {
-            DocumentCard[] cards = 
-                controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, content);
-            foreach (DocumentCard card in cards) {
-                card.InitialHighlight(content);
+
+            ProcessedDocument tempPD = new ProcessedDocument();
+            await tempPD.InitTokens(content.Trim());
+            list[owner].RemoveUnusedHighlight();
+            DocumentCard[] cards =
+                controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, tempPD);
+            foreach (DocumentCard card in cards)
+            {
+                card.InitialHighlight(tempPD);
             }
             list[owner].ShowCardsInSearchResultTray(cards);
         }
@@ -128,6 +134,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         internal void PointerUp(PointerPoint localPoint, PointerPoint globalPoint)
         {
             controllers.TouchController.TouchUp(localPoint, globalPoint);
+        }
+
+        internal void DehighLightAll(string cardID)
+        {
+            controllers.CardController.DocumentCardController.DehighLightAll(cardID);
         }
     }
 }

@@ -50,12 +50,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        internal DocumentCard[] GetCardByContent(User owner, string content)
+        internal DocumentCard[] GetCardByContent(User owner, ProcessedDocument tempPD)
         {
             List<DocumentCard> tempList = new List<DocumentCard>();
             foreach (DocumentCard card in list.Values)
             {
-                if (card.Owner == owner && card.Document.HasWord(content.Trim()))
+                if (card.Owner == owner && card.Document.HasWord(tempPD))
                 {
                     tempList.Add(card);
                 }

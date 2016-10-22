@@ -30,40 +30,45 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// Initialize the token list with the content. Processed with token makers.
         /// </summary>
         /// <param name="content"></param>
-        internal void InitTokens(string content) {
-            Regex r = new Regex("([\\s{}():;., \"“”])");
-            List<Token> tokenList = new List<Token>();
-            string stack = "";
-            //Partition the content with the regular expression.
-            for (int i = 0; i < content.Length; i++)
-            {
-                if (r.IsMatch("" + content[i]))//Add a spliter
-                {
-                    Token tk = new Token();
-                    tk.OriginalWord = "" + content[i];
-                    tokenList.Add(tk);
-                    if (stack.Length > 0)
+        internal async Task InitTokens(string content) {
+            await Task.Run(() =>
+             {
+                 Regex r = new Regex("([\\s{}():;., \"“”])");
+                 List<Token> tokenList = new List<Token>();
+                 string stack = "";
+                //Partition the content with the regular expression.
+                for (int i = 0; i < content.Length; i++)
+                 {
+                     if (r.IsMatch("" + content[i]))//Add a spliter
                     {
-                        Token token = new Token();
-                        token.OriginalWord = stack;
-                        tokenList.Add(token);
-                        stack = "";
-                    }
-                }
-                else//Add the letter to the word stack
-                {
-                    stack += content[i];
-                }
-            }
-            if (stack.Length>0) {
-                Token token = new Token();
-                token.OriginalWord = stack;
-                tokenList.Add(token);
-            }
-            foreach (Token tk in tokenList) {
-                tk.Process();
-            }
-            list = tokenList.ToArray<Token>();
+                         Token tk = new Token();
+                         tk.OriginalWord = "" + content[i];
+                         tokenList.Add(tk);
+                         if (stack.Length > 0)
+                         {
+                             Token token = new Token();
+                             token.OriginalWord = stack;
+                             tokenList.Add(token);
+                             stack = "";
+                         }
+                     }
+                     else//Add the letter to the word stack
+                    {
+                         stack += content[i];
+                     }
+                 }
+                 if (stack.Length > 0)
+                 {
+                     Token token = new Token();
+                     token.OriginalWord = stack;
+                     tokenList.Add(token);
+                 }
+                 foreach (Token tk in tokenList)
+                 {
+                     tk.Process();
+                 }
+                 list = tokenList.ToArray<Token>();
+             });           
         }
         /// <summary>
         /// Return the number of tokens whose original word is the same with the key work
@@ -84,7 +89,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// <returns></returns>
         internal Token IsContainToken(Token newToken)
         {
-            foreach (Token tk in List)
+            foreach (Token tk in list)
             {
                 if (tk.EqualContent(newToken)) {
                     return tk;

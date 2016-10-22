@@ -39,13 +39,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             list.Clear();
         }
         /// <summary>
+        /// Dehighlight all words
+        /// </summary>
+        /// <param name="cardID"></param>
+        internal void DehighLightAll(string cardID)
+        {
+            DocumentCard card = list.GetCard(cardID);
+            if(card!=null)
+                card.DehighlightAll();
+        }
+        /// <summary>
         /// Get all documents with the content
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        internal DocumentCard[] GetCardDocumentCardWByContent(User owner, string content)
+        internal DocumentCard[] GetCardDocumentCardWByContent(User owner, ProcessedDocument tempPD)
         {
-            DocumentCard[] cards = list.GetCardByContent(owner, content);
+            DocumentCard[] cards = list.GetCardByContent(owner, tempPD);
             return cards;
         }
         /// <summary>
@@ -62,5 +72,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             this.Controllers.TouchController.TouchDown(localPoint, globalPoint, tile, type);
         }
+
     }
 }

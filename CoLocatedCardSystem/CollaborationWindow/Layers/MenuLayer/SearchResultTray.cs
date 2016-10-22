@@ -24,7 +24,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         List<Canvas> stackCanvas = new List<Canvas>();
         Button hideButton;
         TextBlock resultNum;
-        int cardToShow = 6;
+        int MAXCARDTOSHOW = 7;
+        int cardToShow = 7;
         MenuLayerController menuLayerController;
         Storyboard showBoard = new Storyboard();
         Storyboard hideBoard = new Storyboard();
@@ -48,7 +49,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             stackPanel.Height = scrollViewer.Height;
             stackPanel.Orientation = Orientation.Horizontal;
             scrollViewer.Content = stackPanel;
-            cardToShow = (int)(info.SearchResultInfo.Size.Width / blockSize.Width) + 1;
+            MAXCARDTOSHOW = (int)(info.SearchResultInfo.Size.Width / blockSize.Width) + 1;
             scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 
             hideButton = new Button();
@@ -60,7 +61,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 0, 1, new Size(hideButton.Width, hideButton.Height), hideButton);
             hideButton.Click += HideButton_Click;
 
-            
+
             resultNum = new TextBlock();
             resultNum.Width = 80;
             resultNum.Height = 20;
@@ -117,13 +118,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// Load the cards to the search result tray
         /// </summary>
         /// <param name="cards"></param>
-        public void AddCards(DocumentCard[] cards)
+        internal void AddCards(DocumentCard[] cards)
         {
             if (cards != null)
             {
                 this.currentSearchResult = cards;
                 stackPanel.Children.Clear();
                 stackCanvas.Clear();
+                cardToShow = MAXCARDTOSHOW > cards.Length ? cards.Length : MAXCARDTOSHOW;
                 foreach (Card card in cards)
                 {
                     Canvas canvas = new Canvas();
@@ -136,35 +138,54 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 resultNum.Text = "Num: " + cards.Length;
             }
         }
-        private async void ShowCard(double position) {
-            int startCardID = (int)(position / blockSize.Width);
-            if (startCardID < 0)
-                startCardID = 0;
-            if (startCardID + cardToShow >= stackCanvas.Count) {
-                startCardID = stackCanvas.Count - cardToShow;
-            }
-            for (int i = 0; i < startCardID; i++)
+        /// <summary>
+        /// Remove the high light of all highlight card
+        /// </summary>
+        internal void RemoveUnusedHighlight() {
+            foreach (Canvas block in stackCanvas)
             {
-                if (stackCanvas[i].Children.Count != 0)
-                    stackCanvas[i].Children.Clear();
-            }
-            for (int i = startCardID, endID = startCardID + cardToShow; i < endID; i++) {
-                if (stackCanvas[i].Children.Count == 0)
+                if (block.Children.Count == 1)
                 {
-                    ResultCard resultCard = new ResultCard(currentSearchResult[i].CardController);
-                    resultCard.MenuLayerController = menuLayerController;
-                    resultCard.Init(currentSearchResult[i].CardID, currentSearchResult[i].Owner, currentSearchResult[i].Document);
-                    await resultCard.LoadUI();
-                    resultCard.MoveTo(new Point(stackCanvas[i].Width / 2, stackCanvas[i].Height / 2));
-                    resultCard.Block = stackCanvas[i];
-                    stackCanvas[i].Children.Add(resultCard);
+                    menuLayerController.DehighLightAll((block.Children[0] as ResultCard).CardID);
                 }
             }
-            for (int i = startCardID + cardToShow; i < stackCanvas.Count; i++) {
-                if (stackCanvas[i].Children.Count != 0)
-                    stackCanvas[i].Children.Clear();
+        }
+        private async void ShowCard(double position)
+        {
+            int startCardID = (int)(position / blockSize.Width);
+            if (startCardID + cardToShow >= stackCanvas.Count)
+            {
+                startCardID = stackCanvas.Count - cardToShow;
+            }
+            if (startCardID < 0)
+                startCardID = 0;
+
+            if (stackCanvas.Count > 0)
+            {
+                for (int i = 0; i < startCardID; i++)
+                {
+                    if (stackCanvas[i].Children.Count != 0)
+                        stackCanvas[i].Children.Clear();
+                }
+                for (int i = startCardID, endID = startCardID + cardToShow; i < endID; i++)
+                {
+                    if (stackCanvas[i].Children.Count == 0)
+                    {
+                        ResultCard resultCard = new ResultCard(currentSearchResult[i].CardController);
+                        resultCard.MenuLayerController = menuLayerController;
+                        resultCard.Init(currentSearchResult[i].CardID, currentSearchResult[i].Owner, currentSearchResult[i].Document);
+                        await resultCard.LoadUI();
+                        resultCard.MoveTo(new Point(stackCanvas[i].Width / 2, stackCanvas[i].Height / 2));
+                        resultCard.Block = stackCanvas[i];
+                        stackCanvas[i].Children.Add(resultCard);
+                    }
+                }
+                for (int i = startCardID + cardToShow; i < stackCanvas.Count; i++)
+                {
+                    if (stackCanvas[i].Children.Count != 0)
+                        stackCanvas[i].Children.Clear();
+                }
             }
         }
-
     }
 }
