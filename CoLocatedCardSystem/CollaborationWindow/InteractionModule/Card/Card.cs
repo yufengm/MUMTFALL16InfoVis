@@ -136,6 +136,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 this.PointerReleased += PointerUp;
                 this.PointerCaptureLost += PointerUp;
                 this.PointerCanceled += PointerUp;
+                this.PointerWheelChanged += Card_PointerWheelChanged;
                 //Manipulation
                 this.ManipulationMode = ManipulationModes.All;
                 this.ManipulationStarting += Card_ManipulationStarting;
@@ -154,6 +155,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.PointerCaptureLost -= PointerUp;
             this.ManipulationStarting -= Card_ManipulationStarting;
             this.ManipulationDelta -= Card_ManipulationDelta;
+            this.PointerWheelChanged -= Card_PointerWheelChanged;
         }
         /// <summary>
         /// Update the card size, detect if any new layers need to appear.
@@ -283,7 +285,27 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
             cardController.PointerUp(localPoint, globalPoint);
         }
-
+        /// <summary>
+        /// Zoom the card when wheel changed. Designed for debugging with non-touch screen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Card_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            PointerPoint point = e.GetCurrentPoint(this);
+            int delta=point.Properties.MouseWheelDelta;
+            if (delta > 0)
+            {
+                if (IsValideManipulation(new Point(0,0), 0, 1.2))
+                    this.cardScale *= 1.2;
+            }
+            else
+            {
+                if (IsValideManipulation(new Point(0, 0), 0, 1/1.2))
+                    this.cardScale /= 1.2;
+            }
+            UpdateTransform();
+        }
         /// <summary>
         /// Check if the manipulation is valid. 
         /// Cancel the manipulation if the card larger or smaller than the bound, or moved out of the screen.
