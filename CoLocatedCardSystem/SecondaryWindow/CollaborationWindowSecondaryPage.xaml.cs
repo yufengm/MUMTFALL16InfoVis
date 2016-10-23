@@ -41,17 +41,16 @@ namespace CoLocatedCardSystem.SecondaryWindow
             
             SecondaryScreen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
             SecondaryScreen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
+            System.Diagnostics.Debug.WriteLine(SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
             SecondaryScreen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             this.Width = SecondaryScreen.WIDTH;
             this.Height = SecondaryScreen.HEIGHT;
-            //Container.Width = this.Width;
-            //Container.Height = this.Height;
             ApplicationView.PreferredLaunchViewSize = new Size(this.Width, this.Height);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
             this.WordCloud.Width = this.Width;
             this.WordCloud.Height = this.Height;
-            string src = "ms-appx-web:///Assets/d3/wordcloud.html";
-            this.WordCloud.Navigate(new Uri(src));
+            string src = "ms-appx-web:///Assets/p5/wordcloud.html";
+            this.WordCloud.Navigate(new Uri(src));            
         }
     }
 }

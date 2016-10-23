@@ -232,6 +232,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\menu_bg.png" />
+    <Content Include="Assets\p5\p5\p5.js" />
+    <Content Include="Assets\p5\p5\p5.min.js" />
+    <Content Include="Assets\p5\wordcloud.html" />
+    <Content Include="Assets\p5\wordcloud.js" />
     <Content Include="Assets\review\00623189-7a17-3ead-b821-c09364258786.jpg" />
     <Content Include="Assets\review\00748e4c-7fd4-37df-a24a-756983cd0050.jpg" />
     <Content Include="Assets\review\00aa5a85-3795-3ddd-a38c-704bd59847d3.jpg" />

@@ -63,9 +63,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 
 
             resultNum = new TextBlock();
-            resultNum.Width = 80;
+            resultNum.Width = 300;
             resultNum.Height = 20;
-            resultNum.Text = "Num:";
+            resultNum.Text = "";
             resultNum.FontSize = 12;
             resultNum.IsHitTestVisible = false;
             resultNum.Padding = new Thickness(0);
@@ -118,7 +118,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// Load the cards to the search result tray
         /// </summary>
         /// <param name="cards"></param>
-        internal void AddCards(DocumentCard[] cards)
+        internal void AddCards(string content, DocumentCard[] cards)
         {
             if (cards != null)
             {
@@ -135,7 +135,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                     stackCanvas.Add(canvas);
                 }
                 ShowCard(0);
-                resultNum.Text = "Num: " + cards.Length;
+                resultNum.Text = "Search: "+ content + " Result: " + cards.Length;
             }
         }
         /// <summary>

@@ -272,8 +272,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         }
         internal class SearchResultTrayAttr
         {
-            Point position = new Point(-100 * Screen.SCALE_FACTOR, -130 * Screen.SCALE_FACTOR);
-            Size size = new Size(1000 * Screen.SCALE_FACTOR, 130 * Screen.SCALE_FACTOR);
+            Point position = new Point(0 * Screen.SCALE_FACTOR, -130 * Screen.SCALE_FACTOR);
+            Size size = new Size(800 * Screen.SCALE_FACTOR, 130 * Screen.SCALE_FACTOR);
             public Point Position
             {
                 get

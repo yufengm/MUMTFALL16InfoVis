@@ -88,9 +88,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// Add all the cards to the search result tray
         /// </summary>
         /// <param name="cards"></param>
-        internal void ShowCardsInSearchResultTray(DocumentCard[] cards)
+        internal void ShowCardsInSearchResultTray(string content, DocumentCard[] cards)
         {
-            searchResultTray.AddCards(cards);
+            searchResultTray.AddCards(content, cards);
         }
 
         private void LoadCreatingSortingBoxButton(MenuBarInfo info)

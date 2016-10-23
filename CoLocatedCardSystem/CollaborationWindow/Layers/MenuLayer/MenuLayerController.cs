@@ -75,7 +75,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             {
                 card.InitialHighlight(tempPD);
             }
-            list[owner].ShowCardsInSearchResultTray(cards);
+            list[owner].ShowCardsInSearchResultTray(content, cards);
         }
         /// <summary>
         /// Get all menu bars
