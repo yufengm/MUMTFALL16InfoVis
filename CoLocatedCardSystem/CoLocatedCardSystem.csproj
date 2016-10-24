@@ -112,6 +112,7 @@
     <Compile Include="CollaborationWindow\CollaborationWindowMainPage.xaml.cs">
       <DependentUpon>CollaborationWindowMainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CollaborationWindow\ConnectionModule\ConnectionController.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\Document.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\DocumentController.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\DocumentList.cs" />

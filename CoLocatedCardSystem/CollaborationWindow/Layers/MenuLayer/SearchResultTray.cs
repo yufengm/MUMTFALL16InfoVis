@@ -169,7 +169,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 }
                 for (int i = startCardID, endID = startCardID + cardToShow; i < endID; i++)
                 {
-                    if (stackCanvas[i].Children.Count == 0)
+                    if (stackCanvas[i].Children.Count == 0 &&
+                        !menuLayerController.Controllers.CardController.IsCardOnTable(currentSearchResult[i].CardID))
                     {
                         ResultCard resultCard = new ResultCard(currentSearchResult[i].CardController);
                         resultCard.MenuLayerController = menuLayerController;

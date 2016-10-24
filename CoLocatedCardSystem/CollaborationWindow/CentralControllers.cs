@@ -9,6 +9,7 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Linking_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using CoLocatedCardSystem.CollaborationWindow.ConnectionModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {
@@ -30,6 +31,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
         MenuLayerController menuLayerController;
         SortingBoxLayerController sortingBoxLayerController;
         GlowLayerController glowLayerController;
+        ConnectionController connectionController;
         internal DocumentController DocumentController
         {
             get
@@ -133,6 +135,14 @@ namespace CoLocatedCardSystem.CollaborationWindow
             }
         }
 
+        internal ConnectionController ConnectionController
+        {
+            get
+            {
+                return connectionController;
+            }
+        }
+
 
         /// <summary>
         /// Initialize all documents
@@ -152,6 +162,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             sortingBoxLayerController = new SortingBoxLayerController(this);
             menuLayerController = new MenuLayerController(this);
             glowLayerController = new GlowLayerController(this);
+            connectionController = new ConnectionController(this);
             await StopwordMarker.Load();
             //Initialize controllers
             touchController.Init();
@@ -171,6 +182,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Load the sorting box and add them to the sorting box layer
             sortingBoxController.Init();
             SortingBoxLayerController.LoadBoxes(sortingBoxController.GetAllSortingBoxes());
+            connectionController.Init();
         }
 
         /// <summary>
@@ -198,6 +210,8 @@ namespace CoLocatedCardSystem.CollaborationWindow
             sortingBoxLayerController = null;
             menuLayerController.Deinit();
             menuLayerController = null;
+            connectionController.Deinit();
+            connectionController = null;
         }
     }
 }

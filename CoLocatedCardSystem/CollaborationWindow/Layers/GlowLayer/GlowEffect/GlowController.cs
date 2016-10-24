@@ -75,22 +75,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="groups"></param>
         internal async void ConnectOneCardWithGroups(string cardID, GlowGroup[] groups)
         {
-            CardStatus targetCard = await controllers.CardController.GetLiveCardStatus(cardID);
-            if (targetCard == null)
-            {
-                return;
-            }
             //if no groups intersected, create a new group
             if (groups == null || groups.Length == 0)
             {
                 GlowGroup newgg = new GlowGroup();
                 newgg.AddCard(cardID);
                 list.AddGlowGroup(newgg);
+                controllers.ConnectionController.UpdateViz(null, new GlowGroup[] { newgg });
                 return;
             }
             else
             {
                 List<string> newCardList = new List<string>();
+                //Remove the glow effects from groups
                 foreach (GlowGroup gg in groups)
                 {
                     foreach (string id in gg.GetCardID())
@@ -101,6 +98,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                     }
                     list.RemoveGlowGroup(gg);
                 }
+                //Add all cards in the previous glow groups to the new group
                 GlowGroup newgg = new GlowGroup();
                 newgg.AddCard(cardID);
                 AddGlowEffect(cardID, 0);
@@ -110,9 +108,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                     AddGlowEffect(id, 0);
                 }
                 list.AddGlowGroup(newgg);
+                controllers.ConnectionController.UpdateViz(groups, new GlowGroup[] { newgg });
                 return;
             }
         }
+        /// <summary>
+        /// Connect multiple groups
+        /// </summary>
+        /// <param name="cardID"> The card id that trigger the event</param>
         internal async void ConnectGroupWithGroups(string cardID)
         {
             GlowGroup group = list.GetGroup(cardID);
@@ -140,6 +143,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                 AddGlowEffect(c, 0);
             }
             list.AddGlowGroup(newgg);
+            controllers.ConnectionController.UpdateViz(tempList.ToArray(), new GlowGroup[] { newgg });
         }
         /// <summary>
         /// Update one card when point down
@@ -147,11 +151,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="cardID"></param>
         internal async void DisconnectOneCardWithGroups(string cardID)
         {
-            CardStatus targetCardStatus = await controllers.CardController.GetLiveCardStatus(cardID);
-            if (targetCardStatus == null)
-            {
-                return;
-            }
             //Find the group that contains this card
             GlowGroup currentGroup = list.GetGroup(cardID);
             int colorIndex = 0;
@@ -186,7 +185,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             }
         }
         /// <summary>
-        /// Form cards into groups
+        /// Based on the connection of the cards, create different groups
         /// </summary>
         /// <param name="cardIDs"></param>
         /// <returns></returns>
@@ -204,6 +203,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                 cardList.Remove(cardID);
                 GlowGroup newgg = new GlowGroup();
                 newgg.AddCard(cardID);
+                //Recursion
                 await GetConnectedCards(cardID, cardList, newgg);
                 groups.Add(newgg);
             }
