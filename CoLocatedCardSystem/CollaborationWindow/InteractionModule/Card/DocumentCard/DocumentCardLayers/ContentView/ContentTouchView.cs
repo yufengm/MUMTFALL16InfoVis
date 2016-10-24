@@ -20,6 +20,21 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         Document document;
         DocumentCardController controller;
         DocumentCard card;
+        double textSize = 3;
+
+        public double TextSize
+        {
+            get
+            {
+                return textSize;
+            }
+
+            set
+            {
+                textSize = value;
+            }
+        }
+
         internal enum LoadMode {
             ALL,
             KeyWord,
@@ -87,7 +102,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 double currentHight = 0;
                 double currentWidth = 0;
                 this.BorderThickness = new Thickness(0);
-                double textSize = 3;
                 StackPanel horiPanel = new StackPanel();
                 horiPanel.Orientation = Orientation.Horizontal;
                 int rIndex = 0;
@@ -131,13 +145,16 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         this.Children.Add(horiPanel);
                     }
                     Size emptyBox = UIHelper.GetBoundingSize(" ", textSize);
-                    horiPanel = new StackPanel();
-                    horiPanel.Width = this.Width;
-                    horiPanel.Height = 0;
-                    horiPanel.Orientation = Orientation.Horizontal;
-                    currentWidth = horiPanel.Width;
-                    currentHight += emptyBox.Height;
-                    this.Children.Add(horiPanel);
+                    if (mode == LoadMode.ALL || mode == LoadMode.KeyWord)
+                    {
+                        horiPanel = new StackPanel();
+                        horiPanel.Width = this.Width;
+                        horiPanel.Height = 0;
+                        horiPanel.Orientation = Orientation.Horizontal;
+                        currentWidth = horiPanel.Width;
+                        currentHight += emptyBox.Height;
+                        this.Children.Add(horiPanel);
+                    }
                     foreach (Token token in pd.List)
                     {
                         if (mode == LoadMode.KeyWord)

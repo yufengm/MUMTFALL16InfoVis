@@ -72,13 +72,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 label.Text = "High light:";
                 grid.Children.Add(label);
                 Grid.SetRow(label, 0);
-                
-                contentView.Height = attachedCard.Height;
+
+                ScrollViewer contentSV = new ScrollViewer();
+                contentSV.HorizontalScrollMode = ScrollMode.Disabled;
+                contentView.TextSize = 6;
+                contentSV.Width = attachedCard.Width;
+                contentSV.Height = attachedCard.Height;
                 contentView.Width = attachedCard.Width;
-                contentView.Padding = new Thickness(0);
-                contentView.Margin = new Thickness(0);
-                Grid.SetRow(contentView, 1);
-                grid.Children.Add(contentView);
+                contentSV.Content = contentView;
+                contentSV.Padding = new Thickness(0);
+                contentSV.Margin = new Thickness(0);
+                grid.Children.Add(contentSV);
+                Grid.SetRow(contentSV, 1);
+
                 this.Children.Add(grid);
             });
         }

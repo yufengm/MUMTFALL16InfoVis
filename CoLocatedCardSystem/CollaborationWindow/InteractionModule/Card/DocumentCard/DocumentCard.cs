@@ -170,7 +170,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 this.Children.Add(layers[currentLayer]);
             });
         }
-
+        internal bool isConnectAllowed() {
+            return currentLayer <= 1;
+        }
         /// <summary>
         /// Send a new touch to the touch module, with the type of Document Card
         /// </summary>
