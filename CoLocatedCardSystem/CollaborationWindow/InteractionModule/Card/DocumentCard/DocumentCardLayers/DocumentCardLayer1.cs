@@ -71,6 +71,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 titleTextBlock.VerticalAlignment = VerticalAlignment.Center;
                 titleTextBlock.FontStretch = FontStretch.Normal;
                 titleTextBlock.FontWeight = FontWeights.Bold;
+                titleTextBlock.IsHitTestVisible = false;
                 this.Children.Add(titleTextBlock);
             });
         }
