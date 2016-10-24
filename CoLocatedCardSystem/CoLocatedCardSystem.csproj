@@ -89,18 +89,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Content Include="Assets\d3\d3\d3.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\d3\d3\d3.min.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\d3\wordcloud.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\d3\wordcloud.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\data\phonelog.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -211,6 +199,7 @@
     <Compile Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml.cs">
       <DependentUpon>CollaborationWindowSecondaryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SecondaryWindow\ScriptController.cs" />
     <Compile Include="SecondaryWindow\Tool\SecondaryScreen.cs" />
     <Compile Include="SecondaryWindow\SecondaryWindowLifeEventControl.cs" />
     <Compile Include="User.cs" />
@@ -232,10 +221,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\menu_bg.png" />
-    <Content Include="Assets\p5\p5\p5.js" />
-    <Content Include="Assets\p5\p5\p5.min.js" />
-    <Content Include="Assets\p5\wordcloud.html" />
-    <Content Include="Assets\p5\wordcloud.js" />
+    <Content Include="Assets\p5\awarecloud.js\index.html" />
+    <Content Include="Assets\p5\awarecloud.js\libraries\p5.dom.js" />
+    <Content Include="Assets\p5\awarecloud.js\libraries\p5.js" />
+    <Content Include="Assets\p5\awarecloud.js\libraries\p5.sound.js" />
+    <Content Include="Assets\p5\awarecloud.js\sketch.js" />
     <Content Include="Assets\review\00623189-7a17-3ead-b821-c09364258786.jpg" />
     <Content Include="Assets\review\00748e4c-7fd4-37df-a24a-756983cd0050.jpg" />
     <Content Include="Assets\review\00aa5a85-3795-3ddd-a38c-704bd59847d3.jpg" />

@@ -25,6 +25,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
     public sealed partial class CollaborationWindowSecondaryPage : Page
     {
         public static CollaborationWindowSecondaryPage Current;
+        ScriptController scriptController;
         public CollaborationWindowSecondaryPage()
         {
             this.InitializeComponent();
@@ -38,7 +39,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
 
         private void Init()
         {
-            
+
             SecondaryScreen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
             SecondaryScreen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
             System.Diagnostics.Debug.WriteLine(SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
@@ -49,8 +50,15 @@ namespace CoLocatedCardSystem.SecondaryWindow
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
             this.WordCloud.Width = this.Width;
             this.WordCloud.Height = this.Height;
-            string src = "ms-appx-web:///Assets/p5/wordcloud.html";
-            this.WordCloud.Navigate(new Uri(src));            
+            string src = "ms-appx-web:///Assets/p5/awarecloud.js/index.html";
+            this.WordCloud.Navigate(new Uri(src));
+            this.WordCloud.NavigationCompleted += WordCloud_NavigationCompleted;
+         }
+
+        private async void WordCloud_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            await this.WordCloud.InvokeScriptAsync("initData", new string[] { "1", "Peach" });
+            await this.WordCloud.InvokeScriptAsync("initData", new string[] { "2", "Banananana" });
         }
     }
 }
