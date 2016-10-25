@@ -98,14 +98,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             liveCardList.MoveCardByVector(id, vector);
         }
         /// <summary>
-        /// Remove the glow from the card
-        /// </summary>
-        /// <param name="cardID"></param>
-        internal void RemoveGlow(string cardID)
-        {
-            controllers.GlowController.DisconnectOneCardWithGroups(cardID);
-        }
-        /// <summary>
         /// Create a touch and pass it to the interaction controller.
         /// </summary>
         /// <param name="p"></param>

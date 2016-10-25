@@ -15,30 +15,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         }
         internal override void Detect(Touch[] touchList, Touch[] targetList)
         {
-            if (targetList == null || targetList.Length == 0||touchList==null) {
+            if (targetList == null || targetList.Length == 0 || touchList == null)
+            {
                 return;
             }
             base.Detect(touchList, targetList);
-            try
+            Touch newTouch = targetList[0];
+            if (newTouch!=null&&newTouch.Sender is DocumentCard)
             {
-                Touch newTouch = targetList[0];
-                if (newTouch.Sender is DocumentCard)
+                //If some other touch on the same card, don't perform the action
+                for (int i = 0, size = touchList.Length; i < size; i++)
                 {
-                    //If some other touch on the same card, don't perform the action
-                    for (int i = 0, size = touchList.Length; i < size; i++)
+                    if (touchList[i].Sender.Equals(newTouch.Sender) && touchList[i].TouchID != newTouch.TouchID)
                     {
-                        if (touchList[i].Sender.Equals(newTouch.Sender)&&touchList[i].TouchID!=newTouch.TouchID)
-                        {
-                            return;
-                        }
+                        return;
                     }
-                    Card card = newTouch.Sender as Card;
-                    gestureController.Controllers.GlowController.DisconnectOneCardWithGroups(card.CardID);
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message + "\n" + ex.StackTrace.ToString());
+                Card card = newTouch.Sender as Card;
+                gestureController.Controllers.GlowController.DisconnectOneCardWithGroups(card.CardID);
             }
         }
     }

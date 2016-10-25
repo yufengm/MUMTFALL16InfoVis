@@ -26,6 +26,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
     {
         CentralControllers controllers;
         CollaborationWindowLifeEventControl lifeEventControl;
+        Canvas container;
         public CollaborationWindowMainPage()
         {
             this.InitializeComponent();
@@ -45,23 +46,25 @@ namespace CoLocatedCardSystem.CollaborationWindow
             Screen.SCALE_FACTOR= 1/DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             this.Width = Screen.WIDTH;
             this.Height = Screen.HEIGHT;
-            Container.Width = this.Width;
-            Container.Height = this.Height;
+            container = new Canvas();
+            container.Width = Screen.WIDTH;
+            container.Height = Screen.HEIGHT;
             controllers = new CentralControllers();
             controllers.Init(Screen.WIDTH, Screen.HEIGHT);
-            Container.Children.Add(controllers.BaseLayerController.GetBaseLayer());
-            Container.Children.Add(controllers.GlowLayerController.GetGlowLayer());
-            Container.Children.Add(controllers.CardLayerController.GetCardLayer());
-            Container.Children.Add(controllers.SortingBoxLayerController.GetSortingBoxLayer());
-            Container.Children.Add(controllers.MenuLayerController.GetMenuLayer());
+            container.Children.Add(controllers.BaseLayerController.GetBaseLayer());
+            container.Children.Add(controllers.GlowLayerController.GetGlowLayer());
+            container.Children.Add(controllers.CardLayerController.GetCardLayer());
+            container.Children.Add(controllers.SortingBoxLayerController.GetSortingBoxLayer());
+            container.Children.Add(controllers.MenuLayerController.GetMenuLayer());
+            this.Content = container;
         }
         public void Deinit()
         {
             controllers.Deinit();
-            Container.Children.Remove(controllers.BaseLayerController.GetBaseLayer());
-            Container.Children.Remove(controllers.CardLayerController.GetCardLayer());
-            Container.Children.Remove(controllers.SortingBoxLayerController.GetSortingBoxLayer());
-            Container.Children.Remove(controllers.MenuLayerController.GetMenuLayer());
+            container.Children.Remove(controllers.BaseLayerController.GetBaseLayer());
+            container.Children.Remove(controllers.CardLayerController.GetCardLayer());
+            container.Children.Remove(controllers.SortingBoxLayerController.GetSortingBoxLayer());
+            container.Children.Remove(controllers.MenuLayerController.GetMenuLayer());
         }
     }
 }

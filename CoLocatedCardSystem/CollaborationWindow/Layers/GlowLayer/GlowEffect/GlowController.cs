@@ -73,7 +73,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// </summary>
         /// <param name="cardID"></param>
         /// <param name="groups"></param>
-        internal async void ConnectOneCardWithGroups(string cardID, GlowGroup[] groups)
+        internal void ConnectOneCardWithGroups(string cardID, GlowGroup[] groups)
         {
             //if no groups intersected, create a new group
             if (groups == null || groups.Length == 0)
@@ -143,7 +143,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                 AddGlowEffect(c, 0);
             }
             list.AddGlowGroup(newgg);
-            controllers.ConnectionController.UpdateViz(tempList.ToArray(), new GlowGroup[] { newgg });
+            controllers.ConnectionController.UpdateViz(tempList.ToArray(), new GlowGroup[] {newgg});
         }
         /// <summary>
         /// Update one card when point down
@@ -158,6 +158,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             if (glow != null) {
                 colorIndex = glow.ColorIndex;
             }
+            
             //If a group contains the card, remove the card from the group
             //If the group is empty, remove the group from the list
             if (currentGroup != null)
@@ -182,6 +183,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                         }
                     }
                 }
+                currentGroup.AddCard(cardID);
+                controllers.ConnectionController.UpdateViz(new GlowGroup[] { currentGroup }, groups);
             }
         }
         /// <summary>
