@@ -23,29 +23,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         /// <returns></returns>
         internal override async void Detect(Touch[] touchList, Touch[] targetList)
         {
-            try
+            Touch removedTouch = targetList[0];
+            if (removedTouch.Sender is DocumentCard
+                    && removedTouch.GetStatus() == TOUCH_STATUS.RELEASED)
             {
-                Touch removedTouch = targetList[0];
-                if (removedTouch.Sender is DocumentCard
-                        && removedTouch.GetStatus() == TOUCH_STATUS.RELEASED)
+                //If some other touch on the same card, don't perform the action
+                for (int i = 0, size = touchList.Length; i < size; i++)
                 {
-                    //If some other touch on the same card, don't perform the action
-                    for (int i = 0, size = touchList.Length; i < size; i++) {
-                        if (touchList[i].Sender.Equals(removedTouch.Sender)) {
-                            return;
-                        }
-                    }
-                    DocumentCard card = removedTouch.Sender as DocumentCard;
-                    GlowGroup[] attachedGroups = await gestureController.Controllers.GlowController.GetAttachedGroups(card.CardID);
-                    if (card.isConnectAllowed() && attachedGroups != null)
+                    if (touchList[i].Sender.Equals(removedTouch.Sender))
                     {
-                        gestureController.Controllers.GlowController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
+                        return;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message + "\n" + ex.StackTrace.ToString());
+                DocumentCard card = removedTouch.Sender as DocumentCard;
+                GlowGroup[] attachedGroups = await gestureController.Controllers.GlowController.GetAttachedGroups(card.CardID);
+                if (card.isConnectAllowed() && attachedGroups != null)
+                {
+                    gestureController.Controllers.GlowController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
+                }
             }
         }
     }

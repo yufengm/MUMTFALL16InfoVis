@@ -4,53 +4,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
 {
     class ConnectionController
     {
-        private CentralControllers centralControllers;
-
+        private CentralControllers controllers;
+        private List<GlowGroup> previousStatus;
+        private List<GlowGroup> currentStatus;
         public ConnectionController(CentralControllers centralControllers)
         {
-            this.centralControllers = centralControllers;
+            this.controllers = centralControllers;
         }
 
-        internal void Init() { }
+        internal void Init()
+        {
+            previousStatus = new List<GlowGroup>();
+            currentStatus = new List<GlowGroup>();
+        }
         internal void Deinit() { }
-        /// <summary>
-        /// Update the visualization on the secondary display
-        /// </summary>
-        /// <param name="newgg1">The old glow groups. If null, adding newgg2</param>
-        /// <param name="newgg2">The new glow groups, If null, remove newgg1</param>
-        internal void UpdateViz(GlowGroup[] newgg1, GlowGroup[] newgg2)
+
+        internal void SavePreviousStatus()
         {
-            if (newgg1 == null) {
-                AddCloud(newgg2);
-            }
-            if (newgg2 == null)
+            lock (previousStatus)
             {
-                RemoveCloud(newgg1);
+                List<GlowGroup> glowgroups = controllers.GlowController.GetGroups();
+                previousStatus.Clear();
+                foreach (GlowGroup gg in glowgroups)
+                {
+                    GlowGroup newgg = new GlowGroup();
+                    foreach (string id in gg.GetCardID())
+                    {
+                        newgg.AddCard(id);
+                    }
+                    previousStatus.Add(newgg);
+                }
             }
-            else {
-                UpdateCloud(newgg1,newgg2);
-            }
         }
-        private void AddCloud(GlowGroup[] newgg2)
+
+        internal void UpdateCurrentStatus()
         {
-            System.Diagnostics.Debug.WriteLine("add cloud");
+            lock (currentStatus)
+            {
+                List<GlowGroup> glowgroups = controllers.GlowController.GetGroups();
+                currentStatus.Clear();
+                foreach (GlowGroup gg in glowgroups)
+                {
+                    GlowGroup newgg = new GlowGroup();
+                    foreach (string id in gg.GetCardID())
+                    {
+                        newgg.AddCard(id);
+                    }
+                    currentStatus.Add(newgg);
+                }
+            }            
         }
-
-        private void UpdateCloud(GlowGroup[] newgg1, GlowGroup[] newgg2)
-        {
-            System.Diagnostics.Debug.WriteLine("update cloud");
-        }
-
-        private void RemoveCloud(GlowGroup[] newgg1)
-        {
-            System.Diagnostics.Debug.WriteLine("remove cloud");
-        }
-
-
     }
 }
