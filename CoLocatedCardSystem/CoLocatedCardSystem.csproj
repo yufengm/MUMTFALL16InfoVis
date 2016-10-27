@@ -109,6 +109,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ClusterModule\ClusterDoc.cs" />
     <Compile Include="CollaborationWindow\CollaborationWindowMainPage.xaml.cs">
       <DependentUpon>CollaborationWindowMainPage.xaml</DependentUpon>
     </Compile>
@@ -197,10 +198,15 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloud.cs" />
+    <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloudController.cs" />
+    <Compile Include="ClusterModule\CardClusters.cs" />
+    <Compile Include="SecondaryWindow\AwareCloudModule\Cloud.cs" />
+    <Compile Include="SecondaryWindow\AwareCloudModule\CloudTile.cs" />
+    <Compile Include="SecondaryWindow\AwareCloudModule\CLOUDTILETYPE.cs" />
     <Compile Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml.cs">
       <DependentUpon>CollaborationWindowSecondaryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SecondaryWindow\ScriptController.cs" />
     <Compile Include="SecondaryWindow\Tool\SecondaryScreen.cs" />
     <Compile Include="SecondaryWindow\SecondaryWindowLifeEventControl.cs" />
     <Compile Include="User.cs" />
@@ -226,7 +232,9 @@
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.dom.js" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.js" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.sound.js" />
+    <Content Include="Assets\p5\awarecloud.js\Node.js" />
     <Content Include="Assets\p5\awarecloud.js\sketch.js" />
+    <Content Include="Assets\p5\awarecloud.js\WordCloud.js" />
     <Content Include="Assets\review\00623189-7a17-3ead-b821-c09364258786.jpg" />
     <Content Include="Assets\review\00748e4c-7fd4-37df-a24a-756983cd0050.jpg" />
     <Content Include="Assets\review\00aa5a85-3795-3ddd-a38c-704bd59847d3.jpg" />

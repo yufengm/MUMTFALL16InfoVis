@@ -1,9 +1,11 @@
 ﻿using System;
 using Windows.ApplicationModel.Core;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -14,8 +16,6 @@ namespace CoLocatedCardSystem
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public static MainPage Current;
-
         public MainPage()
         {
             this.InitializeComponent();
@@ -26,7 +26,6 @@ namespace CoLocatedCardSystem
         /// </summary>
         internal async void Init()
         {
-            Current = this;
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
         }
         /// <summary>
@@ -84,6 +83,8 @@ namespace CoLocatedCardSystem
                 catch (InvalidOperationException)
                 {
                 }
+                this.Visibility = Visibility.Collapsed;
+                this.Background = new SolidColorBrush(Colors.Transparent);
             }
         }
     }

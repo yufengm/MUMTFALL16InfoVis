@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CoLocatedCardSystem.ClusterModule;
+using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,6 +26,7 @@ namespace CoLocatedCardSystem
     /// </summary>
     sealed partial class App : Application
     {
+        CardClusters cardClusters = new CardClusters();
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -32,6 +37,16 @@ namespace CoLocatedCardSystem
             this.Suspending += OnSuspending;
         }
 
+        internal void SetCardClusters(Document[][] docs, CardStatus[][] states) {
+            cardClusters.SetCluster(docs,states);
+        }
+        internal ConcurrentBag<ClusterDoc[]> GetBuffer() {
+            return cardClusters.Bufferlist;
+        }
+        internal ConcurrentBag<ClusterDoc[]> GetCurrent()
+        {
+            return cardClusters.List;
+        }
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.

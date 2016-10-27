@@ -81,7 +81,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="groups"></param>
         internal void ConnectOneCardWithGroups(string cardID, GlowGroup[] groups)
         {
-            controllers.ConnectionController.SavePreviousStatus();
             //if no groups intersected, create a new group
             if (groups == null || groups.Length == 0)
             {
@@ -125,7 +124,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="cardID"> The card id that trigger the event</param>
         internal async void ConnectGroupWithGroups(string cardID)
         {
-            controllers.ConnectionController.SavePreviousStatus();
             GlowGroup group = list.GetGroup(cardID);
             List<GlowGroup> tempList = new List<GlowGroup>();
             list.RemoveGlowGroup(group);
@@ -159,7 +157,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="cardID"></param>
         internal async void DisconnectOneCardWithGroups(string cardID)
         {
-            controllers.ConnectionController.SavePreviousStatus();
             //Find the group that contains this card
             GlowGroup currentGroup = list.GetGroup(cardID);
             int colorIndex = 0;

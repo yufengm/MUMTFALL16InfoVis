@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoLocatedCardSystem.SecondaryWindow.AwareCloudModule;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
     public sealed partial class CollaborationWindowSecondaryPage : Page
     {
         public static CollaborationWindowSecondaryPage Current;
-        ScriptController scriptController;
+        AwareCloudController controller;
         public CollaborationWindowSecondaryPage()
         {
             this.InitializeComponent();
@@ -39,7 +40,6 @@ namespace CoLocatedCardSystem.SecondaryWindow
 
         private void Init()
         {
-
             SecondaryScreen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
             SecondaryScreen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
             System.Diagnostics.Debug.WriteLine(SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
@@ -48,6 +48,8 @@ namespace CoLocatedCardSystem.SecondaryWindow
             this.Height = SecondaryScreen.HEIGHT;
             ApplicationView.PreferredLaunchViewSize = new Size(this.Width, this.Height);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+            controller = new AwareCloudController();
+
             this.WordCloud.Width = this.Width;
             this.WordCloud.Height = this.Height;
             string src = "ms-appx-web:///Assets/p5/awarecloud.js/index.html";
@@ -55,10 +57,9 @@ namespace CoLocatedCardSystem.SecondaryWindow
             this.WordCloud.NavigationCompleted += WordCloud_NavigationCompleted;
          }
 
-        private async void WordCloud_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        private void WordCloud_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            await this.WordCloud.InvokeScriptAsync("initData", new string[] { "1", "Peach" });
-            await this.WordCloud.InvokeScriptAsync("initData", new string[] { "2", "Banananana" });
+            controller.init(this.WordCloud);
         }
     }
 }

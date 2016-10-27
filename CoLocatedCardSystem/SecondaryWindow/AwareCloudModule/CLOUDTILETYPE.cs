@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoLocatedCardSystem.SecondaryWindow
+namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
 {
-    class ScriptController
+    enum CLOUDTILETYPE
     {
+        WORD,
+        PICTURE
     }
 }
