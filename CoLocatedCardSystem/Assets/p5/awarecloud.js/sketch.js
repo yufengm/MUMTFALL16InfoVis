@@ -6,44 +6,16 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255);
     cloud = new WordCloud();
-    root = new Node();
-    root.txt = "root";
-    root.group = "one";
-    root.x = windowWidth / 2;
-    root.y = windowHeight / 2;
-    root.attrX = windowWidth / 3;
-    root.attrY = windowHeight / 2;
-    root.weight = 50;
-    var font = root.weight + "px Arial";
-    var tsize = getTextSize(root.txt, font, root.weight);
-    root.w = tsize.w;
-    root.h = tsize.h;
-    cloud.push(root);
-
-    for (var i = 0; i < 20; i++) {
-        var node = new Node();
-        node.txt = "test" + i;
-        node.group = "one";
-        node.x = windowWidth / 2 + random(10) - 5;
-        node.y = windowHeight / 2 + random(10) - 5;
-        node.attrX = windowWidth / 3;
-        node.attrY = windowHeight / 2;
-        node.weight = random(10,50);
-        var font = node.weight + "px Arial";
-        var tsize = getTextSize(node.txt, font, node.weight);
-        node.w = tsize.w;
-        node.h = tsize.h;
-        root.connections.push(node);
-        cloud.push(node);
-    }
-    sort(cloud.wordNodes);
 }
 
 function draw() {
+    background(255);
     cloud.update();
-    background(0);
+
+    console.log(cloud.wordNodes.length);
     for (var i = 0; i < cloud.wordNodes.length; i++) {
-        fill(255);
+        fill(0);
+        noStroke();
         var node = cloud.wordNodes[i];
         textSize(node.weight);
         text(node.txt, node.x, node.y+node.h);
@@ -59,16 +31,15 @@ function mousePressed() {
     var node = new Node();
     node.txt = "test" + cloud.wordNodes.length;
     node.group = "one";
-    node.x = windowWidth / 2 + random(10) - 5;
-    node.y = windowHeight / 2 + random(10) - 5;
-    node.attrX = windowWidth / 3;
-    node.attrY = windowHeight / 2;
-    node.weight = random(10, 50);
+    node.x = mouseX;
+    node.y = mouseY;
+    node.attrX = mouseX;
+    node.attrY = mouseY;
+    node.weight = random(30, 50);
     var font = node.weight + "px Arial";
     var tsize = getTextSize(node.txt, font, node.weight);
     node.w = tsize.w;
     node.h = tsize.h;
-    root.connections.push(node);
     cloud.push(node);
 }
 

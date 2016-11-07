@@ -1,7 +1,8 @@
 ﻿function WordCloud() {
     this.converged = false;
-    this.step = 10;
+    this.step = 30;
     this.energy = Number.MAX_VALUE;
+    this.overlap = Number.MAX_VALUE;
     this.wordNodes = new Array();
     this.progress = 0;
     this.optimal = 10;
@@ -12,45 +13,70 @@ WordCloud.prototype.update = function () {
     this.energy = 0;
     for (var i = 0; i < this.wordNodes.length; i++) {
         var firstNode = this.wordNodes[i];
-        //var fca = [0, 0];
-        //var centerAttr = this.calCenterAttraction(firstNode);
-        //fca[0] += centerAttr[0];
-        //fca[1] += centerAttr[1];
-        //var fcalength = Math.sqrt(Math.pow(fca[0], 2) + Math.pow(fca[1], 2));
-        //firstNode.x += this.step * (fca[0] / fcalength);
-        //firstNode.y += this.step * (fca[1] / fcalength);
-        for (var j = i; j < this.wordNodes.length; j++) {
-            var f = [0, 0];
-            var secondNode = this.wordNodes[j];
+        for (var j = 0; j < i; j++) {
             if (i != j) {
-                if (secondNode.connect(firstNode)) {
-                    var attraction = this.calOverlapAttraction(firstNode, secondNode);
-                    f[0] += attraction[0];
-                    f[1] += attraction[1];
-                }
+                var f = [0, 0];
+                var secondNode = this.wordNodes[j];
                 var repel = this.calOverlapRepel(firstNode, secondNode);
                 f[0] += repel[0];
                 f[1] += repel[1];
+                var flength = Math.sqrt(Math.pow(f[0], 2) + Math.pow(f[1], 2));
+                if (flength > 0) {
+                    firstNode.x += this.step * (f[0] / flength);
+                    firstNode.y += this.step * (f[1] / flength);
+                    secondNode.x -= this.step * (f[0] / flength);
+                    secondNode.y -= this.step * (f[1] / flength);
+                }
+                this.energy += Math.pow(flength, 2);
             }
-            var flength = Math.sqrt(Math.pow(f[0], 2) + Math.pow(f[1], 2));
-            if (flength > 0) {
-                firstNode.x += this.step * (f[0] / flength);
-                firstNode.y += this.step * (f[1] / flength);
-                secondNode.x -= this.step * (f[0] / flength);
-                secondNode.y -= this.step * (f[1] / flength);
+        }
+    }
+    for (var i = 0; i < this.wordNodes.length; i++) {
+        var f = [0, 0];
+        var node = this.wordNodes[i];
+        var attraction = this.calCenterAttraction(node);
+        f[0] = attraction[0];
+        f[1] = attraction[1];
+        var flength = Math.sqrt(Math.pow(f[0], 2) + Math.pow(f[1], 2));
+        if (flength > 0) {
+            var xMove = this.step * (f[0] / flength);
+            var yMove = this.step * (f[1] / flength);
+            node.x -= xMove;
+            node.y -= yMove;
+            var overlap0 = this.overlap;
+            this.updateOverlap();
+            if (overlap0 < this.overlap) {
+                node.x += xMove;
+                node.y += yMove;
             }
-            this.energy += Math.pow(flength, 2);
+            else {
+                this.energy += Math.pow(flength, 2);
+            }
         }
     }
     this.updateStepLength(this.energy, energy0);
 }
 
+WordCloud.prototype.updateOverlap = function () {
+    this.overlap = 0;
+    for (var i = 0; i < this.wordNodes.length; i++) {
+        var firstNode = this.wordNodes[i];
+        for (var j = 0; j < this.wordNodes.length; j++) {
+            if (i != j) {
+                var secondNode = this.wordNodes[j];
+                var deltaXY = rectRect(firstNode.x, firstNode.y, firstNode.w, firstNode.h,
+                    secondNode.x, secondNode.y, secondNode.w, secondNode.h);
+                this.overlap += deltaXY.x + deltaXY.y;
+            }
+        }
+    }
+}
 
 WordCloud.prototype.calCenterAttraction = function (node) {
     var dist = lineDistance(node.x + node.w / 2, node.y + node.h / 2, node.attrX, node.attrY);
-    var atrc = Math.pow(dist, 2);
-    result = [atrc * (node.attrX - node.x - node.w / 2) / dist,
-        atrc * (node.attrY - node.y - node.h / 2) / dist];
+    var atrc = dist*node.weight;
+    result = [atrc * (node.x + node.w / 2 - node.attrX) / dist,
+        atrc * (node.y + node.h / 2 - node.attrY) / dist];
     return result;
 }
 
@@ -94,7 +120,7 @@ WordCloud.prototype.calOverlapRepel = function (node1, node2) {
     var rpl = 0;
     var result = [0, 0];
     if (deltaXY.x > 0 && deltaXY.y > 0) {
-        rpl = -100000 * min(deltaXY.x, deltaXY.y);
+        rpl = -Math.pow(2, 53) * min(deltaXY.x, deltaXY.y);
         result = [rpl * (node2.x + node2.w / 2 - node1.x - node1.w / 2) / dist,
                 rpl * (node2.y + node2.h / 2 - node1.y - node1.h / 2) / dist];
     }
