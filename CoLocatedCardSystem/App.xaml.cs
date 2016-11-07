@@ -1,6 +1,7 @@
 ﻿using CoLocatedCardSystem.ClusterModule;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using CoLocatedCardSystem.SecondaryWindow.AwareCloudModule;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -27,6 +28,21 @@ namespace CoLocatedCardSystem
     sealed partial class App : Application
     {
         CardClusters cardClusters = new CardClusters();
+        AwareCloudController awareCloudController;
+
+        internal AwareCloudController AwareCloudController
+        {
+            get
+            {
+                return awareCloudController;
+            }
+
+            set
+            {
+                awareCloudController = value;
+            }
+        }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -40,6 +56,11 @@ namespace CoLocatedCardSystem
         internal void SetCardClusters(Document[][] docs, CardStatus[][] states) {
             cardClusters.SetCluster(docs,states);
         }
+
+        internal void UpdateCloud() {
+            awareCloudController.UpdateView();
+        }
+
         internal ConcurrentBag<ClusterDoc[]> GetBuffer() {
             return cardClusters.Bufferlist;
         }

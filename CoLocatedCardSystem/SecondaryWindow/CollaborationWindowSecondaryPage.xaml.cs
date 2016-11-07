@@ -27,6 +27,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
     {
         public static CollaborationWindowSecondaryPage Current;
         AwareCloudController controller;
+
         public CollaborationWindowSecondaryPage()
         {
             this.InitializeComponent();
@@ -49,7 +50,8 @@ namespace CoLocatedCardSystem.SecondaryWindow
             ApplicationView.PreferredLaunchViewSize = new Size(this.Width, this.Height);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
             controller = new AwareCloudController();
-
+            App app = App.Current as App;
+            app.AwareCloudController = controller;
             this.WordCloud.Width = this.Width;
             this.WordCloud.Height = this.Height;
             string src = "ms-appx-web:///Assets/p5/awarecloud.js/index.html";

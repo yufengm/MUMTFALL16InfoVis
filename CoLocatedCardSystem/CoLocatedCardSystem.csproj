@@ -228,6 +228,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\menu_bg.png" />
+    <Content Include="Assets\p5\awarecloud.js\Geometry.js" />
     <Content Include="Assets\p5\awarecloud.js\index.html" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.dom.js" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.js" />
@@ -1735,6 +1736,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\d3\" />
     <Folder Include="ControlWindow\" />
   </ItemGroup>
   <ItemGroup>

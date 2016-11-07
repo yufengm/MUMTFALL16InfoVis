@@ -17,7 +17,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
         ThreadPoolTimer periodicTimer;
         TimeSpan period = TimeSpan.FromMilliseconds(3000);
         WebView webView;
-        internal void init(WebView v) {
+        ConcurrentBag<ClusterDoc[]> list=new ConcurrentBag<ClusterDoc[]>();
+        internal void init(WebView v)
+        {
             this.webView = v;
             if (periodicTimer == null)
             {
@@ -28,28 +30,31 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
             }
         }
 
-        internal void Deinit() {
+        internal void Deinit()
+        {
             if (periodicTimer != null)
             {
                 periodicTimer.Cancel();
                 periodicTimer = null;
             }
         }
-
-        private async void FetchNewArray()
-        {
-            App app = App.Current as App;
-            ConcurrentBag<ClusterDoc[]> bag = app.GetCurrent();
-            foreach (ClusterDoc[] docs in bag)
+        internal async void UpdateView() {
+            foreach (ClusterDoc[] docs in list)
             {
                 foreach (ClusterDoc doc in docs)
                 {
                     await webView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
-                     {
-                         await webView.InvokeScriptAsync("addNode", new string[] {  Guid.NewGuid().ToString(),doc.RawDocument.Name.Split(' ')[0] });
-                     });
+                    {
+                        await webView.InvokeScriptAsync("addNode", new string[] {doc.GetName()});
+                    });
                 }
             }
+
+        }
+        private void FetchNewArray()
+        {
+            App app = App.Current as App;
+            list = app.GetCurrent();
         }
     }
 }
