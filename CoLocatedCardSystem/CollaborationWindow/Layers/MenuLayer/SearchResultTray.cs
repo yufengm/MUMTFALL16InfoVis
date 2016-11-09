@@ -171,8 +171,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 }
                 for (int i = startCardID, endID = startCardID + cardToShow; i < endID; i++)
                 {
-                    if (stackCanvas[i].Children.Count == 0 &&
-                        !menuLayerController.Controllers.CardController.IsCardOnTable(currentSearchResult[i].CardID))
+                    if (stackCanvas[i].Children.Count == 0)
                     {
                         ResultCard resultCard = new ResultCard(currentSearchResult[i].CardController);
                         resultCard.MenuLayerController = menuLayerController;
@@ -180,6 +179,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                         await resultCard.LoadUI();
                         resultCard.MoveTo(new Point(stackCanvas[i].Width / 2, stackCanvas[i].Height / 2));
                         resultCard.Block = stackCanvas[i];
+
+                        if (menuLayerController.Controllers.CardController.IsCardOnTable(currentSearchResult[i].CardID)) {
+                            resultCard.DisableCard();
+                        }
                         stackCanvas[i].Children.Add(resultCard);
                     }
                 }

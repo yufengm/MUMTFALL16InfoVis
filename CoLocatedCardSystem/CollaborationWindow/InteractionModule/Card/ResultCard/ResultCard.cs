@@ -26,6 +26,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         Canvas block = null;
         MenuLayerController menuLayerController = null;
+        bool isEnabled = true;
         public Canvas Block
         {
             get
@@ -122,34 +123,46 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         protected override void Card_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-            double translate = 0;
-            if (owner == User.ALEX)
+            if (isEnabled)
             {
-                translate = -e.Delta.Translation.X;
+                double translate = 0;
+                if (owner == User.ALEX)
+                {
+                    translate = -e.Delta.Translation.X;
+                }
+                else if (owner == User.BEN)
+                {
+                    translate = e.Delta.Translation.Y;
+                }
+                else if (owner == User.CHRIS)
+                {
+                    translate = e.Delta.Translation.X;
+                }
+                else if (owner == User.DANNY)
+                {
+                    translate = -e.Delta.Translation.Y;
+                }
+                if (this.position.Y + translate >= 0
+                    && this.position.Y + translate < 80 * Screen.SCALE_FACTOR)
+                {
+                    this.position.Y += translate;
+                    UpdateTransform();
+                }
+                else if (this.position.Y + translate < 0)
+                {
+                    MoveTo(new Point(80 * Screen.SCALE_FACTOR, 65 * Screen.SCALE_FACTOR));
+                    menuLayerController.AddPulledCard(this);
+                    DisableCard();
+                }
             }
-            else if (owner == User.BEN)
-            {
-                translate = e.Delta.Translation.Y;
-            }
-            else if (owner == User.CHRIS)
-            {
-                translate = e.Delta.Translation.X;
-            }
-            else if (owner == User.DANNY)
-            {
-                translate = -e.Delta.Translation.Y;
-            }
-            if (this.position.Y + translate >= 0
-                && this.position.Y + translate < 80 * Screen.SCALE_FACTOR)
-            {
-                this.position.Y += translate;
-                UpdateTransform();
-            }
-            else if (this.position.Y + translate < 0)
-            {
-                block.Children.Remove(this);
-                menuLayerController.AddPulledCard(this);
-            }
+        }
+
+        internal void DisableCard()
+        {
+            isEnabled = false;
+            titleTextBlock.Foreground = new SolidColorBrush(
+                Color.FromArgb(100, MyColor.Color3.R, MyColor.Color3.G, MyColor.Color3.B));
+            this.IsHitTestVisible = false;
         }
     }
 }
