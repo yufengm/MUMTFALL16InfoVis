@@ -7,10 +7,10 @@ function setup() {
 }
 
 function draw() {
-    background(255);
+    background(25,52,65);
     cloud.update();
     for (var i = 0; i < cloud.wordNodes.length; i++) {
-        fill(0);
+        fill(252,255,245);
         noStroke();
         var node = cloud.wordNodes[i];
         textSize(node.weight);

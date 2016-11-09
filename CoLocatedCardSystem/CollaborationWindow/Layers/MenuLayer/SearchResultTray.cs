@@ -35,7 +35,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         }
         public void Init(MenuBarInfo info)
         {
-            this.Background = new SolidColorBrush(Colors.LightBlue);//for debug
+            this.Background = new SolidColorBrush(Color.FromArgb(255,209,219,189));
             this.Width = info.SearchResultInfo.Size.Width;
             this.Height = info.SearchResultInfo.Size.Height;
             scrollViewer = new ScrollViewer();
@@ -57,6 +57,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             hideButton.Height = 20;
             hideButton.Content = "Hide";
             hideButton.Padding = new Thickness(0);
+            hideButton.Foreground = new SolidColorBrush(MyColor.Color1);
             UIHelper.InitializeUI(new Point(this.Width - hideButton.Width, -hideButton.Height),
                 0, 1, new Size(hideButton.Width, hideButton.Height), hideButton);
             hideButton.Click += HideButton_Click;
@@ -69,6 +70,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             resultNum.FontSize = 12;
             resultNum.IsHitTestVisible = false;
             resultNum.Padding = new Thickness(0);
+            resultNum.Foreground = new SolidColorBrush(MyColor.Color1);
             UIHelper.InitializeUI(new Point(0, -resultNum.Height),
                 0, 1, new Size(resultNum.Width, resultNum.Height), resultNum);
 

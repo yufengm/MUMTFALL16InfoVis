@@ -70,6 +70,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 label.FontSize = 4;
                 label.FontStretch = FontStretch.Normal;
                 label.Text = "High light:";
+                label.Foreground = new SolidColorBrush(MyColor.Color1);
                 grid.Children.Add(label);
                 Grid.SetRow(label, 0);
 
@@ -82,6 +83,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 contentSV.Content = contentView;
                 contentSV.Padding = new Thickness(0);
                 contentSV.Margin = new Thickness(0);
+               
                 grid.Children.Add(contentSV);
                 Grid.SetRow(contentSV, 1);
 

@@ -198,6 +198,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MyColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloud.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloudController.cs" />
@@ -1737,7 +1738,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\d3\" />
-    <Folder Include="ControlWindow\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VirtualKeyboard\VirtualKeyboard.csproj">

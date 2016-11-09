@@ -11,7 +11,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class CardInfo
     {
         protected Size cardSize = new Size(120 * Screen.SCALE_FACTOR, 90 * Screen.SCALE_FACTOR);
-        protected Color cardColor = Colors.Red;
+        protected Color cardColor = MyColor.Color4;
         protected Point cardPosition = new Point(0, 0);
         protected double cardScale = 1;
         protected double cardRotation = 0;
@@ -73,7 +73,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         private static CardInfo InitAlex()
         {
             CardInfo cardInfo = new CardInfo();
-            cardInfo.cardColor = Colors.Silver;
+            cardInfo.cardColor = MyColor.Color4;
             cardInfo.cardPosition = new Point(0, 0);
             cardInfo.cardScale = 1;
             cardInfo.cardRotation = 0;
@@ -87,7 +87,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         private static CardInfo InitBen()
         {
             CardInfo cardInfo = new CardInfo();
-            cardInfo.cardColor = Colors.Silver;
+            cardInfo.cardColor = MyColor.Color4;
             cardInfo.cardPosition = new Point(0, 0);
             cardInfo.cardScale = 1;
             cardInfo.cardRotation = 0;
@@ -100,7 +100,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         private static CardInfo InitChris()
         {
             CardInfo cardInfo = new CardInfo();
-            cardInfo.cardColor = Colors.Silver;
+            cardInfo.cardColor = MyColor.Color4;
             cardInfo.cardPosition = new Point(0, 0);
             cardInfo.cardScale = 1;
             cardInfo.cardRotation = 0;
@@ -113,7 +113,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         private static CardInfo InitDanny()
         {
             CardInfo cardInfo = new CardInfo();
-            cardInfo.cardColor = Colors.Silver;
+            cardInfo.cardColor = MyColor.Color4;
             cardInfo.cardPosition = new Point(0, 0);
             cardInfo.cardScale = 1;
             cardInfo.cardRotation = 0;

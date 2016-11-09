@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using Windows.UI;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
@@ -52,10 +53,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             LoadSearchButton(info);
             LoadCreatingSortingBoxButton(info);
             LoadSearchResultTray(info);
-            //Initialize the menubar
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/menu_bg.png"));
-            this.Background = brush;
+            this.Background = new SolidColorBrush(Color.FromArgb(255,145,170,157));
             //this.Children.Add(createSortingBoxButton);
             this.Children.Add(deleteButton);
             this.Children.Add(searchButton);
