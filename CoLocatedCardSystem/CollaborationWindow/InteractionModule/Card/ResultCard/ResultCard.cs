@@ -1,4 +1,5 @@
-﻿using CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer;
+﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,9 @@ using Windows.UI.Xaml.Media;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    class ResultCard:DocumentCard
+    class ResultCard : Card
     {
+        Document document;
         TextBlock titleTextBlock = new TextBlock();
         /// <summary>
         /// A fake card added to the tray just to show the search result. The move of the card is restricted to the block.
@@ -54,6 +56,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             
         }
+
+        /// <summary>
+        /// Initialize a semantic card.
+        /// </summary>
+        /// <param name="cardID"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="position"></param>
+        /// <param name="scale"></param>
+        /// <param name="rotation"></param>
+        internal void Init(string cardID, User user, Document doc)
+        {
+            base.Init(cardID, user);
+            this.document = doc;
+        }
+
         internal override async Task LoadUI()
         {
             await base.LoadUI();
@@ -77,13 +95,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     new Size(this.Width, this.Height),
                     titleTextBlock);
                 this.Children.Add(titleTextBlock);
-                titleTextBlock.Text = this.Document.GetName();
-                if (this.Document.GetName().Length > 25)
+                titleTextBlock.Text = this.document.GetName();
+                if (this.document.GetName().Length > 25)
                 {
                     titleTextBlock.FontSize = 11;
 
                 }
-                if (this.Document.GetName().Length > 50)
+                if (this.document.GetName().Length > 50)
                 {
                     titleTextBlock.FontSize = 9;
                 }
