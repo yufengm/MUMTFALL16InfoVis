@@ -109,7 +109,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ClusterModule\ClusterDoc.cs" />
+    <Compile Include="ClusterModule\ClusterDocs.cs" />
+    <Compile Include="ClusterModule\ClusterWord.cs" />
     <Compile Include="CollaborationWindow\CollaborationWindowMainPage.xaml.cs">
       <DependentUpon>CollaborationWindowMainPage.xaml</DependentUpon>
     </Compile>
@@ -200,7 +201,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloud.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloudController.cs" />
-    <Compile Include="ClusterModule\CardClusters.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\Cloud.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\CloudTile.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\CLOUDTILETYPE.cs" />

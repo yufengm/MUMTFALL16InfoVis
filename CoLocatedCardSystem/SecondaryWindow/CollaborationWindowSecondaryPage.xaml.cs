@@ -43,7 +43,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
         {
             SecondaryScreen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
             SecondaryScreen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
-            System.Diagnostics.Debug.WriteLine(SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
+            System.Diagnostics.Debug.WriteLine("secondary: "+SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
             SecondaryScreen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             this.Width = SecondaryScreen.WIDTH;
             this.Height = SecondaryScreen.HEIGHT;

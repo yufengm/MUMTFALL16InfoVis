@@ -59,6 +59,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             return cards;
         }
         /// <summary>
+        /// Get the highlighted word by card id.
+        /// </summary>
+        /// <param name="cardID"></param>
+        /// <returns></returns>
+        internal Token[] GetHighLightedContent(string cardID) {
+            DocumentCard dc= list.GetCard(cardID);
+            return dc.HighlightedTokens.ToArray();
+        }
+        /// <summary>
         /// Return the card that match the specific id.
         /// </summary>
         /// <param name="cardID"></param>

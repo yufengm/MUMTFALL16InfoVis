@@ -15,9 +15,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
     class AwareCloudController
     {
         ThreadPoolTimer periodicTimer;
-        TimeSpan period = TimeSpan.FromMilliseconds(3000);
+        TimeSpan period = TimeSpan.FromMilliseconds(1000);
         WebView webView;
-        ConcurrentBag<ClusterDoc[]> list=new ConcurrentBag<ClusterDoc[]>();
+        ClusterDocs docs;
         internal void init(WebView v)
         {
             this.webView = v;
@@ -25,7 +25,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
             {
                 periodicTimer = ThreadPoolTimer.CreatePeriodicTimer((source) =>
                 {
-                    FetchNewArray();
+                    UpdateView();
                 }, period);
             }
         }
@@ -38,23 +38,25 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
                 periodicTimer = null;
             }
         }
-        internal async void UpdateView() {
-            foreach (ClusterDoc[] docs in list)
-            {
-                foreach (ClusterDoc doc in docs)
-                {
-                    await webView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
-                    {
-                        await webView.InvokeScriptAsync("addNode", new string[] {doc.GetName()});
-                    });
-                }
-            }
-
-        }
-        private void FetchNewArray()
+        internal async void UpdateView()
         {
             App app = App.Current as App;
-            list = app.GetCurrent();
+            this.docs = app.Docs;
+            foreach (ClusterWord word in docs.GetAllWords())
+            {
+                await webView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                {
+                    await webView.InvokeScriptAsync("addNode",
+                        new string[] {
+                            "" + word.Type,
+                            word.Text,
+                            "" + word.Weight,
+                            "" + word.X,
+                            "" + word.Y,
+                            "" + word.Highlight,
+                            word.Group });
+                });
+            }
         }
     }
 }

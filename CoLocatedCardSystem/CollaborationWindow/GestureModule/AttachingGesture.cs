@@ -40,8 +40,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                 if (card.isConnectAllowed() && attachedGroups != null)
                 {
                     gestureController.Controllers.GlowController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
-                    App app = App.Current as App;
-                    app.UpdateCloud();
                 }
             }
         }

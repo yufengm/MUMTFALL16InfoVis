@@ -96,8 +96,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal void InitialHighlight(ProcessedDocument tempPD)
         {
             var tokens = document.GetToken(tempPD);
-            foreach (Token tk in tokens) {
-                highlightedTokens.Add(tk);
+            foreach (Token tk in tokens)
+            {
+                if (tk != null)
+                    highlightedTokens.Add(tk);
             }
         }
 

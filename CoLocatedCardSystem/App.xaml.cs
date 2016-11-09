@@ -27,7 +27,7 @@ namespace CoLocatedCardSystem
     /// </summary>
     sealed partial class App : Application
     {
-        CardClusters cardClusters = new CardClusters();
+        ClusterDocs docs=new ClusterDocs();
         AwareCloudController awareCloudController;
 
         internal AwareCloudController AwareCloudController
@@ -43,6 +43,23 @@ namespace CoLocatedCardSystem
             }
         }
 
+        internal ClusterDocs Docs
+        {
+            get
+            {
+                return docs;
+            }
+
+            set
+            {
+                docs = value;
+            }
+        }
+
+        internal void AddWordToScreen(ClusterWord clusterWord) {
+            docs.AddWord(clusterWord);
+        }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -53,21 +70,8 @@ namespace CoLocatedCardSystem
             this.Suspending += OnSuspending;
         }
 
-        internal void SetCardClusters(Document[][] docs, CardStatus[][] states) {
-            cardClusters.SetCluster(docs,states);
-        }
 
-        internal void UpdateCloud() {
-            awareCloudController.UpdateView();
-        }
 
-        internal ConcurrentBag<ClusterDoc[]> GetBuffer() {
-            return cardClusters.Bufferlist;
-        }
-        internal ConcurrentBag<ClusterDoc[]> GetCurrent()
-        {
-            return cardClusters.List;
-        }
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.

@@ -1,9 +1,12 @@
 ﻿function Node() {
     this.connections = [];
+    this.type = 0;
     this.txt = "test";
     this.group = "";
     this.x = 0;
     this.y = 0;
+    this.vx = 10;
+    this.vy = 10;
     this.attrX = 0;
     this.attrY = 0;
     this.weight = 20;
