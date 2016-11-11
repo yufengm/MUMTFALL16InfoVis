@@ -52,8 +52,8 @@ namespace CoLocatedCardSystem.SecondaryWindow
             controller = new AwareCloudController();
             App app = App.Current as App;
             app.AwareCloudController = controller;
-            this.WordCloud.Width = this.Width* SecondaryScreen.SCALE_FACTOR;
-            this.WordCloud.Height = this.Height* SecondaryScreen.SCALE_FACTOR;
+            this.WordCloud.Width = this.Width / SecondaryScreen.SCALE_FACTOR;
+            this.WordCloud.Height = this.Height / SecondaryScreen.SCALE_FACTOR;
             string src = "ms-appx-web:///Assets/p5/awarecloud.js/index.html";
             this.WordCloud.Navigate(new Uri(src));
             this.WordCloud.NavigationCompleted += WordCloud_NavigationCompleted;
