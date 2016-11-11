@@ -85,10 +85,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             list[owner].RemoveUnusedHighlight();
             DocumentCard[] cards =
                 controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, tempPD);
-            foreach (DocumentCard card in cards)
-            {
-                card.InitialHighlight(tempPD);
-            }
+            //foreach (DocumentCard card in cards)
+            //{
+            //    card.InitialHighlight(tempPD);
+            //}
             list[owner].ShowCardsInSearchResultTray(content, cards);
         }
         /// <summary>
