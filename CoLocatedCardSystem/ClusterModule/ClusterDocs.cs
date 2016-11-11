@@ -13,26 +13,38 @@ namespace CoLocatedCardSystem.ClusterModule
     class ClusterDocs 
     {
 
-        ConcurrentBag<ClusterWord> list = new ConcurrentBag<ClusterWord>();
+        ConcurrentDictionary<string, ClusterWord> list = new ConcurrentDictionary<string, ClusterWord>();
 
         internal void AddWord(ClusterWord word)
         {
             ClusterWord target = null;
-            try
+            foreach (ClusterWord cw in list.Values)
             {
-                target = list.Single(a => a.Text == word.Text && a.Group == word.Group);
+                if (cw.StemmedText == word.StemmedText && cw.Group == word.Group)
+                {
+                    target = cw;
+                }
+            }
+            if (target != null)
+            {
                 target.X = word.X;
                 target.Y = word.Y;
                 target.Weight = word.Weight;
             }
-            catch (Exception ex)
+            else
             {
-                list.Add(word);
+                list.TryAdd(word.Group+word.StemmedText, word);
             }
         }
 
         internal ClusterWord[] GetAllWords() {
-            return list.ToArray();
+            return list.Values.ToArray();
+        }
+
+        internal void RemoveWord(string text, string group)
+        {
+            ClusterWord removedWord;
+            list.TryRemove(group + text, out removedWord);
         }
     }
 }

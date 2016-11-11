@@ -2,6 +2,7 @@
     this.connections = [];
     this.type = 0;
     this.txt = "test";
+    this.stemmedText = "test";
     this.group = "";
     this.x = 0;
     this.y = 0;
@@ -19,7 +20,7 @@ Node.prototype.connect = function (node) {
         return false;
     } else {
         for (var i = 0; i < this.connections.length; i++) {
-            if (this.connections[i].txt == node.txt && this.connections[i].group == node.group) {
+            if (this.connections[i].stemmedText == node.stemmedText && this.connections[i].group == node.group) {
                 return true;
             }
         }

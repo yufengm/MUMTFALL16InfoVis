@@ -37,8 +37,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal enum LoadMode {
             ALL,
-            KeyWord,
-            Highlight
+            KeyWord
         }
         /// <summary>
         /// Initialize the view.
@@ -163,13 +162,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                             token.WordType == WordType.PUNCTUATION ||
                             token.WordType == WordType.IRREGULAR ||
                             token.WordType == WordType.DEFAULT)
-                            {
-                                continue;
-                            }
-                        }
-                        else if (mode == LoadMode.Highlight)
-                        {
-                            if (!card.HighlightedTokens.Contains(token))
                             {
                                 continue;
                             }

@@ -7,9 +7,22 @@ WordCloud.prototype.push = function (n) {
     this.wordNodes.push(n);
 }
 
+WordCloud.prototype.removeNode = function (text, group) {
+    var tobeRemoved;
+    for (var i = 0; i < this.wordNodes.length; i++) {
+        if (this.wordNodes[i].stemmedText == text && this.wordNodes[i].group == group) {
+            tobeRemoved = i;
+        }
+    }
+    if (tobeRemoved != null) {
+        this.wordNodes.splice(tobeRemoved, 1);
+    }
+    return null;
+}
+
 WordCloud.prototype.findNode = function (text, group) {
     for (var i = 0; i < this.wordNodes.length; i++) {
-        if (this.wordNodes[i].txt == text && this.wordNodes[i].group == group) {
+        if (this.wordNodes[i].stemmedText == text && this.wordNodes[i].group == group) {
             return this.wordNodes[i];
         }
     }

@@ -60,6 +60,11 @@ namespace CoLocatedCardSystem
             docs.AddWord(clusterWord);
         }
 
+        internal void RemoveWord(string text, string group)
+        {
+            docs.RemoveWord(text, group);
+            awareCloudController.removeWord(text, group);
+        }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().

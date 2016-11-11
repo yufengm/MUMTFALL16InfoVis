@@ -103,7 +103,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         internal void DeHighLight()
         {
-            this.Background = new SolidColorBrush(MyColor.Color1);
+            this.Background = new SolidColorBrush(MyColor.Color3);
             isHighlighted = false;
         }
         private void Tile_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)

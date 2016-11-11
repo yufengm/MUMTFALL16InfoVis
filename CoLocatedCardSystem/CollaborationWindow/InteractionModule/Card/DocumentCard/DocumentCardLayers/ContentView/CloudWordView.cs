@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
-namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
+namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    class AwareCloud
+    class CloudWordView:Canvas
     {
-        List<Cloud> list = new List<Cloud>();
     }
 }

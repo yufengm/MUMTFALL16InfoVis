@@ -19,16 +19,26 @@ function draw() {
 }
 
 function mousePressed() {//for debug
-    addNode("0", "abc" + Math.floor(random(100)), "" + random(20, 50), "" + mouseX, "" + mouseY, "false", "test");
+    updateNode("0", "abc" , "" + random(20, 50), "" + mouseX, "" + mouseY, "false", "test");
+
 }
 
-function addNode(type, text, weight, x, y, hightlight, group) {
-    var node = cloud.findNode(text, group);
+function mouseReleased() {
+    cloud.removeNode("abc", "test");
+}
+
+function removeNode(text, group) {
+    cloud.removeNode(text, group);
+}
+
+function updateNode(type, text, stemmedText, group, weight, x, y, hightlight) {
+    var node = cloud.findNode(stemmedText, group);
     cloud.step = 10;
     if (node == null) {
         node = new Node();
         node.type = parseInt(type);
         node.txt = text;
+        node.stemmedText = stemmedText;
         node.weight = parseInt(weight);
         node.x = parseInt(x);
         node.y = parseInt(y);

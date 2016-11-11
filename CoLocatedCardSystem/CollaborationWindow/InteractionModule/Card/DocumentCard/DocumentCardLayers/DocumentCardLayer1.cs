@@ -31,15 +31,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,() =>
             {
                 titleTextBlock.Text = doc.GetName();
-                if (doc.GetName().Length > 25)
+                double fsize = 50 * Math.Pow(doc.GetName().Length, -0.43);
+                if (fsize > 16)
                 {
-                    titleTextBlock.FontSize = 11;
-
+                    fsize = 16;
                 }
-                if (doc.GetName().Length > 50)
-                {
-                    titleTextBlock.FontSize = 9;
-                }
+                titleTextBlock.FontSize = fsize;
             });
         }
         /// <summary>
@@ -65,7 +62,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 titleTextBlock.Foreground = new SolidColorBrush(MyColor.Color1);
                 titleTextBlock.LineHeight = 1;
                 titleTextBlock.TextWrapping = TextWrapping.Wrap;
-                titleTextBlock.FontSize = 13;
+                titleTextBlock.FontSize = 12;
                 titleTextBlock.TextAlignment = TextAlignment.Center;
                 titleTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
                 titleTextBlock.VerticalAlignment = VerticalAlignment.Center;

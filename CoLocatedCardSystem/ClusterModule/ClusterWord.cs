@@ -10,6 +10,7 @@ namespace CoLocatedCardSystem.ClusterModule
     {
         int type = 0;//0 for text, 1 for pic
         string text="text";
+        string stemmedText;
         double weight =10;
         double x = 0, y = 0;
         bool highlight=false;
@@ -116,6 +117,19 @@ namespace CoLocatedCardSystem.ClusterModule
             set
             {
                 connections = value;
+            }
+        }
+
+        public string StemmedText
+        {
+            get
+            {
+                return stemmedText;
+            }
+
+            set
+            {
+                stemmedText = value;
             }
         }
     }

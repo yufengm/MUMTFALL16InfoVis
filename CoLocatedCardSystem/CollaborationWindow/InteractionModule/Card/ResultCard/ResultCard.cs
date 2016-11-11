@@ -83,7 +83,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 titleTextBlock.Foreground = new SolidColorBrush(MyColor.Color1);
                 titleTextBlock.LineHeight = 1;
                 titleTextBlock.TextWrapping = TextWrapping.Wrap;
-                titleTextBlock.FontSize = 13;
                 titleTextBlock.TextAlignment = TextAlignment.Center;
                 titleTextBlock.HorizontalAlignment = HorizontalAlignment.Center;
                 titleTextBlock.VerticalAlignment = VerticalAlignment.Center;
@@ -97,17 +96,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     titleTextBlock);
                 this.Children.Add(titleTextBlock);
                 titleTextBlock.Text = this.document.GetName();
-                if (this.document.GetName().Length > 25)
-                {
-                    titleTextBlock.FontSize = 11;
-
+                double fsize= 50 * Math.Pow(this.document.GetName().Length, -0.43);
+                if (fsize > 16) {
+                    fsize = 16;
                 }
-                if (this.document.GetName().Length > 50)
-                {
-                    titleTextBlock.FontSize = 9;
-                }
+                titleTextBlock.FontSize = fsize;
             });
         }
+
         protected override void PointerUp(object sender, PointerRoutedEventArgs e)
         {
             MoveTo(new Point(80 * Screen.SCALE_FACTOR, 65 * Screen.SCALE_FACTOR));

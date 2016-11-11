@@ -16,7 +16,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class DocumentCardLayer2 : DocumentCardLayerBase
     {
-        ContentTouchView contentView = new ContentTouchView();
+        CloudWordView cloudWordView = new CloudWordView();
         Document doc;
         public DocumentCardLayer2(DocumentCardController cardController, DocumentCard card) : base(cardController, card)
         {
@@ -27,10 +27,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             await base.SetArticle(doc);
             this.doc = doc;
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                contentView.Init(cardController, attachedCard, doc, ContentTouchView.LoadMode.Highlight, contentView.Width);
-            });
         }
 
         /// <summary>
@@ -56,7 +52,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 // Create row definitions.
                 RowDefinition rowDefinition1 = new RowDefinition();
                 RowDefinition rowDefinition2 = new RowDefinition();
-                rowDefinition1.Height = new GridLength(1,GridUnitType.Star);
+                rowDefinition1.Height = new GridLength(1, GridUnitType.Star);
                 rowDefinition2.Height = new GridLength(6, GridUnitType.Star);
 
                 grid.RowDefinitions.Add(rowDefinition1);
@@ -74,32 +70,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 grid.Children.Add(label);
                 Grid.SetRow(label, 0);
 
-                ScrollViewer contentSV = new ScrollViewer();
-                contentSV.HorizontalScrollMode = ScrollMode.Disabled;
-                contentView.TextSize = 6;
-                contentSV.Width = attachedCard.Width;
-                contentSV.Height = attachedCard.Height;
-                contentView.Width = attachedCard.Width;
-                contentSV.Content = contentView;
-                contentSV.Padding = new Thickness(0);
-                contentSV.Margin = new Thickness(0);
-               
-                grid.Children.Add(contentSV);
-                Grid.SetRow(contentSV, 1);
-
+                cloudWordView.Width = attachedCard.Width;
+                cloudWordView.Height = attachedCard.Height;
+                cloudWordView.Margin = new Thickness(0);
+                grid.Children.Add(cloudWordView);
+                Grid.SetRow(cloudWordView, 1);
                 this.Children.Add(grid);
             });
         }
         internal override void DisableTouch()
         {
             base.DisableTouch();
-            contentView.IsHitTestVisible = false;
+            cloudWordView.IsHitTestVisible = false;
 
         }
         internal override void EnableTouch()
         {
             base.EnableTouch();
-            contentView.IsHitTestVisible = true;
+            cloudWordView.IsHitTestVisible = true;
         }
         /// <summary>
         /// Highlight tokens
@@ -109,7 +97,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                contentView.Init(cardController, attachedCard, doc, ContentTouchView.LoadMode.Highlight, contentView.Width);
+                TextBlock tb = new TextBlock();
+                tb.Text = token.OriginalWord;
+                cloudWordView.Children.Add(tb);
             });
         }
         /// <summary>
@@ -120,7 +110,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                contentView.Init(cardController, attachedCard, doc, ContentTouchView.LoadMode.Highlight, contentView.Width);
+                TextBlock tb = new TextBlock();
+                tb.Text = token.OriginalWord;
+                cloudWordView.Children.Remove(tb);
             });
         }
     }

@@ -14,7 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         DocumentCardLayerBase[] layers;
         int currentLayer;
         Document document;
-        private const int LAYER_NUMBER = 4;
+        private const int LAYER_NUMBER = 3;
         List<Token> highlightedTokens = new List<Token>();
         public Document Document
         {
@@ -74,9 +74,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 layers = new DocumentCardLayerBase[LAYER_NUMBER];
                 layers[0] = new DocumentCardLayer1(cardController as DocumentCardController, this);
-                layers[1] = new DocumentCardLayer2(cardController as DocumentCardController, this);
-                layers[2] = new DocumentCardLayer3(cardController as DocumentCardController, this);
-                layers[3] = new DocumentCardLayer4(cardController as DocumentCardController, this);
+                layers[1] = new DocumentCardLayer3(cardController as DocumentCardController, this);
+                layers[2] = new DocumentCardLayer4(cardController as DocumentCardController, this);
+                //layers[3] = new DocumentCardLayer4(cardController as DocumentCardController, this);
                 foreach (var layer in layers)
                 {
                     layer.Init();
@@ -112,6 +112,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             if (!highlightedTokens.Contains(token))
             {
                 highlightedTokens.Add(token);
+                cardController.Controllers.ConnectionController.AddToken(token, this.document.DocID, this.position.X, this.position.Y);
                 foreach (var layer in layers) {
                     layer.HighlightToken(token);
                 }
@@ -125,8 +126,21 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             if (highlightedTokens.Contains(token))
             {
+                bool sameToken = false;
+                foreach (Token tk in highlightedTokens)
+                {
+                    if (tk != token && tk.StemmedWord == token.StemmedWord)
+                    {
+                        sameToken = true;
+                    }
+                }
+                if (!sameToken)
+                {
+                    cardController.Controllers.ConnectionController.RemoveToken(token, this.document.DocID);
+                }
                 highlightedTokens.Remove(token);
-                foreach (var layer in layers) {
+                foreach (var layer in layers)
+                {
                     layer.DehighlightToken(token);
                 }
             }
@@ -142,19 +156,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         private void UpdateLayer(double scale)
         {
-            if (scale > 3 && currentLayer != 3)
-            {
-                ShowLayer(3);
-            }
-            else if (scale > 2 && scale <= 3 && currentLayer != 2)
+            if (scale > 3 && currentLayer != 2)
             {
                 ShowLayer(2);
             }
-            else if (scale > 1.3 && scale <= 2 && currentLayer != 1)
+            else if (scale > 2 && scale <= 3 && currentLayer != 1)
             {
                 ShowLayer(1);
             }
-            else if (scale <= 1.3 && currentLayer != 0)
+            else if (scale <= 2 && currentLayer != 0)
             {
                 ShowLayer(0);
             }

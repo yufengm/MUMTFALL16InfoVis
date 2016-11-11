@@ -176,7 +176,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             glowLayerController.Init(width, height);
             //Load the documents, cards and add them to the card layer
             await documentController.Init(FilePath.NewsArticle);//Load the document
-            await tableController.Init(FilePath.CSVFile);
+            //await tableController.Init(FilePath.CSVFile);
             cardController.Init();
             cardController.InitDocCard(documentController.GetDocument());
             //Load the sorting box and add them to the sorting box layer

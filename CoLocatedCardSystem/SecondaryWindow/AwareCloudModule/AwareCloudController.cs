@@ -38,6 +38,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
                 periodicTimer = null;
             }
         }
+        /// <summary>
+        /// Update the word cloud, iterate all docs in the cluster module, if the text exists, update its position and size
+        /// </summary>
         internal async void UpdateView()
         {
             App app = App.Current as App;
@@ -46,17 +49,30 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
             {
                 await webView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
                 {
-                    await webView.InvokeScriptAsync("addNode",
+                    await webView.InvokeScriptAsync("updateNode",
                         new string[] {
                             "" + word.Type,
                             word.Text,
+                            word.StemmedText,
+                            word.Group,
                             "" + word.Weight,
                             "" + word.X,
                             "" + word.Y,
-                            "" + word.Highlight,
-                            word.Group });
+                            "" + word.Highlight, });
                 });
             }
+        }
+        /// <summary>
+        /// Remove a word from the cloud
+        /// </summary>
+        internal async void removeWord(string text, string group)
+        {
+            App app = App.Current as App;
+            await webView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+            {
+                await webView.InvokeScriptAsync("removeNode",
+                    new string[] { text, group });
+            });
         }
     }
 }
