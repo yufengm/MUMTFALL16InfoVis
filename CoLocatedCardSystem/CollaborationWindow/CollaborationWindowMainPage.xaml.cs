@@ -38,8 +38,14 @@ namespace CoLocatedCardSystem.CollaborationWindow
             lifeEventControl = (CollaborationWindowLifeEventControl)e.Parameter;
             FilePath.CSVFile=lifeEventControl.TableFileDir;
             FilePath.NewsArticle = lifeEventControl.DocFileDir;
+            this.Loaded += CollaborationWindowMainPage_Loaded;
+        }
+
+        private void CollaborationWindowMainPage_Loaded(object sender, RoutedEventArgs e)
+        {
             Init();
         }
+
         public void Init()
         {
             Screen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;

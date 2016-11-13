@@ -19,7 +19,7 @@ function draw() {
 }
 
 function mousePressed() {//for debug
-    updateNode("0", "abc" , "" + random(20, 50), "" + mouseX, "" + mouseY, "false", "test");
+    updateNode("0", "abc" ,"abc", "test", "" + random(20, 50), "" + mouseX, "" + mouseY, "false");
 
 }
 
