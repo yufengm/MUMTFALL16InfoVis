@@ -19,7 +19,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <returns></returns>
         internal void AddCard(Document doc,User user, CardController cardController) {
             string cardID = Guid.NewGuid().ToString();
-            DocumentCard card = new DocumentCard(cardController);
+            DocumentCard card = new DocumentCard(cardController.DocumentCardController);
             list.Add(cardID, card);
             card.Init(cardID, user, doc);
         }

@@ -22,7 +22,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         Size boxSize;
         bool isHighlighted = false;
         bool isKeyWord = false;
-        DocumentCardController cardController;
+        DocumentCardController documentCardController;
         DocumentCard docCard;
         internal Token Token
         {
@@ -45,7 +45,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 this.isKeyWord = true;
             }
-            this.cardController = controller;
+            this.documentCardController = controller;
             InitUI();
         }
 
@@ -125,7 +125,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            cardController.PointerDown_Tile(localPoint, globalPoint, this, typeof(Tile));
+            documentCardController.PointerDown_Tile(localPoint, globalPoint, this, typeof(Tile));
         }
         /// <summary>
         /// Call back method for Pointer move
@@ -136,7 +136,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            cardController.PointerMove(localPoint, globalPoint);
+            documentCardController.CardController.PointerMove(localPoint, globalPoint);
         }
         /// <summary>
         /// Call back method for pointer up
@@ -147,7 +147,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            cardController.PointerUp(localPoint, globalPoint);
+            documentCardController.CardController.PointerUp(localPoint, globalPoint);
         }
     }
 }

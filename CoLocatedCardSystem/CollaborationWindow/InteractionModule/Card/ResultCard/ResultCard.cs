@@ -53,6 +53,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
+        public bool IsEnabled
+        {
+            get
+            {
+                return isEnabled;
+            }
+
+            set
+            {
+                isEnabled = value;
+            }
+        }
+
         internal ResultCard(CardController cardController) : base(cardController)
         {
             

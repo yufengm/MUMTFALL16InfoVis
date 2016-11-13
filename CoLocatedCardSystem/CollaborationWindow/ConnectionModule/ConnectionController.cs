@@ -35,11 +35,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             foreach (GlowGroup gg in glowgroups)
             {
                 var cardIDs = gg.GetCardID();
-                foreach (string id in cardIDs)
+                foreach (string id in cardIDs.Keys)
                 {
                     CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
                     Document d = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
                     Token[] tks = controllers.CardController.DocumentCardController.GetHighLightedContent(id);
+                    System.Diagnostics.Debug.WriteLine(d.DocID + " " + tks.Length + " " + cs.position.X + " " + cs.position.Y);
                     if (d != null && cs != null && tks != null)
                     {
                         foreach (Token tk in tks)

@@ -55,7 +55,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             if (!gg.HasCard(card.cardID))
             {
                 CardStatus intersectedCard = null;
-                foreach (string id in gg.GetCardID())
+                foreach (string id in gg.GetCardID().Keys)
                 {
                     intersectedCard = await controllers.CardController.GetLiveCardStatus(id);
                     if (Coordination.IsIntersect(intersectedCard.corners, card.corners))
@@ -96,7 +96,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                 //Remove the glow effects from groups
                 foreach (GlowGroup gg in groups)
                 {
-                    foreach (string id in gg.GetCardID())
+                    foreach (string id in gg.GetCardID().Keys)
                     {
                         newCardList.Add(id);
                         list.RemoveGlow(id);
@@ -128,7 +128,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             List<GlowGroup> tempList = new List<GlowGroup>();
             list.RemoveGlowGroup(group);
             tempList.Add(group);
-            foreach (string id in group.GetCardID())
+            foreach (string id in group.GetCardID().Keys)
             {
                 GlowGroup[] groups = await GetAttachedGroups(id);
                 if (groups != null)
@@ -140,12 +140,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             }
             GlowGroup newgg = new GlowGroup();
             foreach (GlowGroup gg in tempList) {
-                foreach (string c in gg.GetCardID()) {
+                foreach (string c in gg.GetCardID().Keys) {
                     RemoveGlowEffect(c);
                     newgg.AddCard(c);
                 }
             }
-            foreach (string c in newgg.GetCardID()) {
+            foreach (string c in newgg.GetCardID().Keys) {
                 AddGlowEffect(c, 0);
             }
             list.AddGlowGroup(newgg);
@@ -171,8 +171,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             {
                 currentGroup.RemoveCard(cardID);
                 RemoveGlowEffect(cardID);
-                GlowGroup[] groups = await GetGroupsFromCards(currentGroup.GetCardID());
-                foreach (string id in currentGroup.GetCardID())
+                GlowGroup[] groups = await GetGroupsFromCards(currentGroup.GetCardID().Keys);
+                foreach (string id in currentGroup.GetCardID().Keys)
                 {
                     RemoveGlowEffect(id);
                 }
@@ -180,7 +180,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                 foreach (GlowGroup gg in groups)
                 {
                     list.AddGlowGroup(gg);
-                    var ids = gg.GetCardID();
+                    var ids = gg.GetCardID().Keys;
                     if (ids.Count > 1)
                     {
                         foreach (string id in ids)
@@ -284,7 +284,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             {
                 if (group.HasCard(cardID))
                 {
-                    foreach (string id in group.GetCardID())
+                    foreach (string id in group.GetCardID().Keys)
                     {
                         Glow glow = list.GetGlow(id);
                         glow.ColorIndex = colorIndex;
@@ -301,7 +301,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         {
             GlowGroup group = list.GetGroup(cardID);
             if (group != null)
-                foreach (string id in group.GetCardID())
+                foreach (string id in group.GetCardID().Keys)
                 {
                     Glow glow = list.GetGlow(id);
                     if (glow != null)

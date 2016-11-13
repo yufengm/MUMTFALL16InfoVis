@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    public class CardController
+    class CardController
     {
         private CentralControllers controllers;
         DocumentCardController documentCardController = null;
@@ -36,7 +36,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         internal void Init()
         {
-            documentCardController = new DocumentCardController(controllers);
+            documentCardController = new DocumentCardController(controllers.CardController);
             liveCardList = new LiveCardList();
         }
         internal void Deinit() {

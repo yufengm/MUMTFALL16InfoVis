@@ -16,7 +16,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     /// <summary>
     /// Base card, basic form of the card
     /// </summary>
-    public class Card : Canvas
+    class Card : Canvas
     {
         protected string cardID = "";
         protected CardController cardController;

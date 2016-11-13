@@ -46,14 +46,14 @@ namespace CoLocatedCardSystem.CollaborationWindow
                 return tableController;
             }
         }
-        public CardController CardController
+        internal CardController CardController
         {
             get
             {
                 return cardController;
             }
         }
-        public SortingBoxController SortingBoxController
+        internal SortingBoxController SortingBoxController
         {
             get
             {
@@ -147,7 +147,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
         /// <summary>
         /// Initialize all documents
         /// </summary>
-        public async void Init(int width, int height)
+        internal async void Init(int width, int height)
         {
             //create controllers
             documentController = new DocumentController(this);

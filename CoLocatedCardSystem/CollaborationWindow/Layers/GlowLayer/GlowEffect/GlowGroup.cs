@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +9,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {
     class GlowGroup
     {
-        List<string> group = new List<string>();
+        ConcurrentDictionary<string, string> group = new ConcurrentDictionary<string, string>();
         /// <summary>
         /// Add a card to glow group
         /// </summary>
         /// <param name="cardID"></param>
         internal void AddCard(string cardID) {
-            if (!group.Contains(cardID)) {
-                group.Add(cardID);
+            if (!group.Keys.Contains(cardID)) {
+                group.TryAdd(cardID, cardID);
             }
         }
 
@@ -23,16 +24,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// Remove a card from glow group
         /// </summary>
         /// <param name="cardID"></param>
-        internal void RemoveCard(string cardID) {
-            if (group.Contains(cardID)) {
-                group.Remove(cardID);
+        internal void RemoveCard(string cardID)
+        {
+            if (group.Keys.Contains(cardID))
+            {
+                String removedStr = "";
+                group.TryRemove(cardID, out removedStr);
             }
         }
         /// <summary>
         /// Get all card ids within a group.
         /// </summary>
         /// <returns></returns>
-        internal List<string> GetCardID()
+        internal ConcurrentDictionary<string, string> GetCardID()
         {
             return group;
         }
@@ -43,7 +47,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="cardID"></param>
         /// <returns></returns>
         internal bool HasCard(string cardID) {
-            return group.Contains(cardID);
+            return group.Keys.Contains(cardID);
         }
     }
 }

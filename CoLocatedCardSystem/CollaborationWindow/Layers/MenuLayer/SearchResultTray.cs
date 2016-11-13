@@ -146,9 +146,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         internal void RemoveUnusedHighlight() {
             foreach (Canvas block in stackCanvas)
             {
-                if (block.Children.Count == 1)
+                ResultCard rc = block.Children[0] as ResultCard;
+                if (rc.IsEnabled)
                 {
-                    menuLayerController.DehighLightAll((block.Children[0] as ResultCard).CardID);
+                    menuLayerController.DehighLightAll(rc.CardID);
                 }
             }
         }
@@ -173,7 +174,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 {
                     if (stackCanvas[i].Children.Count == 0)
                     {
-                        ResultCard resultCard = new ResultCard(currentSearchResult[i].CardController);
+                        ResultCard resultCard = new ResultCard(menuLayerController.Controllers.CardController);
                         resultCard.MenuLayerController = menuLayerController;
                         resultCard.Init(currentSearchResult[i].CardID, currentSearchResult[i].Owner, currentSearchResult[i].Document);
                         await resultCard.LoadUI();

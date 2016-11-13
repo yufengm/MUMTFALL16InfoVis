@@ -8,12 +8,27 @@ using Windows.UI.Input;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    class DocumentCardController:CardController
+    class DocumentCardController
     {
+        CardController cardController;
         DocumentCardList list;
 
-        public DocumentCardController(CentralControllers ctrls) : base(ctrls)
+        public CardController CardController
         {
+            get
+            {
+                return cardController;
+            }
+
+            set
+            {
+                cardController = value;
+            }
+        }
+
+        public DocumentCardController(CardController ctrls)
+        {
+            cardController = ctrls;
         }
 
         /// <summary>
@@ -27,7 +42,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 foreach (Document doc in documents)
                 {
-                    list.AddCard(doc, user, this);
+                    list.AddCard(doc, user, cardController);
                 }
             }
         }
@@ -45,7 +60,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal void DehighLightAll(string cardID)
         {
             DocumentCard card = list.GetCard(cardID);
-            if(card!=null)
+            if (card != null && !cardController.IsCardOnTable(cardID))
                 card.DehighlightAll();
         }
         /// <summary>
@@ -79,7 +94,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal void PointerDown_Tile(PointerPoint localPoint, PointerPoint globalPoint, Tile tile, Type type)
         {
-            this.Controllers.TouchController.TouchDown(localPoint, globalPoint, tile, type);
+            cardController.Controllers.TouchController.TouchDown(localPoint, globalPoint, tile, type);
         }
 
     }

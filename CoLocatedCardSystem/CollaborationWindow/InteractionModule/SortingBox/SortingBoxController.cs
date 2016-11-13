@@ -57,7 +57,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="card"></param>
         /// <param name="box"></param>
-        public void AddCardToSortingBox(Card card, SortingBox box)
+        internal void AddCardToSortingBox(Card card, SortingBox box)
         {
             box.AddCard(card);
         }

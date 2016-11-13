@@ -9,13 +9,14 @@ using Windows.UI.Xaml.Input;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    public class DocumentCard : Card
+    class DocumentCard : Card
     {
         DocumentCardLayerBase[] layers;
         int currentLayer;
         Document document;
         private const int LAYER_NUMBER = 3;
         List<Token> highlightedTokens = new List<Token>();
+        DocumentCardController documentCardController;
         public Document Document
         {
             get
@@ -37,8 +38,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        public DocumentCard(CardController cardController) : base(cardController)
+        internal DocumentCard(DocumentCardController documentCardController) : base(documentCardController.CardController)
         {
+            this.documentCardController = documentCardController;
         }
 
         /// <summary>
@@ -73,9 +75,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 layers = new DocumentCardLayerBase[LAYER_NUMBER];
-                layers[0] = new DocumentCardLayer1(cardController as DocumentCardController, this);
-                layers[1] = new DocumentCardLayer3(cardController as DocumentCardController, this);
-                layers[2] = new DocumentCardLayer4(cardController as DocumentCardController, this);
+                layers[0] = new DocumentCardLayer1(this.documentCardController, this);
+                layers[1] = new DocumentCardLayer3(this.documentCardController, this);
+                layers[2] = new DocumentCardLayer4(this.documentCardController, this);
                 //layers[3] = new DocumentCardLayer4(cardController as DocumentCardController, this);
                 foreach (var layer in layers)
                 {
