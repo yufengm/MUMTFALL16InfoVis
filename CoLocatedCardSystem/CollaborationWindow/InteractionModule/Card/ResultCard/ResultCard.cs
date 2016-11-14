@@ -109,7 +109,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     titleTextBlock);
                 this.Children.Add(titleTextBlock);
                 titleTextBlock.Text = this.document.GetName();
-                double fsize= 45 * Math.Pow(this.document.GetName().Length, -0.43);
+                double fsize= 42 * Math.Pow(this.document.GetName().Length, -0.43);
                 if (fsize > 16) {
                     fsize = 16;
                 }

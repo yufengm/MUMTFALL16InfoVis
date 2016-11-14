@@ -31,7 +31,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal,() =>
             {
                 titleTextBlock.Text = doc.GetName();
-                double fsize = 50 * Math.Pow(doc.GetName().Length, -0.43);
+                double fsize = 42 * Math.Pow(doc.GetName().Length, -0.43);
                 if (fsize > 16)
                 {
                     fsize = 16;
