@@ -63,6 +63,6 @@ function getTextSize(txt, font, weight) {
     this.element = document.createElement('canvas');
     this.context = this.element.getContext("2d");
     this.context.font = font;
-    var tsize = { 'w': this.context.measureText(txt).width + 6, 'h': weight / 1.5 + 6 };
+    var tsize = { 'w': this.context.measureText(txt).width + 10, 'h': weight / 1.45 + 10 };
     return tsize;
 }

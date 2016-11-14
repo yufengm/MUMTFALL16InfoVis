@@ -114,7 +114,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             if (!highlightedTokens.Contains(token))
             {
                 highlightedTokens.Add(token);
-                cardController.Controllers.ConnectionController.AddToken(token, this.document.DocID, this.position.X, this.position.Y);
+                cardController.Controllers.ConnectionController.AddWordToken(token, this.document.DocID, this.position.X, this.position.Y);
                 foreach (var layer in layers) {
                     layer.HighlightToken(token);
                 }

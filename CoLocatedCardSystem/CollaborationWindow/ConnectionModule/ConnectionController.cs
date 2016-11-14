@@ -40,20 +40,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
                     CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
                     Document d = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
                     Token[] tks = controllers.CardController.DocumentCardController.GetHighLightedContent(id);
-                    System.Diagnostics.Debug.WriteLine(d.DocID + " " + tks.Length + " " + cs.position.X + " " + cs.position.Y);
                     if (d != null && cs != null && tks != null)
                     {
+                        double px = cs.position.X * SecondaryScreen.WIDTH * SecondaryScreen.SCALE_FACTOR / (Screen.WIDTH * Screen.SCALE_FACTOR);
+                        double py = cs.position.Y * SecondaryScreen.HEIGHT * SecondaryScreen.SCALE_FACTOR / (Screen.HEIGHT * Screen.SCALE_FACTOR);
                         foreach (Token tk in tks)
                         {
-                            AddToken(tk, d.DocID, cs.position.X * SecondaryScreen.WIDTH * SecondaryScreen.SCALE_FACTOR / (Screen.WIDTH * Screen.SCALE_FACTOR),
-                                cs.position.Y * SecondaryScreen.HEIGHT * SecondaryScreen.SCALE_FACTOR / (Screen.HEIGHT * Screen.SCALE_FACTOR));
+                            AddWordToken(tk, d.DocID, px, py);
                         }
+
+                        string[] jpgs = d.RawDocument.Jpg[0].Split(',');
+                        AddImageToken(jpgs[0], d.DocID, px, py);
                     }
                 }
             }
         }
 
-        internal void AddToken(Token tk, String group, double x, double y)
+        internal void AddWordToken(Token tk, String group, double x, double y)
         {
             ClusterWord cw = new ClusterWord();
             cw.Text = tk.OriginalWord;
@@ -66,7 +69,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             cw.Highlight = true;
             app.AddWordToScreen(cw);
         }
-
+        internal void AddImageToken(String imgUrl, String group, double x, double y)
+        {
+            ClusterWord cw = new ClusterWord();
+            cw.Text = imgUrl;
+            cw.StemmedText = imgUrl;
+            cw.X = x;
+            cw.Y = y;
+            cw.Type = 1;
+            cw.Weight = 20;
+            cw.Group = group;
+            cw.Highlight = true;
+            app.AddWordToScreen(cw);
+        }
         internal void RemoveToken(Token tk, String group)
         {
             app.RemoveWord(tk.StemmedWord, group);

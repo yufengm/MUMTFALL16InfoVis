@@ -2,6 +2,7 @@
     this.connections = [];
     this.type = 0;
     this.txt = "test";
+    this.image = null;
     this.stemmedText = "test";
     this.group = "";
     this.x = 0;

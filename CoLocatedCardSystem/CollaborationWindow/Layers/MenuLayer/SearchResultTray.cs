@@ -143,11 +143,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// <summary>
         /// Remove the high light of all highlight card
         /// </summary>
-        internal void RemoveUnusedHighlight() {
+        internal void RemoveUnusedHighlight()
+        {
             foreach (Canvas block in stackCanvas)
             {
                 ResultCard rc = block.Children[0] as ResultCard;
-                if (rc.IsEnabled)
+                if (rc != null && rc.IsEnabled)
                 {
                     menuLayerController.DehighLightAll(rc.CardID);
                 }
