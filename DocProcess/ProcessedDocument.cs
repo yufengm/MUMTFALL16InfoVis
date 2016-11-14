@@ -112,18 +112,27 @@ namespace DocProcess
         }
 
         public void LoadDoc(string[][] items) {
-            this.name = items[0][0];
-            time = items.Select(a => a[1].Replace("\"", "")).ToArray() as string[];
-            rating = items.Select(a => a[3].Replace("\"", "")).ToArray() as string[];
-            jpg = items.Select(a => a[9].Replace("\"", "")).ToArray() as string[];
-            string[] texts = items.Select(a => a[2]).ToArray() as String[];
-            List<Token[]> tlist = new List<Token[]>();
-            foreach (String text in texts) {
-                List<Token> tokenList = new List<Token>();
-                ProcessRegular(text, tokenList);
-                tlist.Add(tokenList.ToArray());
+
+            try
+            {
+                this.name = items[0][0];
+                time = items.Select(a => a[1].Replace("\"", "")).ToArray() as string[];
+                rating = items.Select(a => a[3].Replace("\"", "")).ToArray() as string[];
+                jpg = items.Select(a => a[9].Replace("\"", "")).ToArray() as string[];
+                string[] texts = items.Select(a => a[2]).ToArray() as String[];
+                List<Token[]> tlist = new List<Token[]>();
+                foreach (String text in texts)
+                {
+                    List<Token> tokenList = new List<Token>();
+                    ProcessRegular(text, tokenList);
+                    tlist.Add(tokenList.ToArray());
+                }
+                list = tlist.ToArray();
+
             }
-            list = tlist.ToArray();
+            catch (Exception ex) {
+
+            }
         }
         internal string ToJson()
         {

@@ -43,11 +43,16 @@ namespace DocProcess
                     string[] files = s.Split(',');
                     foreach (string name in files)
                     {
-                        string sourceFile = @"reviewpics\"+name;
-                        string destinationFile = @"selected\"+name;
+                        string sourceFile = @"reviewpics\" + name;
+                        string destinationFile = @"selected\" + name;
+                        try
+                        {
+                            // To move a file or folder to a new location:
+                            System.IO.File.Copy(sourceFile, destinationFile);
 
-                        // To move a file or folder to a new location:
-                        System.IO.File.Move(sourceFile, destinationFile);
+                        } catch (Exception ex) {
+                            Console.WriteLine(sourceFile);
+                        }
                     }
                 }
             }
