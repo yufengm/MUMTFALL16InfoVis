@@ -9,7 +9,25 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {
     class GlowGroup
     {
+        String id = "";
         ConcurrentDictionary<string, string> group = new ConcurrentDictionary<string, string>();
+
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+
+            set
+            {
+                id = value;
+            }
+        }
+
+        public GlowGroup() {
+            id = Guid.NewGuid().ToString();
+        }
         /// <summary>
         /// Add a card to glow group
         /// </summary>

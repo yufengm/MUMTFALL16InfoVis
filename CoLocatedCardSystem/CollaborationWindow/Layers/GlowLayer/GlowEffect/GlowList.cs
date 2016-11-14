@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
@@ -6,11 +7,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
     class GlowList
     {
         Dictionary<string, Glow> glowEffectList;// A list of the glow objects
-        List<GlowGroup> glowGroups;//Save info of which cards are connected
+        ConcurrentDictionary<string, GlowGroup> glowGroups;//Save info of which cards are connected
 
         internal void Init() {
             glowEffectList = new Dictionary<string, Glow>();         
-            glowGroups = new List<GlowGroup>();
+            glowGroups = new ConcurrentDictionary<string, GlowGroup>();
         }
 
         internal void Deinit() {
@@ -62,10 +63,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// </summary>
         /// <param name="group"></param>
         internal void RemoveGlowGroup(GlowGroup group)
-        {  
-            if (glowGroups.Contains(group))
+        {
+            if (glowGroups.Keys.Contains(group.Id))
             {
-                glowGroups.Remove(group);
+                GlowGroup gg;
+                glowGroups.TryRemove(group.Id, out gg);
             }
         }
         /// <summary>
@@ -74,9 +76,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="group"></param>
         internal void AddGlowGroup(GlowGroup group)
         {
-            if (!glowGroups.Contains(group))
+            if (!glowGroups.Keys.Contains(group.Id))
             {
-                glowGroups.Add(group);
+                glowGroups.TryAdd(group.Id,group);
             }
         }
 
@@ -87,7 +89,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <returns></returns>
         internal GlowGroup GetGroup(string cardID) {
             GlowGroup result = null;
-            foreach (GlowGroup group in glowGroups)
+            foreach (GlowGroup group in glowGroups.Values)
             {
                 if (group!=null&&group.HasCard(cardID))
                 {
@@ -100,7 +102,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// Get the glow group
         /// </summary>
         /// <returns></returns>
-        internal List<GlowGroup> GetGroup()
+        internal ConcurrentDictionary<string, GlowGroup> GetGroup()
         {
             return glowGroups;
         }
@@ -111,7 +113,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <returns></returns>
         internal bool HasGroup(string cardID)
         {
-            foreach (GlowGroup group in glowGroups) {
+            foreach (GlowGroup group in glowGroups.Values) {
                 if (group.HasCard(cardID)) {
                     return true;
                 }

@@ -1,5 +1,6 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -40,7 +41,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
                 return null;
             }
             List<GlowGroup> tempList = new List<GlowGroup>();
-            foreach (GlowGroup gg in list.GetGroup())
+            foreach (GlowGroup gg in list.GetGroup().Values)
             {
                 if (await IsIntersect(targetCard, gg))
                 {
@@ -70,7 +71,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// Get all groups
         /// </summary>
         /// <returns></returns>
-        internal List<GlowGroup> GetGroups() {
+        internal ConcurrentDictionary<string, GlowGroup> GetGroups()
+        {
             return list.GetGroup();
         }
         /// <summary>
@@ -280,7 +282,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="colorIndex"></param>
         internal void UpdateConnectedColor(string cardID, int colorIndex)
         {
-            foreach (GlowGroup group in list.GetGroup())
+            foreach (GlowGroup group in list.GetGroup().Values)
             {
                 if (group.HasCard(cardID))
                 {

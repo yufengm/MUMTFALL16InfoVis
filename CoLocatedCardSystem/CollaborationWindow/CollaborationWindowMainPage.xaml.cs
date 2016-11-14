@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
@@ -46,25 +48,27 @@ namespace CoLocatedCardSystem.CollaborationWindow
             Init();
         }
 
-        public void Init()
+        public async void Init()
         {
             Screen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
             Screen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
-            Screen.SCALE_FACTOR= 1/DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+            Screen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             this.Width = Screen.WIDTH;
             this.Height = Screen.HEIGHT;
             container = new Canvas();
             container.Width = Screen.WIDTH;
             container.Height = Screen.HEIGHT;
+            this.Content = container;
             controllers = new CentralControllers();
             controllers.Init(Screen.WIDTH, Screen.HEIGHT);
+            await Task.Delay(TimeSpan.FromSeconds(3));
             container.Children.Add(controllers.BaseLayerController.GetBaseLayer());
             container.Children.Add(controllers.GlowLayerController.GetGlowLayer());
             container.Children.Add(controllers.CardLayerController.GetCardLayer());
             container.Children.Add(controllers.SortingBoxLayerController.GetSortingBoxLayer());
             container.Children.Add(controllers.MenuLayerController.GetMenuLayer());
-            this.Content = container;
         }
+
         public void Deinit()
         {
             controllers.Deinit();

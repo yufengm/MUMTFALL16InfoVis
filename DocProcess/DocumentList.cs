@@ -29,16 +29,17 @@ namespace DocProcess
             {
                 string[] fields = CSVParser.Parse(line);
                 //Add the review about the same hotel to fields
-                if (items.Count()>0&&fields[0].Equals(items[0][0]))
+                if (items.Count() > 0 && fields[0].Equals(items[0][0]))
                 {
                     items.Add(fields);
                 }
                 else//Process the document
                 {
-                    if (items.Count() > 2)
+                    if (items.Count() > 2 && items.Count < 4)
                     {
                         ProcessedDocument doc = new ProcessedDocument(Guid.NewGuid().ToString());
-                        if (items.Count > 1) {//only use the first.
+                        if (items.Count > 1)
+                        {//only use the first.
                             string[] first = items[0];
                             items.Clear();
                             items.Add(first);
@@ -53,7 +54,8 @@ namespace DocProcess
                 }
             }
         }
-        internal ProcessedDocument[] GetList() {
+        internal ProcessedDocument[] GetList()
+        {
             return fileList.Values.ToArray();
         }
     }

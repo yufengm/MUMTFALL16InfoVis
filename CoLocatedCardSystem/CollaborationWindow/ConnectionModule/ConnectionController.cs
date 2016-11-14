@@ -8,6 +8,7 @@ using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.ClusterModule;
 using CoLocatedCardSystem.SecondaryWindow;
+using System.Collections.Concurrent;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
 {
@@ -31,8 +32,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         /// </summary>
         internal async void UpdateCurrentStatus()
         {
-            List<GlowGroup> glowgroups = controllers.GlowController.GetGroups();
-            foreach (GlowGroup gg in glowgroups)
+            foreach (GlowGroup gg in controllers.GlowController.GetGroups().Values)
             {
                 var cardIDs = gg.GetCardID();
                 foreach (string id in cardIDs.Keys)
@@ -48,7 +48,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
                         {
                             AddWordToken(tk, d.DocID, px, py);
                         }
-
                         string[] jpgs = d.RawDocument.Jpg[0].Split(',');
                         AddImageToken(jpgs[0], d.DocID, px, py);
                     }
