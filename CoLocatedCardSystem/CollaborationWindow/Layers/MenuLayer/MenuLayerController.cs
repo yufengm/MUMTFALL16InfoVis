@@ -13,7 +13,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         MenuLayer menuLayer;
         CentralControllers controllers;
         Dictionary<User, MenuBar> list = new Dictionary<User, MenuBar>();
-
+        
         public CentralControllers Controllers
         {
             get

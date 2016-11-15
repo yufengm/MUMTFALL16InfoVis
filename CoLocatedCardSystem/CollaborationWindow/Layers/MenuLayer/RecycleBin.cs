@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
-namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
+namespace CoLocatedCardSystem.CollaborationWindow.Layers.MenuLayer
 {
-    class CloudWordView:Canvas
+    class RecycleBin:Canvas
     {
+        internal void Init() {
+
+        }
     }
 }

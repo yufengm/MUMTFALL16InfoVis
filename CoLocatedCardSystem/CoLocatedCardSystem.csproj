@@ -89,6 +89,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\close.png" />
     <Content Include="Assets\data\phonelog.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -131,7 +132,6 @@
     <Compile Include="CollaborationWindow\GestureModule\RemoveAttachingGesture.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardPositionStatus.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardStatus.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\CloudWordView.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\LiveCardList.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\ContentTouchView.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
@@ -143,6 +143,7 @@
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowList.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayer.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayerController.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\RecycleBin.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
     <Compile Include="CollaborationWindow\TableModule\AttributeHelper.cs" />
@@ -226,7 +227,6 @@
     <Content Include="Assets\data\vast2006_short.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\menu_bg.png" />
     <Content Include="Assets\p5\awarecloud.js\Geometry.js" />
     <Content Include="Assets\p5\awarecloud.js\index.html" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.dom.js" />
@@ -503,6 +503,8 @@
     <Content Include="Assets\review\fe00b019-909d-3110-ad2f-269c97392465.jpg" />
     <Content Include="Assets\review\fe2643ba-a381-3b3a-a447-bce9d8ab2519.jpg" />
     <Content Include="Assets\review\fe98f965-db23-3ff4-8d00-a8aebc423c63.jpg" />
+    <Content Include="Assets\search.png" />
+    <Content Include="Assets\trash.png" />
     <Content Include="GenericParsing.dll" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

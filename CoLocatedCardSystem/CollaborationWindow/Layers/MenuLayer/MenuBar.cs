@@ -21,10 +21,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         MenuLayerController menuLayerController;
         OnScreenKeyBoard virtualKeyboard;
         TextBox textbox;
-        TextInputButton createSortingBoxButton;
         User owner;
         DeleteButton deleteButton;
         TextInputButton searchButton;
+        TextInputButton createSortingBoxButton;
         TextInputButton currentInputView = null;//Which input target the view is targeting
         SearchResultTray searchResultTray;
         public MenuBar(MenuLayerController controller)
@@ -128,7 +128,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         {
             //Initialize search button
             searchButton = new TextInputButton();
-            searchButton.Init("Search", "Close", virtualKeyboard, textbox);
+            searchButton.Init(new Uri(@"ms-appx:///Assets/search.png"), new Uri(@"ms-appx:///Assets/close.png"), virtualKeyboard, textbox);
             searchButton.Click += KeyboardButton_Click;
             RegisterPointerEvent(searchButton);
             searchButton.IsTextScaleFactorEnabled = false;

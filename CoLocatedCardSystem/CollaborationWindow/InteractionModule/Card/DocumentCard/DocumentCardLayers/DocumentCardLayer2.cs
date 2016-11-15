@@ -16,7 +16,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class DocumentCardLayer2 : DocumentCardLayerBase
     {
-        CloudWordView cloudWordView = new CloudWordView();
         Document doc;
         public DocumentCardLayer2(DocumentCardController cardController, DocumentCard card) : base(cardController, card)
         {
@@ -70,24 +69,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 grid.Children.Add(label);
                 Grid.SetRow(label, 0);
 
-                cloudWordView.Width = attachedCard.Width;
-                cloudWordView.Height = attachedCard.Height;
-                cloudWordView.Margin = new Thickness(0);
-                grid.Children.Add(cloudWordView);
-                Grid.SetRow(cloudWordView, 1);
                 this.Children.Add(grid);
             });
         }
         internal override void DisableTouch()
         {
             base.DisableTouch();
-            cloudWordView.IsHitTestVisible = false;
 
         }
         internal override void EnableTouch()
         {
             base.EnableTouch();
-            cloudWordView.IsHitTestVisible = true;
         }
         /// <summary>
         /// Highlight tokens
@@ -99,7 +91,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 TextBlock tb = new TextBlock();
                 tb.Text = token.OriginalWord;
-                cloudWordView.Children.Add(tb);
             });
         }
         /// <summary>
@@ -112,7 +103,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 TextBlock tb = new TextBlock();
                 tb.Text = token.OriginalWord;
-                cloudWordView.Children.Remove(tb);
             });
         }
     }
