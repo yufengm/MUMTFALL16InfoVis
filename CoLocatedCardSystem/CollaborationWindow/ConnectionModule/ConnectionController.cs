@@ -32,24 +32,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         /// </summary>
         internal async void UpdateCurrentStatus()
         {
-            foreach (GlowGroup gg in controllers.GlowController.GetGroups().Values)
+            foreach (KeyValuePair<string, GlowGroup> gg in controllers.GlowController.GetGroups())
             {
-                var cardIDs = gg.GetCardID();
+                var cardIDs = gg.Value.GetCardID();
                 foreach (string id in cardIDs.Keys)
                 {
                     CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
-                    Document d = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
+                    Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
                     Token[] tks = controllers.CardController.DocumentCardController.GetHighLightedContent(id);
-                    if (d != null && cs != null && tks != null)
+                    if (doc != null && cs != null && tks != null)
                     {
                         double px = cs.position.X * SecondaryScreen.WIDTH * SecondaryScreen.SCALE_FACTOR / (Screen.WIDTH * Screen.SCALE_FACTOR);
                         double py = cs.position.Y * SecondaryScreen.HEIGHT * SecondaryScreen.SCALE_FACTOR / (Screen.HEIGHT * Screen.SCALE_FACTOR);
                         foreach (Token tk in tks)
                         {
-                            AddWordToken(tk, d.DocID, px, py);
+                            AddWordToken(tk, doc.DocID, px, py);
                         }
-                        string[] jpgs = d.RawDocument.Jpg[0].Split(',');
-                        AddImageToken(jpgs[0], d.DocID, px, py);
+                        string[] jpgs = doc.RawDocument.Jpg[0].Split(',');
+                        AddImageToken(jpgs[0], doc.DocID, px, py);
                     }
                 }
             }
@@ -68,6 +68,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             cw.Highlight = true;
             app.AddWordToScreen(cw);
         }
+
         internal void AddImageToken(String imgUrl, String group, double x, double y)
         {
             ClusterWord cw = new ClusterWord();
