@@ -57,7 +57,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             base.Init(cardID, user);
             this.document = doc;
         }
-
+        internal override async void Deinit()
+        {
+            base.Deinit();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                currentLayer = 0;
+                foreach (var layer in layers)
+                {
+                    this.Children.Remove(layers[0]);
+                }
+                layers = null;
+            });
+        }
         /// <summary>
         /// Load the document card ui
         /// </summary>

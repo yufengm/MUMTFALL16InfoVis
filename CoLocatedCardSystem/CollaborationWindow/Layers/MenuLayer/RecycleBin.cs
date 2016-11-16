@@ -14,7 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
     class RecycleBin : Canvas
     {
-        double radius = 150 * Screen.SCALE_FACTOR;
+        double radius = 120 * Screen.SCALE_FACTOR;
         ImageBrush closeTrashBin = new ImageBrush();
         ImageBrush openTrashBin = new ImageBrush();
         Ellipse bg;
@@ -49,6 +49,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 new Size(2 * radius, 2 * radius),
                 this);
             this.Children.Add(bg);
+            this.IsHitTestVisible = false;
         }
 
         internal async void Open()

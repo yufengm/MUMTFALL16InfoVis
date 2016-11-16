@@ -144,8 +144,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 this.ManipulationCompleted += Card_ManipulationCompleted;
             });
         }
-
-        internal void Deinit()
+        /// <summary>
+        /// Deinit the ui, set the card to default and remove the listener
+        /// </summary>
+        internal virtual void Deinit()
         {
             this.position = new Point();
             this.cardScale = 1;
