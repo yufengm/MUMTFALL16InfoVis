@@ -147,6 +147,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal void Deinit()
         {
+            this.position = new Point();
+            this.cardScale = 1;
+            this.rotation = 0;
             this.PointerPressed -= PointerDown;
             this.PointerMoved -= PointerMove;
             this.PointerCanceled -= PointerUp;

@@ -14,6 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         CentralControllers controllers;
         AttachingGesture attachingGesture;
         RemoveAttachingGesture removeAttachingGesture;
+        DeleteCardGesture deleteCardGesture;
 
         public CentralControllers Controllers
         {
@@ -54,6 +55,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
             }
         }
 
+        internal DeleteCardGesture DeleteCardGesture
+        {
+            get
+            {
+                return deleteCardGesture;
+            }
+
+            set
+            {
+                deleteCardGesture = value;
+            }
+        }
+
         public GestureController(CentralControllers ctrls)
         {
             this.controllers = ctrls;
@@ -62,6 +76,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         {
             attachingGesture = new AttachingGesture(this);
             removeAttachingGesture = new RemoveAttachingGesture(this);
+            deleteCardGesture = new DeleteCardGesture(this);
         }
 
         public void Deinit()

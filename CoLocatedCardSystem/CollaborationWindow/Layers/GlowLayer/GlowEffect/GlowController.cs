@@ -67,6 +67,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             }
             return false;
         }
+
         /// <summary>
         /// Get all groups
         /// </summary>

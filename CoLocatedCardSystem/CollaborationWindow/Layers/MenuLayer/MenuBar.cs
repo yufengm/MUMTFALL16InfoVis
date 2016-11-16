@@ -77,6 +77,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             UnregisterPointerEvent(searchResultTray);
         }
 
+        internal void EnableResultCard(string cardID)
+        {
+            searchResultTray.EnableResultCard(cardID);
+        }
+
         internal void RemoveUnusedHighlight()
         {
             searchResultTray.RemoveUnusedHighlight();

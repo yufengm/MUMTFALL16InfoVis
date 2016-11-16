@@ -126,6 +126,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             Touch[] touchList = list.GetTouch();
             Touch[] removedTouchList = new Touch[] { removedTouch };
             controllers.GestureController.AttachingGesture.Detect(touchList, removedTouchList);
+            controllers.GestureController.DeleteCardGesture.Detect(touchList, removedTouchList);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using System;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 
 namespace CoLocatedCardSystem.CollaborationWindow
@@ -26,9 +27,8 @@ namespace CoLocatedCardSystem.CollaborationWindow
         /// </summary>
         /// <param name="point"></param>
         /// <param name="element"></param>
-        /// <param name="isCentered"></param>
         /// <returns></returns>
-        public static bool IsIntersect(Point point, Point[] points, bool isCentered)
+        public static bool IsIntersect(Point point, Point[] points)
         {
             Point[] polygon = points;
             bool isInside = false;
@@ -42,13 +42,34 @@ namespace CoLocatedCardSystem.CollaborationWindow
             }
             return isInside;
         }
-
-       /// <summary>
-       /// Checks if the two polygons are intersecting.
-       /// </summary>
-       /// <param name="a"></param>
-       /// <param name="b"></param>
-       /// <returns></returns>
+        /// <summary>
+        /// Check if a circle is intersected with points
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="radius"></param>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static bool IsIntersect(Point point, double radius, Point[] points)
+        {
+            Point[] polygon = points;
+            if (polygon != null && polygon.Length > 0)
+            {
+                for (int i = 0; i < polygon.Length; i++)
+                {
+                    if (Math.Sqrt(Math.Pow(polygon[i].X - point.X, 2) + Math.Pow(polygon[i].Y - point.Y, 2)) < radius)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Checks if the two polygons are intersecting.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool IsIntersect(Point[] points1, Point[] points2)
         {
             foreach (var polygon in new[] { points1, points2 })

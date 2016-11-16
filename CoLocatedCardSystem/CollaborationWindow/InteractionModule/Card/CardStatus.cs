@@ -16,5 +16,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal double scale;
         internal string cardID;
         internal Point[] corners;
+        internal User owner;
     }
 }

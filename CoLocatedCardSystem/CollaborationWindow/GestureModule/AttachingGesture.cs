@@ -16,13 +16,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
         }
 
         /// <summary>
-        /// Detect the sorting gesture (Drag and drop the card to the sorting box). 
-        /// The touches in the sorting gesture will be removed from the touchList
+        /// Detect the attaching gesture
         /// </summary>
-        /// <param name="touchList"></param>
-        /// <returns></returns>
+        /// <param name="touchList">all the active touch points</param>
+        /// <param name="targetList">the removed touch points (by release the finger)</param>
         internal override async void Detect(Touch[] touchList, Touch[] targetList)
         {
+            base.Detect(touchList, targetList);
             Touch removedTouch = targetList[0];
             if (removedTouch.Sender is DocumentCard
                     && removedTouch.GetStatus() == TOUCH_STATUS.RELEASED)

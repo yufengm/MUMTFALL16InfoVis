@@ -32,7 +32,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                     SortingBox[] boxes = gestureController.Controllers.SortingBoxController.GetAllSortingBoxes();
                     foreach (SortingBox box in boxes)
                     {
-                        bool isIntersect = Coordination.IsIntersect(card.Position, box.Corners, true);
+                        bool isIntersect = Coordination.IsIntersect(card.Position, box.Corners);
                         if (isIntersect)
                         {
                             foreach (Touch otherTouches in touchList)

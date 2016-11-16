@@ -165,7 +165,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 }
             }
         }
-
+        internal void EnableCard()
+        {
+            isEnabled = true;
+            titleTextBlock.Foreground = new SolidColorBrush(MyColor.Color1);
+            this.IsHitTestVisible = true;
+        }
         internal void DisableCard()
         {
             isEnabled = false;

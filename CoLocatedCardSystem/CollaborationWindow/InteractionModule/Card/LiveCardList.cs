@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     /// </summary>
     class LiveCardList
     {
-        Dictionary<string, CardStatus> statusList = new Dictionary<string, CardStatus>();
-        Dictionary<string, Card> cardList = new Dictionary<string, Card>();
+        ConcurrentDictionary<string, CardStatus> statusList = new ConcurrentDictionary<string, CardStatus>();
+        ConcurrentDictionary<string, Card> cardList = new ConcurrentDictionary<string, Card>();
         internal void Deinit()
         {
             statusList.Clear();
@@ -38,8 +39,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 info.scale = card.CardScale;
                 info.cardID = card.CardID;
                 info.corners = card.Corners;
-                statusList.Add(card.CardID, info);
-                cardList.Add(card.CardID, card);
+                info.owner = card.Owner;
+                statusList.TryAdd(card.CardID, info);
+                cardList.TryAdd(card.CardID, card);
             }
         }
         /// <summary>
@@ -50,7 +52,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal async Task<CardStatus> GetStatus(string cardID)
         {
             CardStatus status = null;
-            if (!cardList.Keys.Contains(cardID)) {
+            if (!cardList.Keys.Contains(cardID) || !statusList.Keys.Contains(cardID))
+            {
                 return null;
             }
             Card card = cardList[cardID];
@@ -67,6 +70,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             });
             return status;
         }
+        /// <summary>
+        /// Remove the card from live card list
+        /// </summary>
+        /// <param name="cardID"></param>
+        internal void RemoveCard(string cardID)
+        {
+            if (statusList.Keys.Contains(cardID)) {
+                CardStatus cs;
+                statusList.TryRemove(cardID, out cs);
+            }
+            if (cardList.Keys.Contains(cardID))
+            {
+                Card card;
+                cardList.TryRemove(cardID, out card);
+            }
+        }
+
         /// <summary>
         /// Get the card status of all the cards.
         /// </summary>
@@ -100,7 +120,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <returns></returns>
         internal bool HasCard(string cardID)
         {
-            return cardList.Keys.Contains(cardID);
+            return statusList.Keys.Contains(cardID);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
@@ -71,6 +72,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer
                 await cardLayer.SetZIndex(card, zIndexList[card]);
             }
         }
+        /// <summary>
+        /// Remove the card.
+        /// </summary>
+        /// <param name="card"></param>
+        internal void UnloadCard(Card card)
+        {
+            card.Deinit();
+            MoveCardToTop(card);
+            cardLayer.RemoveCard(card);
+            zIndexList.Remove(card);
+        }
+
         /// <summary>
         /// Update the card zindex in the cardlayer
         /// </summary>

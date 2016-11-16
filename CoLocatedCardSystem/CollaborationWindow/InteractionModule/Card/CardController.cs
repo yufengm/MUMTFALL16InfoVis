@@ -39,6 +39,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             documentCardController = new DocumentCardController(controllers.CardController);
             liveCardList = new LiveCardList();
         }
+
         internal void Deinit() {
             documentCardController.Deinit();
             liveCardList.Deinit();
@@ -53,6 +54,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 documentCardController.Init(docs);
             }
+        }
+
+        internal async void RemoveActiveCard(string cardID)
+        {
+            controllers.GlowController.DisconnectOneCardWithGroups(cardID);
+            CardStatus cs = await GetLiveCardStatus(cardID);
+            if (cs.type == typeof(DocumentCard))
+            {
+                DocumentCard card = documentCardController.GetDocumentCardById(cardID);
+                if (card != null)
+                {
+                    controllers.CardLayerController.UnloadCard(card);
+                    card.DehighlightAll();
+                }
+            }
+            controllers.MenuLayerController.EnableCard(cs.owner, cardID);
+            liveCardList.RemoveCard(cardID);
         }
 
         /// <summary>
@@ -87,6 +105,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal Task<CardStatus> GetLiveCardStatus(string cardID)
         {
             return liveCardList.GetStatus(cardID);
+        }
+
+        internal Task<IEnumerable<CardStatus>> GetLiveCardStatus()
+        {
+            return liveCardList.GetStatus();
         }
         /// <summary>
         /// Move the card by vector

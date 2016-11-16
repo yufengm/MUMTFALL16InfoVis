@@ -141,6 +141,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             }
         }
         /// <summary>
+        /// Re-enable the card in the search result tray
+        /// </summary>
+        internal void EnableResultCard(string cardID) {
+            foreach (Canvas block in stackCanvas) {
+                if (block.Children.Count != 0) {
+                    ResultCard resultCard = block.Children[0] as ResultCard;
+                    if (resultCard != null && resultCard.CardID == cardID) {
+                        resultCard.EnableCard();
+                    }
+                }
+            }
+        }
+        /// <summary>
         /// Remove the high light of all highlight card
         /// </summary>
         internal void RemoveUnusedHighlight()
@@ -161,9 +174,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             {
                 startCardID = stackCanvas.Count - cardToShow;
             }
-            if (startCardID < 0)
+            if (startCardID < 0) { 
                 startCardID = 0;
-
+            }
             if (stackCanvas.Count > 0)
             {
                 for (int i = 0; i < startCardID; i++)
@@ -182,8 +195,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                         resultCard.MoveTo(new Point(stackCanvas[i].Width / 2, stackCanvas[i].Height / 2));
                         resultCard.Block = stackCanvas[i];
 
-                        if (menuLayerController.Controllers.CardController.IsCardOnTable(currentSearchResult[i].CardID)) {
+                        if (menuLayerController.Controllers.CardController.IsCardOnTable(currentSearchResult[i].CardID))
+                        {
                             resultCard.DisableCard();
+                        }
+                        else {
+                            resultCard.EnableCard();
                         }
                         stackCanvas[i].Children.Add(resultCard);
                     }

@@ -128,6 +128,7 @@
     <Compile Include="CollaborationWindow\DocumentModule\Token.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\WordType.cs" />
     <Compile Include="CollaborationWindow\GestureModule\AttachingGesture.cs" />
+    <Compile Include="CollaborationWindow\GestureModule\DeleteCardGesture.cs" />
     <Compile Include="CollaborationWindow\GestureModule\Gesture.cs" />
     <Compile Include="CollaborationWindow\GestureModule\RemoveAttachingGesture.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\CardPositionStatus.cs" />
@@ -504,7 +505,8 @@
     <Content Include="Assets\review\fe2643ba-a381-3b3a-a447-bce9d8ab2519.jpg" />
     <Content Include="Assets\review\fe98f965-db23-3ff4-8d00-a8aebc423c63.jpg" />
     <Content Include="Assets\search.png" />
-    <Content Include="Assets\trash.png" />
+    <Content Include="Assets\trashIcon-1.png" />
+    <Content Include="Assets\trashIcon-2.png" />
     <Content Include="GenericParsing.dll" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

@@ -52,7 +52,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 this.Children.Add(card);
-                DocumentCard sCard = card as DocumentCard;
             });
         }
 
@@ -66,6 +65,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 Canvas.SetZIndex(card, zindex);
+            });
+        }
+
+        internal async void RemoveCard(Card card)
+        {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                this.Children.Remove(card);
             });
         }
     }

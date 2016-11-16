@@ -57,13 +57,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             base.Init(cardID, user);
             this.document = doc;
         }
-        /// <summary>
-        /// Dehighlight all words
-        /// </summary>
-        internal void DehighlightAll()
-        {
-            highlightedTokens.Clear();
-        }
 
         /// <summary>
         /// Load the document card ui
@@ -148,6 +141,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
+        /// <summary>
+        /// Dehighlight all words
+        /// </summary>
+        internal void DehighlightAll()
+        {
+            Token[] tkcopy = new Token[highlightedTokens.Count];
+            highlightedTokens.CopyTo(tkcopy);
+            foreach (Token tk in tkcopy)
+            {
+                RemoveHighLightWord(tk);
+            }
+        }
         /// <summary>
         /// Check the size of the card, load new layer if the size falls in a zoom range
         /// </summary>

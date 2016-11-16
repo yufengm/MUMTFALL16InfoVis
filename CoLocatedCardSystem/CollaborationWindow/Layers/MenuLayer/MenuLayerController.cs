@@ -4,7 +4,9 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Foundation;
 using Windows.UI.Input;
+using System.Threading.Tasks;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
@@ -44,7 +46,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 list.Add(user, bar);
                 menuLayer.AddMenuBar(bar);
             }
+            Point[] rbPosi = new Point[] {
+                new Point(0,0),
+                new Point(Screen.WIDTH,0),
+                new Point(0,Screen.HEIGHT),
+                new Point(Screen.WIDTH,Screen.HEIGHT)
+            };
+            menuLayer.AddRecycleBin(rbPosi);
         }
+
+        internal bool IsIntersectWithDelete(CardStatus status)
+        {
+            return menuLayer.IsIntersectWithDeleteBin(status);
+        }
+
         /// <summary>
         /// Destroy the menu layer
         /// </summary>
@@ -60,6 +75,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         internal MenuLayer GetMenuLayer() {
             return menuLayer;
         }
+        /// <summary>
+        /// The user delete the card, reenable the search result to enable interaction
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="cardID"></param>
+        internal void EnableCard(User owner, string cardID)
+        {
+            MenuBar menubar = list[owner];
+            menubar.EnableResultCard(cardID);
+        }
+
         /// <summary>
         /// Ask the interaction module to create a sorting box
         /// </summary>
@@ -107,19 +133,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         {
             DocumentCard card = controllers.CardController.DocumentCardController.GetDocumentCardById(resultCard.CardID);
             MenuBarInfo info = MenuBarInfo.GetMenuBarInfo(card.Owner);
-            card.MoveBy(info.CardInitPosition);
+            card.MoveTo(info.CardInitPosition);
             card.Rotate(info.Rotate);
             controllers.CardController.MoveCardToTable(card, typeof(DocumentCard));     
         }
-        /// <summary>
-        /// Check if the card is on the table.
-        /// </summary>
-        /// <param name="documentCard"></param>
-        /// <returns></returns>
-        internal bool IsCardOnTable(DocumentCard documentCard)
-        {
-            return controllers.CardController.IsCardOnTable(documentCard.CardID);
-        }
+
         /// <summary>
         /// Pass the touch poitn to the touch module
         /// </summary>
