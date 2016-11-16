@@ -48,8 +48,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
                         {
                             AddWordToken(tk, doc.DocID, px, py);
                         }
-                        string[] jpgs = doc.RawDocument.Jpg[0].Split(',');
-                        AddImageToken(jpgs[0], doc.DocID, px, py);
+                        int topicIndex = doc.GetTopicIndex();
+                        Token[] topicTokens = controllers.DocumentController.TopicTokenList[topicIndex];
+                        foreach (Token tk in topicTokens)
+                        {
+                            AddWordToken(tk, doc.DocID, px, py);
+                        }
+                        //string[] jpgs = doc.RawDocument.Jpg[0].Split(',');
+                        //AddImageToken(jpgs[0], doc.DocID, px, py);
                     }
                 }
             }

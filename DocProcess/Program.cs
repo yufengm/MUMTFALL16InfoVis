@@ -11,11 +11,10 @@ namespace DocProcess
     {
         static void Main(string[] args)
         {
-            String dir = @"orlandoimages.csv";
+            String dir = @"Orlando_200_topics.csv";
             DocumentList mdir = new DocumentList();
             mdir.Load(dir);
             string fileName = "review.preload";
-            string folder = "review";
 
             // Create a file to write to.
             using (StreamWriter sw = File.CreateText(fileName))

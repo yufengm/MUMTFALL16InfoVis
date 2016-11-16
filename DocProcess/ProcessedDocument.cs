@@ -16,6 +16,7 @@ namespace DocProcess
         string[] time;
         string[] rating;
         string[] jpg;
+        string[] topics;
         string[][] serializedProcessedDocument;
         
 
@@ -83,7 +84,18 @@ namespace DocProcess
                 jpg = value;
             }
         }
+        public string[] Topics
+        {
+            get
+            {
+                return topics;
+            }
 
+            set
+            {
+                topics = value;
+            }
+        }
         public string[][] SerializedProcessedDocument
         {
             get
@@ -96,6 +108,8 @@ namespace DocProcess
                 serializedProcessedDocument = value;
             }
         }
+
+
 
         public ProcessedDocument(string docID)
         {
@@ -119,6 +133,7 @@ namespace DocProcess
                 time = items.Select(a => a[1].Replace("\"", "")).ToArray() as string[];
                 rating = items.Select(a => a[3].Replace("\"", "")).ToArray() as string[];
                 jpg = items.Select(a => a[9].Replace("\"", "")).ToArray() as string[];
+                topics = items.Select(a => a[10].Replace("\"", "")).ToArray() as string[];
                 string[] texts = items.Select(a => a[2]).ToArray() as String[];
                 List<Token[]> tlist = new List<Token[]>();
                 foreach (String text in texts)

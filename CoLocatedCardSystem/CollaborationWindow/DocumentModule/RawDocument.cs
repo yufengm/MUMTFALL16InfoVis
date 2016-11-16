@@ -14,11 +14,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         string[] reviewTime;
         string[] rating;
         string[] jpg;
+        double[][] topics;
         string[][] serializedProcessedDocument;
 
-        public string ToJson() {
-            return JsonConvert.SerializeObject(this);
-        }
         public string Id
         {
             get
@@ -94,6 +92,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             set
             {
                 serializedProcessedDocument = value;
+            }
+        }
+
+        public double[][] Topics
+        {
+            get
+            {
+                return topics;
+            }
+
+            set
+            {
+                topics = value;
             }
         }
     }

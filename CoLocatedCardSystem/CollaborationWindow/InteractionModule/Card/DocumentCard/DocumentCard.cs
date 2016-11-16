@@ -120,7 +120,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 highlightedTokens.Add(token);
                 cardController.Controllers.ConnectionController.AddWordToken(token, this.document.DocID, this.position.X, this.position.Y);
-                foreach (var layer in layers) {
+                foreach (var layer in layers)
+                {
                     layer.HighlightToken(token);
                 }
             }
@@ -146,9 +147,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     cardController.Controllers.ConnectionController.RemoveToken(token, this.document.DocID);
                 }
                 highlightedTokens.Remove(token);
-                foreach (var layer in layers)
+                if (layers != null)
                 {
-                    layer.DehighlightToken(token);
+                    foreach (var layer in layers)
+                    {
+                        layer.DehighlightToken(token);
+                    }
+
                 }
             }
         }
@@ -201,7 +206,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 this.Children.Add(layers[currentLayer]);
             });
         }
-        internal bool isConnectAllowed() {
+        internal bool isConnectAllowed()
+        {
             return currentLayer <= 1;
         }
         /// <summary>
@@ -220,7 +226,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         protected override void Card_ManipulationStarting(object sender, ManipulationStartingRoutedEventArgs e)
         {
             base.Card_ManipulationStarting(sender, e);
-            if (this.PointerCaptures!=null&&this.PointerCaptures.Count > 1)
+            if (this.PointerCaptures != null && this.PointerCaptures.Count > 1)
             {
                 foreach (var layer in layers)
                 {

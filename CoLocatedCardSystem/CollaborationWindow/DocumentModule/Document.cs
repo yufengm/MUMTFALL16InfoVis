@@ -14,6 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         string docID;
         RawDocument rawDocument;
         ProcessedDocument[] processedDocuments;
+        int[] topicIndex;
         private class JDocument
         {
             public string DocID = "";
@@ -21,6 +22,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             public string[] time;
             public string[] rating;
             public string[] jpg;
+            private string[] topics;
             public string[][] serializedProcessedDocument;
 
             internal string Name
@@ -59,6 +61,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 set
                 {
                     serializedProcessedDocument = value;
+                }
+            }
+
+            public string[] Topics
+            {
+                get
+                {
+                    return topics;
+                }
+
+                set
+                {
+                    topics = value;
                 }
             }
         }
@@ -114,6 +129,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             rawDocument.Name = tempDoc.Name;
             rawDocument.ReviewTime = tempDoc.Time;
             rawDocument.Jpg = tempDoc.jpg;
+            rawDocument.Topics = new double[tempDoc.Topics.Length][];
+            for (int i = 0; i < tempDoc.Topics.Length; i++) {
+                string[] strs = tempDoc.Topics[i].Split(',');
+                List<double> vs = new List<double>();
+                foreach (string s in strs) {
+                    vs.Add(Double.Parse(s));
+                }
+                rawDocument.Topics[i] = vs.ToArray();
+            }
+            topicIndex = new int[rawDocument.Topics.Length];
+            for (int i = 0; i < rawDocument.Topics.Length; i++) {
+                double max = rawDocument.Topics[i].Max();
+                topicIndex[i] = Array.IndexOf(rawDocument.Topics[i], max);
+            }
             rawDocument.SerializedProcessedDocument = tempDoc.SerializedProcessedDocument;
             processedDocuments = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
             for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)
@@ -185,6 +214,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 }
             }
             return result;
+        }
+
+        internal int GetTopicIndex() {
+            return topicIndex[0];
         }
     }
 }
