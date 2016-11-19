@@ -1,12 +1,11 @@
-﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Input;
 
-namespace CoLocatedCardSystem.CollaborationWindow.TopicModule
+namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class GlowController
     {

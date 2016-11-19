@@ -10,7 +10,7 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Linking_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.ConnectionModule;
-using CoLocatedCardSystem.CollaborationWindow.TopicModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {

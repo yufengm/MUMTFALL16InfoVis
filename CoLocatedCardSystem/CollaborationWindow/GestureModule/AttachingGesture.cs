@@ -1,7 +1,7 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer;
-using CoLocatedCardSystem.CollaborationWindow.TopicModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.TouchModule;
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CoLocatedCardSystem.CollaborationWindow.TopicModule
+namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class GlowList
     {

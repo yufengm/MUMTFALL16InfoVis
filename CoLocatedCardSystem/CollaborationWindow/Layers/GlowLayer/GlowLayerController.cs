@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using System.Collections.Generic;
-using CoLocatedCardSystem.CollaborationWindow.TopicModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {

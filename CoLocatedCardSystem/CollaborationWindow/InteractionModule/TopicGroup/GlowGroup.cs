@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoLocatedCardSystem.CollaborationWindow.TopicModule
+namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class GlowGroup
     {

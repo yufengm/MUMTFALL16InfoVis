@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI;
 
-namespace CoLocatedCardSystem.CollaborationWindow.TopicModule
+namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class GlowInfo
     {
