@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
 {
-    class RawDocument
+    class DocumentAttributes
     {
         string id;
         string name = "";
@@ -15,7 +15,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         string[] rating;
         string[] jpg;
         double[][] topics;
-        string[][] serializedProcessedDocument;
 
         public string Id
         {
@@ -79,19 +78,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             set
             {
                 jpg = value;
-            }
-        }
-
-        public string[][] SerializedProcessedDocument
-        {
-            get
-            {
-                return serializedProcessedDocument;
-            }
-
-            set
-            {
-                serializedProcessedDocument = value;
             }
         }
 

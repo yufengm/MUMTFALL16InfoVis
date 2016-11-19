@@ -9,6 +9,8 @@ namespace CoLocatedCardSystem.ClusterModule
     class ClusterWord
     {
         int type = 0;//0 for text, 1 for pic
+        string owner = "";
+        string color = "";
         string text="text";
         string stemmedText;
         double weight =10;
@@ -130,6 +132,32 @@ namespace CoLocatedCardSystem.ClusterModule
             set
             {
                 stemmedText = value;
+            }
+        }
+
+        public string Owner
+        {
+            get
+            {
+                return owner;
+            }
+
+            set
+            {
+                owner = value;
+            }
+        }
+
+        public string Color
+        {
+            get
+            {
+                return color;
+            }
+
+            set
+            {
+                color = value;
             }
         }
     }

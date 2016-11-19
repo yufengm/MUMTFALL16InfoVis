@@ -37,10 +37,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                     }
                 }
                 DocumentCard card = removedTouch.Sender as DocumentCard;
-                GlowGroup[] attachedGroups = await gestureController.Controllers.GlowController.GetAttachedGroups(card.CardID);
+                SemanticGroup[] attachedGroups = await gestureController.Controllers.SemanticGroupController.GetAttachedGroups(card.CardID);
                 if (card.isConnectAllowed() && attachedGroups != null)
                 {
-                    gestureController.Controllers.GlowController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
+                    gestureController.Controllers.SemanticGroupController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
                 }
             }
         }

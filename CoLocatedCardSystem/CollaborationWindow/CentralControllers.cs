@@ -10,7 +10,7 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Linking_Layer;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.ConnectionModule;
-using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using CoLocatedCardSystem.CollaborationWindow.MachineLearningModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {
@@ -20,12 +20,13 @@ namespace CoLocatedCardSystem.CollaborationWindow
     public class CentralControllers
     {
         DocumentController documentController;
+        MLController mlController;
         TableController tableController;
         CardController cardController;
         SortingBoxController sortingBoxController;
         TouchController touchController;
         GestureController gestureController;
-        GlowController glowController;
+        SemanticGroupController semanticGroupController;
         BaseLayerController baseLayerController;
         CardLayerController cardLayerController;
         LinkingLayerController linkingLayerController;
@@ -112,11 +113,11 @@ namespace CoLocatedCardSystem.CollaborationWindow
             }
         }
 
-        internal GlowController GlowController
+        internal SemanticGroupController SemanticGroupController
         {
             get
             {
-                return glowController;
+                return semanticGroupController;
             }
         }
 
@@ -144,6 +145,19 @@ namespace CoLocatedCardSystem.CollaborationWindow
             }
         }
 
+        internal MLController MlController
+        {
+            get
+            {
+                return mlController;
+            }
+
+            set
+            {
+                mlController = value;
+            }
+        }
+
 
         /// <summary>
         /// Initialize all documents
@@ -152,12 +166,13 @@ namespace CoLocatedCardSystem.CollaborationWindow
         {
             //create controllers
             documentController = new DocumentController(this);
+            mlController = new MLController(this);
             tableController = new TableController(this);
             cardController = new CardController(this);
             sortingBoxController = new SortingBoxController(this);
             touchController = new TouchController(this);
             gestureController = new GestureController(this);
-            glowController = new GlowController(this);
+            semanticGroupController = new SemanticGroupController(this);
             baseLayerController = new BaseLayerController(this);
             cardLayerController = new CardLayerController(this);
             sortingBoxLayerController = new SortingBoxLayerController(this);
@@ -168,7 +183,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Initialize controllers
             touchController.Init();
             gestureController.Init();
-            glowController.Init();
+            semanticGroupController.Init();
             baseLayerController.Init(width, height);
             Coordination.Baselayer = baseLayerController.GetBaseLayer();//Set the base layer to the coordination helper
             cardLayerController.Init(width, height);
@@ -177,6 +192,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             glowLayerController.Init(width, height);
             //Load the documents, cards and add them to the card layer
             await documentController.Init(FilePath.NewsArticle);//Load the document
+            mlController.Init();
             //await tableController.Init(FilePath.CSVFile);
             cardController.Init();
             cardController.InitDocCard(documentController.GetDocument());

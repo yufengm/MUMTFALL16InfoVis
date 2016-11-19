@@ -16,27 +16,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
     {
         DocumentList list=new DocumentList();
         CentralControllers controllers;
-        string[][] topicList = new string[][] {
-            new string[] { "one" , "get" , "stay" ,"day", "night","desk" , "go", "front","us","park" },
-            new string[] { "place" , "bed" , "stay" , "clean" , "area" , "one" , "great" , "breakfast" , "like" , "nice" },
-            new string[] { "breakfast" , "stay" , "free" , "clean" , "like" , "park" , "good" , "well" , "disney" , "day" },
-            new string[] { "stay" ,"nice","clean" ,"area","night" ,"place","pool" ,"day" ,"one" ,"get"},
-            new string[] { "look" ,"stay" ,"time" , "see", "like" , "around" , "bed" , "us", "clean", "one" }
-        };
-        Token[][] topicTokenList;
-
-        internal Token[][] TopicTokenList
-        {
-            get
-            {
-                return topicTokenList;
-            }
-
-            set
-            {
-                topicTokenList = value;
-            }
-        }
 
         public DocumentController(CentralControllers ctrls) {
             this.controllers = ctrls;
@@ -59,15 +38,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                     Document doc = new Document();
                     doc.Deserialize(line);
                     list.AddDocument(doc);
-                }
-            }
-            topicTokenList = new Token[topicList.Length][];
-            for (int i = 0; i < topicList.Length; i++) {
-                topicTokenList[i] = new Token[topicList[i].Length];
-                for (int j = 0; j < topicList[i].Length; j++) {
-                    topicTokenList[i][j] = new Token();
-                    topicTokenList[i][j].OriginalWord = topicList[i][j];
-                    topicTokenList[i][j].Process();
                 }
             }
         }

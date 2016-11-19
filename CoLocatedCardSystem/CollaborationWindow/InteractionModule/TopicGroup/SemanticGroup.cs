@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    class GlowGroup
+    class SemanticGroup
     {
-        String id = "";
-        ConcurrentDictionary<string, string> group = new ConcurrentDictionary<string, string>();
+        String id = "";//random group id
+        ConcurrentDictionary<string, string> group = new ConcurrentDictionary<string, string>();//The key is the cardID, value is group id
 
         public string Id
         {
@@ -25,7 +25,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        public GlowGroup() {
+        public SemanticGroup() {
             id = Guid.NewGuid().ToString();
         }
         /// <summary>
@@ -34,7 +34,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="cardID"></param>
         internal void AddCard(string cardID) {
             if (!group.Keys.Contains(cardID)) {
-                group.TryAdd(cardID, cardID);
+                group.TryAdd(cardID, id);
             }
         }
 
@@ -54,9 +54,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Get all card ids within a group.
         /// </summary>
         /// <returns></returns>
-        internal ConcurrentDictionary<string, string> GetCardID()
+        internal string[] GetCardID()
         {
-            return group;
+            return group.Keys.ToArray();
         }
 
         /// <summary>
@@ -66,6 +66,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <returns></returns>
         internal bool HasCard(string cardID) {
             return group.Keys.Contains(cardID);
+        }
+
+        internal int Count() {
+            return group.Count();
         }
     }
 }

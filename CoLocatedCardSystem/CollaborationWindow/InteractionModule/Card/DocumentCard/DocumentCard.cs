@@ -119,7 +119,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             if (!highlightedTokens.Contains(token))
             {
                 highlightedTokens.Add(token);
-                cardController.Controllers.ConnectionController.AddWordToken(token, this.document.DocID, this.position.X, this.position.Y);
                 foreach (var layer in layers)
                 {
                     layer.HighlightToken(token);
@@ -141,10 +140,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     {
                         sameToken = true;
                     }
-                }
-                if (!sameToken)
-                {
-                    cardController.Controllers.ConnectionController.RemoveToken(token, this.document.DocID);
                 }
                 highlightedTokens.Remove(token);
                 if (layers != null)

@@ -58,7 +58,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal async void RemoveActiveCard(string cardID)
         {
-            controllers.GlowController.DisconnectOneCardWithGroups(cardID);
+            controllers.SemanticGroupController.DisconnectOneCardWithGroups(cardID);
             CardStatus cs = await GetLiveCardStatus(cardID);
             if (cs.type == typeof(DocumentCard))
             {

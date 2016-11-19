@@ -22,7 +22,10 @@ WordCloud.prototype.removeNode = function (text, group) {
 
 WordCloud.prototype.findNode = function (text, group) {
     for (var i = 0; i < this.wordNodes.length; i++) {
-        if (this.wordNodes[i].stemmedText == text && this.wordNodes[i].group == group) {
+        //if (this.wordNodes[i].stemmedText == text && this.wordNodes[i].group == group) {
+        //    return this.wordNodes[i];
+        //}
+        if (this.wordNodes[i].stemmedText == text) {
             return this.wordNodes[i];
         }
     }

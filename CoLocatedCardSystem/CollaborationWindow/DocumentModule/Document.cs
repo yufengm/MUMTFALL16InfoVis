@@ -12,9 +12,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
     public class Document
     {
         string docID;
-        RawDocument rawDocument;
+        DocumentAttributes documentAttributes;
         ProcessedDocument[] processedDocuments;
-        int[] topicIndex;
+        int[] defaultTopicIndex;
         private class JDocument
         {
             public string DocID = "";
@@ -103,16 +103,16 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
-        internal RawDocument RawDocument
+        internal DocumentAttributes DocumentAttributes
         {
             get
             {
-                return rawDocument;
+                return documentAttributes;
             }
 
             set
             {
-                rawDocument = value;
+                documentAttributes = value;
             }
         }
 
@@ -124,26 +124,26 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         {
             JDocument tempDoc = JsonConvert.DeserializeObject<JDocument>(line);
             this.docID = tempDoc.DocID;
-            rawDocument = new RawDocument();
-            rawDocument.Id = tempDoc.DocID;
-            rawDocument.Name = tempDoc.Name;
-            rawDocument.ReviewTime = tempDoc.Time;
-            rawDocument.Jpg = tempDoc.jpg;
-            rawDocument.Topics = new double[tempDoc.Topics.Length][];
+            documentAttributes = new DocumentAttributes();
+            documentAttributes.Id = tempDoc.DocID;
+            documentAttributes.Name = tempDoc.Name;
+            documentAttributes.ReviewTime = tempDoc.Time;
+            documentAttributes.Jpg = tempDoc.jpg;
+            documentAttributes.Rating = tempDoc.rating;
+            documentAttributes.Topics = new double[tempDoc.Topics.Length][];
             for (int i = 0; i < tempDoc.Topics.Length; i++) {
                 string[] strs = tempDoc.Topics[i].Split(',');
                 List<double> vs = new List<double>();
                 foreach (string s in strs) {
                     vs.Add(Double.Parse(s));
                 }
-                rawDocument.Topics[i] = vs.ToArray();
+                documentAttributes.Topics[i] = vs.ToArray();
             }
-            topicIndex = new int[rawDocument.Topics.Length];
-            for (int i = 0; i < rawDocument.Topics.Length; i++) {
-                double max = rawDocument.Topics[i].Max();
-                topicIndex[i] = Array.IndexOf(rawDocument.Topics[i], max);
+            defaultTopicIndex = new int[documentAttributes.Topics.Length];
+            for (int i = 0; i < documentAttributes.Topics.Length; i++) {
+                double max = documentAttributes.Topics[i].Max();
+                defaultTopicIndex[i] = Array.IndexOf(documentAttributes.Topics[i], max);
             }
-            rawDocument.SerializedProcessedDocument = tempDoc.SerializedProcessedDocument;
             processedDocuments = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
             for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)
             {
@@ -166,7 +166,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// <returns></returns>
         internal string GetName()
         {
-            return rawDocument.Name;
+            return documentAttributes.Name;
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         }
 
         internal int GetTopicIndex() {
-            return topicIndex[0];
+            return defaultTopicIndex[0];
         }
     }
 }

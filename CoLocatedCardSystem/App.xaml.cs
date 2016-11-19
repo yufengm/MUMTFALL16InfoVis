@@ -60,10 +60,10 @@ namespace CoLocatedCardSystem
             docs.AddWord(clusterWord);
         }
 
-        internal void RemoveWord(string text, string group)
+        internal void RemoveWord(string text, string cardID)
         {
-            docs.RemoveWord(text, group);
-            awareCloudController.removeWord(text, group);
+            docs.RemoveWord(text, cardID);
+            awareCloudController.removeWord(text, cardID);
         }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

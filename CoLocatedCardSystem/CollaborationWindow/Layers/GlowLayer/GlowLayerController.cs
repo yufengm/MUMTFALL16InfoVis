@@ -68,7 +68,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="status">card status</param>
         /// <param name="controller"></param>
         /// <returns></returns>
-        internal async Task<Glow> AddGlow(CardStatus status, int colorIndex,  GlowController controller)
+        internal async Task<Glow> AddGlow(CardStatus status, int colorIndex,  SemanticGroupController controller)
         {
             Glow glow = await glowLayer.AddGlow(status, colorIndex,  controller);
             return glow;

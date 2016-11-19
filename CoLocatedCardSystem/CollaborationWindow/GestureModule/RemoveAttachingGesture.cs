@@ -32,7 +32,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                     }
                 }
                 Card card = newTouch.Sender as Card;
-                gestureController.Controllers.GlowController.DisconnectOneCardWithGroups(card.CardID);
+                gestureController.Controllers.SemanticGroupController.DisconnectOneCardWithGroups(card.CardID);
             }
         }
     }

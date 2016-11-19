@@ -52,6 +52,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
                     await webView.InvokeScriptAsync("updateNode",
                         new string[] {
                             "" + word.Type,
+                            word.Owner,
+                            word.Color,
                             word.Text,
                             word.StemmedText,
                             word.Group,

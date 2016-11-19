@@ -51,7 +51,7 @@ function removeNode(text, group) {
     cloud.removeNode(text, group);
 }
 
-function updateNode(type, owner, color, text, stemmedText, group, weight, x, y, hightlight) {
+function updateNode(type, owner, color, text, stemmedText,group, weight, x, y, hightlight) {
     var node = cloud.findNode(stemmedText, group);
     cloud.step = 10;
     if (node == null) {

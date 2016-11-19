@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.ClusterModule;
 using CoLocatedCardSystem.SecondaryWindow;
-using System.Collections.Concurrent;
-using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using Windows.UI;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
 {
@@ -33,38 +28,44 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         /// </summary>
         internal async void UpdateCurrentStatus()
         {
-            foreach (KeyValuePair<string, GlowGroup> gg in controllers.GlowController.GetGroups())
+            foreach (SemanticGroup gg in controllers.SemanticGroupController.GetGroups().Values)
             {
-                var cardIDs = gg.Value.GetCardID();
-                foreach (string id in cardIDs.Keys)
+                var cardIDs = gg.GetCardID();
+                List<Document> docs = new List<Document>();
+                double px = 0;
+                double py = 0;
+                List<User> ownerList = new List<User>();
+                foreach (string id in cardIDs)
                 {
-                    CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
                     Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
-                    Token[] tks = controllers.CardController.DocumentCardController.GetHighLightedContent(id);
-                    if (doc != null && cs != null && tks != null)
+                    docs.Add(doc);
+                    CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
+                    px += cs.position.X;
+                    py += cs.position.Y;
+                    if (!ownerList.Contains(cs.owner))
                     {
-                        double px = cs.position.X * SecondaryScreen.WIDTH * SecondaryScreen.SCALE_FACTOR / (Screen.WIDTH * Screen.SCALE_FACTOR);
-                        double py = cs.position.Y * SecondaryScreen.HEIGHT * SecondaryScreen.SCALE_FACTOR / (Screen.HEIGHT * Screen.SCALE_FACTOR);
-                        foreach (Token tk in tks)
-                        {
-                            AddWordToken(tk, doc.DocID, px, py);
-                        }
-                        int topicIndex = doc.GetTopicIndex();
-                        Token[] topicTokens = controllers.DocumentController.TopicTokenList[topicIndex];
-                        foreach (Token tk in topicTokens)
-                        {
-                            AddWordToken(tk, doc.DocID, px, py);
-                        }
-                        //string[] jpgs = doc.RawDocument.Jpg[0].Split(',');
-                        //AddImageToken(jpgs[0], doc.DocID, px, py);
+                        ownerList.Add(cs.owner);
+                    }
+                }
+                px /= gg.Count();
+                py /= gg.Count();
+                System.Diagnostics.Debug.WriteLine(gg.Id);
+                if (docs.Count > 0)
+                {
+                    Token[] tks = controllers.MlController.GetTopicToken(docs.ToArray());
+                    foreach (Token tk in tks)
+                    {
+                        AddWordToken(tk, ownerList[0], MyColor.Color1, gg.Id, px, py);
                     }
                 }
             }
         }
 
-        internal void AddWordToken(Token tk, String group, double x, double y)
+        internal void AddWordToken(Token tk, User owner, Color color, String group, double x, double y)
         {
             ClusterWord cw = new ClusterWord();
+            cw.Owner = owner.ToString();
+            cw.Color = color.R + "," + color.G + "," + color.B;
             cw.Text = tk.OriginalWord;
             cw.StemmedText = tk.StemmedWord;
             cw.X = x;
@@ -76,9 +77,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             app.AddWordToScreen(cw);
         }
 
-        internal void AddImageToken(String imgUrl, String group, double x, double y)
+        internal void AddImageToken(String imgUrl, User owner, Color color, String group, double x, double y)
         {
             ClusterWord cw = new ClusterWord();
+            cw.Owner = owner.ToString();
+            cw.Color = color.R + "," + color.G + "," + color.B;
             cw.Text = imgUrl;
             cw.StemmedText = imgUrl;
             cw.X = x;
@@ -89,9 +92,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             cw.Highlight = true;
             app.AddWordToScreen(cw);
         }
-        internal void RemoveToken(Token tk, String group)
+        internal void RemoveToken(Token tk, String cardID)
         {
-            app.RemoveWord(tk.StemmedWord, group);
+            app.RemoveWord(tk.StemmedWord, cardID);
         }
     }
 }

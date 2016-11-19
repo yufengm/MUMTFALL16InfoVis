@@ -41,10 +41,10 @@ namespace CoLocatedCardSystem.ClusterModule
             return list.Values.ToArray();
         }
 
-        internal void RemoveWord(string text, string group)
+        internal void RemoveWord(string text, string cardID)
         {
             ClusterWord removedWord;
-            list.TryRemove(group + text, out removedWord);
+            list.TryRemove(cardID + text, out removedWord);
         }
     }
 }

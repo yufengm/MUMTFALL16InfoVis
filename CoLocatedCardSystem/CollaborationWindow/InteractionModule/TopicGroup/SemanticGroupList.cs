@@ -4,19 +4,19 @@ using System.Linq;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
-    class GlowList
+    class SemanticGroupList
     {
-        Dictionary<string, Glow> glowEffectList;// A list of the glow objects
-        ConcurrentDictionary<string, GlowGroup> glowGroups;//Save info of which cards are connected
+        Dictionary<string, Glow> glowEffectList;// A list of the glow objects. key: card id, value Glow object
+        ConcurrentDictionary<string, SemanticGroup> semanticGroups;//Save info of which cards are connected. key: group id, value: semantic group
 
         internal void Init() {
             glowEffectList = new Dictionary<string, Glow>();         
-            glowGroups = new ConcurrentDictionary<string, GlowGroup>();
+            semanticGroups = new ConcurrentDictionary<string, SemanticGroup>();
         }
 
         internal void Deinit() {
             glowEffectList.Clear();
-            glowGroups.Clear();
+            semanticGroups.Clear();
         }
         /// <summary>
         /// Add a glow object to the list
@@ -62,23 +62,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Delete a glow group. return the removed ids.
         /// </summary>
         /// <param name="group"></param>
-        internal void RemoveGlowGroup(GlowGroup group)
+        internal void RemoveSemanticGroup(SemanticGroup group)
         {
-            if (glowGroups.Keys.Contains(group.Id))
+            if (semanticGroups.Keys.Contains(group.Id))
             {
-                GlowGroup gg;
-                glowGroups.TryRemove(group.Id, out gg);
+                SemanticGroup gg;
+                semanticGroups.TryRemove(group.Id, out gg);
             }
         }
         /// <summary>
         /// Create a new glow group
         /// </summary>
         /// <param name="group"></param>
-        internal void AddGlowGroup(GlowGroup group)
+        internal void AddSemanticGroup(SemanticGroup group)
         {
-            if (!glowGroups.Keys.Contains(group.Id))
+            if (!semanticGroups.Keys.Contains(group.Id))
             {
-                glowGroups.TryAdd(group.Id,group);
+                semanticGroups.TryAdd(group.Id,group);
             }
         }
 
@@ -87,9 +87,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="cardID"></param>
         /// <returns></returns>
-        internal GlowGroup GetGroup(string cardID) {
-            GlowGroup result = null;
-            foreach (GlowGroup group in glowGroups.Values)
+        internal SemanticGroup GetSemanticGroup(string cardID) {
+            SemanticGroup result = null;
+            foreach (SemanticGroup group in semanticGroups.Values)
             {
                 if (group!=null&&group.HasCard(cardID))
                 {
@@ -102,18 +102,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Get the glow group
         /// </summary>
         /// <returns></returns>
-        internal ConcurrentDictionary<string, GlowGroup> GetGroup()
+        internal ConcurrentDictionary<string, SemanticGroup> GetSemanticGroup()
         {
-            return glowGroups;
+            return semanticGroups;
         }
         /// <summary>
         /// Check if some group contains the cardID
         /// </summary>
         /// <param name="cardID"></param>
         /// <returns></returns>
-        internal bool HasGroup(string cardID)
+        internal bool HasSemanticGroup(string cardID)
         {
-            foreach (GlowGroup group in glowGroups.Values) {
+            foreach (SemanticGroup group in semanticGroups.Values) {
                 if (group.HasCard(cardID)) {
                     return true;
                 }

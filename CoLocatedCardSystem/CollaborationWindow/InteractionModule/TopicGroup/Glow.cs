@@ -20,7 +20,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         double scale = 1;
         Point position = new Point(0, 0);
         double rotation = 0;
-        GlowController glowController;
+        SemanticGroupController semanticGroupController;
         int colorIndex = 0;
         GlowInfo glowInfo;
         string cardID;
@@ -51,9 +51,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        internal Glow(GlowController controller)
+        internal Glow(SemanticGroupController controller)
         {
-            this.glowController = controller;
+            this.semanticGroupController = controller;
         }
         /// <summary>
         /// Initialize the glow
@@ -163,7 +163,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            glowController.PointerDown(localPoint, globalPoint, this, typeof(Glow));
+            semanticGroupController.PointerDown(localPoint, globalPoint, this, typeof(Glow));
         }
         /// <summary>
         /// Call back method for Pointer move
@@ -174,7 +174,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            glowController.PointerMove(localPoint, globalPoint);
+            semanticGroupController.PointerMove(localPoint, globalPoint);
         }
         /// <summary>
         /// Call back method for pointer up
@@ -185,7 +185,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            glowController.PointerUp(localPoint, globalPoint);
+            semanticGroupController.PointerUp(localPoint, globalPoint);
         }
         /// <summary>
         /// Manipulate the card. Move if the manipulation is valid.
@@ -195,11 +195,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         protected virtual void Glow_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             Point vector = e.Delta.Translation;
-            glowController.UpdateConnectedPosition(cardID, vector);
+            semanticGroupController.UpdateConnectedPosition(cardID, vector);
         }
         private void Glow_ManipulationComplete(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            glowController.ConnectGroupWithGroups(cardID);
+            semanticGroupController.ConnectGroupWithGroups(cardID);
         }
         /// <summary>
         /// When double tapped the glow, change the color
@@ -209,7 +209,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         private void Glow_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             colorIndex = (colorIndex + 1) % glowInfo.GlowColors.Length;
-            glowController.UpdateConnectedColor(cardID, colorIndex);
+            semanticGroupController.UpdateConnectedColor(cardID, colorIndex);
         }
     }
 }

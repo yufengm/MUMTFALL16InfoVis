@@ -112,7 +112,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         horiPanel.Width = this.Width;
                         horiPanel.Height = 20;
                         horiPanel.Orientation = Orientation.Horizontal;
-                        string[] jpgs = doc.RawDocument.Jpg[rIndex].Split(',');
+                        string[] jpgs = doc.DocumentAttributes.Jpg[rIndex].Split(',');
                         foreach (string jpgfile in jpgs) {
                             BitmapImage bitmapImage = new BitmapImage(new Uri(@"ms-appx:///Assets/review/" + jpgfile));
                             if (bitmapImage != null) {
