@@ -139,11 +139,11 @@
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\ContentTouchView.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\ResultCard\ResultCard.cs" />
-    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\Glow.cs" />
-    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowController.cs" />
-    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowGroup.cs" />
-    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowInfo.cs" />
-    <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowEffect\GlowList.cs" />
+    <Compile Include="CollaborationWindow\TopicModule\Glow.cs" />
+    <Compile Include="CollaborationWindow\TopicModule\GlowController.cs" />
+    <Compile Include="CollaborationWindow\TopicModule\GlowGroup.cs" />
+    <Compile Include="CollaborationWindow\TopicModule\GlowInfo.cs" />
+    <Compile Include="CollaborationWindow\TopicModule\GlowList.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayer.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayerController.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\RecycleBin.cs" />

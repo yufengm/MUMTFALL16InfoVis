@@ -30,6 +30,7 @@ WordCloud.prototype.findNode = function (text, group) {
 }
 
 WordCloud.prototype.update = function () {
+    var energy0 = this.energy;
     this.energy = 0;
     for (var i = 0; i < this.wordNodes.length; i++) {
         var firstNode = this.wordNodes[i];
@@ -54,6 +55,7 @@ WordCloud.prototype.update = function () {
         firstNode.x = firstNode.x + this.timeStep * firstNode.vx + a[0] * Math.pow(this.timeStep, 2) / 2.0;
         firstNode.y = firstNode.y + this.timeStep * firstNode.vy + a[1] * Math.pow(this.timeStep, 2) / 2.0;
     }
+    //this.updateStepLength(this.energy, energy0);
 }
 
 WordCloud.prototype.calOverlapRepel = function (node1, node2) {

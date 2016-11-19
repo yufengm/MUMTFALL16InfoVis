@@ -4,7 +4,6 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255);
     cloud = new WordCloud();
-    randomSeed(0);
 }
 
 function draw() {
@@ -21,48 +20,35 @@ function draw() {
     for (var i = 0; i < cloud.wordNodes.length; i++) {
         var node = cloud.wordNodes[i];
         if (node.type == 0) {
-            noStroke();
-            fill(node.textColor[0], node.textColor[1], node.textColor[2]);
             textSize(node.weight);
-            text(node.cloudText, node.x + 5, node.y + node.h - node.weight / 3);
-            noFill();
-            stroke(255);
-            strokeWeight(1);
-            rect(node.x, node.y, node.w, node.h);
+            text(node.txt, node.x + 5, node.y + node.h + 5);
         }
     }
 }
 
-function mouseClicked() {//for debug
-    updateNode("0",
-        "Alex",
-        "0,255,255",
-        random(["apple", "bear", "peach", "orange", "banana", "grape", "pear"]),
-        random(["apple", "bear", "cat", "dog"]),
-        random(["red", "blue", "green", "orange", "pink", "yellow"]),
-        "" + random(20, 50), "" + mouseX, "" + mouseY, "false");
+function mousePressed() {//for debug
+    updateNode("1", "0bb884e7-0e79-383f-9173-2f23799c41f0.jpg", "abc", "test", "" + random(20, 50), "" + mouseX, "" + mouseY, "false");
+
 }
 
 function mouseReleased() {
-    //cloud.removeNode("abc", "test");ddd
+    cloud.removeNode("abc", "test");
 }
 
 function removeNode(text, group) {
     cloud.removeNode(text, group);
 }
 
-function updateNode(type, owner, color, text, stemmedText, group, weight, x, y, hightlight) {
+function updateNode(type, text, stemmedText, group, weight, x, y, hightlight) {
     var node = cloud.findNode(stemmedText, group);
     cloud.step = 10;
     if (node == null) {
         node = new Node();
         node.type = parseInt(type);
-        node.cloudText = text;
-        node.owner = owner;
-        var colors = color.split(",");
-        node.textColor = [parseFloat(colors[0]), parseFloat(colors[1]), parseFloat(colors[2])];
+        node.txt = text;
         node.stemmedText = stemmedText;
-        node.weight = parseInt(weight);
+        //node.weight = parseInt(weight);
+        node.weight=random(15, 25);//for debug
         node.x = parseInt(x);
         node.y = parseInt(y);
         node.attrX = parseInt(x);
@@ -71,16 +57,16 @@ function updateNode(type, owner, color, text, stemmedText, group, weight, x, y, 
         node.group = group;
         if (type == "0") {
             var font = node.weight + "px Arial";
-            var tsize = getTextSize(node.cloudText, font, node.weight);
+            var tsize = getTextSize(node.txt, font, node.weight);
             node.w = tsize.w;
             node.h = tsize.h;
         }
         else if (type == "1") {
             var img = new Image();
-            img.src = "../../review/" + node.cloudText;
-            node.image = loadImage("../../review/" + node.cloudText);
-            node.w = node.weight * img.width / 200 + 10;
-            node.h = node.weight * img.height / 200 + 10;
+            img.src = "../../review/" + node.txt;
+            node.image = loadImage("../../review/" + node.txt);
+            node.w = node.weight * img.width / 200+10;
+            node.h = node.weight * img.height / 200+10;
         }
         cloud.push(node);
     } else {

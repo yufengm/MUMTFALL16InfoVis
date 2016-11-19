@@ -9,6 +9,7 @@ using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.ClusterModule;
 using CoLocatedCardSystem.SecondaryWindow;
 using System.Collections.Concurrent;
+using CoLocatedCardSystem.CollaborationWindow.TopicModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
 {

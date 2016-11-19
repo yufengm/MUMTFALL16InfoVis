@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Core;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using CoLocatedCardSystem.CollaborationWindow.TopicModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {

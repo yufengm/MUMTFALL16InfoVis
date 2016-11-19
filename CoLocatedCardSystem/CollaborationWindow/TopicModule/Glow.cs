@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
-namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
+namespace CoLocatedCardSystem.CollaborationWindow.TopicModule
 {
     class Glow : Canvas
     {

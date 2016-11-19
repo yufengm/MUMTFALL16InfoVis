@@ -41,6 +41,14 @@ function mouseClicked() {//for debug
         random(["apple", "bear", "cat", "dog"]),
         random(["red", "blue", "green", "orange", "pink", "yellow"]),
         "" + random(20, 50), "" + mouseX, "" + mouseY, "false");
+    updateNode("1",
+        "Alex",
+        "0,255,255",
+        random(["apple", "bear", "peach", "orange", "banana", "grape", "pear"]),
+        random(["apple", "bear", "cat", "dog"]),
+        random(["red", "blue", "green", "orange", "pink", "yellow"]),
+        "" + random(20, 50), "" + mouseX, "" + mouseY, "false");
+
 }
 
 function mouseReleased() {

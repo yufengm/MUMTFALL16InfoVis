@@ -1,4 +1,4 @@
-function rectRect(r1x, r1y, r1w, r1h, r2x, r2y, r2w, r2h) {
+﻿function rectRect(r1x, r1y, r1w, r1h, r2x, r2y, r2w, r2h) {
     var deltax = 0;
     var deltay = 0;
     if (r1x + r1w < r2x) {
@@ -63,6 +63,6 @@ function getTextSize(txt, font, weight) {
     this.element = document.createElement('canvas');
     this.context = this.element.getContext("2d");
     this.context.font = font;
-    var tsize = { 'w': this.context.measureText(txt).width + 10, 'h': weight + 10 };
+    var tsize = { 'w': this.context.measureText(txt).width + 10, 'h': weight / 1.45 + 10 };
     return tsize;
 }
