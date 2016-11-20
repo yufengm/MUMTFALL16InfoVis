@@ -1,5 +1,5 @@
 ﻿function Node() {
-    this.type = 0;//0 text, 1 image, 2 circle
+    this.type = "point";
     this.cloudText = "test";
     this.image = null;
     this.stemmedText = "test";

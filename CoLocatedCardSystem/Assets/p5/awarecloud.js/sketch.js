@@ -1,4 +1,5 @@
 var cloud;
+var debugCounter = 0;
 function setup() {
     frameRate(30);
     createCanvas(windowWidth, windowHeight);
@@ -14,33 +15,55 @@ function draw() {
     noStroke();
     for (var i = 0; i < cloud.wordNodes.length; i++) {
         var node = cloud.wordNodes[i];
-        if (node.type == 1) {
+        if (node.type == "image") {
             image(node.image, node.x + 5, node.y + 5, node.w, node.h);
         }
     }
+
     for (var i = 0; i < cloud.wordNodes.length; i++) {
         var node = cloud.wordNodes[i];
-        if (node.type == 0) {
+        if (node.type == "point") {
+            stroke(255, 255, 0);
+            fill(node.textColor[0], node.textColor[1], node.textColor[2]);
+            ellipse(node.x + node.w / 2, node.y + node.w / 2, node.weight, node.weight);
+        }
+    }
+
+    for (var i = 0; i < cloud.wordNodes.length; i++) {
+        var node = cloud.wordNodes[i];
+        if (node.type == "text") {
             noStroke();
             fill(node.textColor[0], node.textColor[1], node.textColor[2]);
             textSize(node.weight);
-            text(node.cloudText, node.x + 5, node.y + node.h - node.weight / 3);
-            noFill();
-            stroke(255);
-            strokeWeight(1);
-            rect(node.x, node.y, node.w, node.h);
+            text(node.cloudText, node.x + 5, node.y + node.h - 2);
+            // noFill();
+            // stroke(255);
+            // strokeWeight(1);
+            // rect(node.x, node.y, node.w, node.h);
         }
     }
 }
 
 function mouseClicked() {//for debug
-    updateNode("0",
-        "Alex",
-        "0,255,255",
-        random(["apple", "bear", "peach", "orange", "banana", "grape", "pear"]),
-        random(["apple", "bear", "cat", "dog"]),
-        random(["red", "blue", "green", "orange", "pink", "yellow"]),
-        "" + random(20, 50), "" + mouseX, "" + mouseY, "false");
+    if (debugCounter < 100) {
+        updateNode("point",
+            "Alex",
+            "255,0,0",
+            random(["apple", "bear", "peach", "orange", "banana", "grape", "pear"]),
+            random(100000),
+            random(["red", "blue", "green", "orange", "pink", "yellow"]),
+            "" + 10, "" + mouseX, "" + mouseY, "false");
+    } else {
+        updateNode("text",
+            "Alex",
+            "254,255,252",
+            random(["apple", "bear", "peach", "orange", "banana", "grape", "pear"]),
+            random(100000),
+            random(["red", "blue", "green", "orange", "pink", "yellow"]),
+            "" + 10, "" + mouseX, "" + mouseY, "false");
+    }
+    debugCounter++;
+    cloud.moveStep=1;
 }
 
 function mouseReleased() {
@@ -51,12 +74,11 @@ function removeNode(text, group) {
     cloud.removeNode(text, group);
 }
 
-function updateNode(type, owner, color, text, stemmedText,group, weight, x, y, hightlight) {
+function updateNode(type, owner, color, text, stemmedText, group, weight, x, y, hightlight) {
     var node = cloud.findNode(stemmedText, group);
-    cloud.step = 10;
     if (node == null) {
         node = new Node();
-        node.type = parseInt(type);
+        node.type = type;
         node.cloudText = text;
         node.owner = owner;
         var colors = color.split(",");
@@ -65,22 +87,25 @@ function updateNode(type, owner, color, text, stemmedText,group, weight, x, y, h
         node.weight = parseInt(weight);
         node.x = parseInt(x);
         node.y = parseInt(y);
-        node.attrX = parseInt(x);
-        node.attrY = parseInt(y);
+        node.attrX = windowWidth / 2;
+        node.attrY = windowHeight / 2;
         node.hightlight = (hightlight == "true");
         node.group = group;
-        if (type == "0") {
+        if (type == "text") {
             var font = node.weight + "px Arial";
-            var tsize = getTextSize(node.cloudText, font, node.weight);
-            node.w = tsize.w;
-            node.h = tsize.h;
+            var tSize = getTextSize(node.cloudText, font, node.weight);
+            node.w = tSize.w;
+            node.h = tSize.h;
         }
-        else if (type == "1") {
+        else if (type == "image") {
             var img = new Image();
             img.src = "../../review/" + node.cloudText;
             node.image = loadImage("../../review/" + node.cloudText);
             node.w = node.weight * img.width / 200 + 10;
             node.h = node.weight * img.height / 200 + 10;
+        } else if (type == "point") {
+            node.w = node.weight;
+            node.h = node.weight;
         }
         cloud.push(node);
     } else {
