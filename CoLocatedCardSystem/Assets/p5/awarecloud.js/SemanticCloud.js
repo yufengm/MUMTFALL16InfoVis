@@ -66,8 +66,8 @@ SemanticCloud.prototype.update = function () {
         var fLength = lineDistance(0, 0, f[0], f[1]);
         this.energy += fLength * fLength;
     }
-    center[0] = windowWidth / 2 - center[0] / this.semanticNodes.length;
-    center[1] = windowHeight / 2 - center[1] / this.semanticNodes.length;
+    center[0] = canvasWidth / 2 - center[0] / this.semanticNodes.length;
+    center[1] = canvasHeight / 2 - center[1] / this.semanticNodes.length;
     for (var i = 0; i < this.semanticNodes.length; i++) {
         var firstNode = this.semanticNodes[i];
         firstNode.x += center[0];
@@ -106,14 +106,14 @@ SemanticCloud.prototype.calRepel = function (node1, node2) {
 };
 
 SemanticCloud.prototype.calBorderRepel = function (node) {
-    var dist = lineDistance(node.x, node.y, windowWidth / 2, windowHeight / 2) + 0.001;
+    var dist = lineDistance(node.x, node.y, canvasWidth / 2, canvasHeight / 2) + 0.001;
     var atrc = 0;
     var result = [0, 0];
-    if (node.x < 100 || node.x > windowWidth-100 || node.y < 100 || node.y > windowHeight-100) {
+    if (node.x < canvasWidth/10 || node.x > canvasWidth-100 || node.y < canvasHeight/10 || node.y > canvasHeight-100) {
         atrc = -30000;
     }
-    var result = [atrc * (node.x - windowWidth / 2) / dist,
-        atrc * (node.y - windowHeight / 2) / dist];
+    var result = [atrc * (node.x - canvasWidth / 2) / dist,
+        atrc * (node.y - canvasHeight / 2) / dist];
     return result;
 };
 

@@ -11,9 +11,9 @@
     this.vx = 0;
     this.vy = 0;
     this.semanticNode = null;
-    this.weight = 20;
-    this.w = 20;
-    this.h = 20;
+    this.weight = 10;
+    this.w = 10;
+    this.h = 10;
 }
 
 

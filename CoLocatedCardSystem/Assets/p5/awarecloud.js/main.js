@@ -1,8 +1,11 @@
 var wordCloud;
 var semanticCloud;
+var canvasWidth=1920;
+var canvasHeight=1080;
 function setup() {
     frameRate(30);
-    createCanvas(windowWidth, windowHeight);
+    fullscreen();
+    createCanvas(canvasWidth, canvasHeight);
     background(255);
     wordCloud = new WordCloud();
     semanticCloud = new SemanticCloud();
@@ -69,6 +72,7 @@ function draw() {
     text("node# " + wordCloud.wordNodes.length, 10, 20);
     text("Energy " + wordCloud.energy, 10, 35);
     text("Step" + wordCloud.moveStep, 10, 50);
+    // text("Screen size "+windowWidth+" "+windowHeight+" "+displayDensity(),10,65);
 }
 
 function mouseClicked() {
@@ -86,7 +90,7 @@ function mouseClicked() {
 //     createWordNode(newid, "text", sid);
 //     setWordNodeText(newid, newid, newid);
 //     //updateWordNodePosition(newid, mouseX, mouseY);
-//     //setWordNodeWeight(newid,20);
+//     setWordNodeWeight(newid,20);
 //     wordCloud.moveStep = 10;
 //     semanticCloud.moveStep = 10;
 // }
@@ -152,8 +156,8 @@ function addSemanticNode(snid, semantic) {
     var semanticNode = semanticCloud.findNode(snid);
     if (semanticNode == null) {
         var semanticNode = new SemanticNode();
-        semanticNode.x = random(windowWidth);
-        semanticNode.y = random(windowHeight);
+        semanticNode.x = random(canvasWidth);
+        semanticNode.y = random(canvasHeight);
         semanticNode.semantic = semantic;
         semanticNode.guid = snid;
         semanticCloud.push(semanticNode);
