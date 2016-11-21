@@ -41,15 +41,14 @@ namespace CoLocatedCardSystem.SecondaryWindow
 
         private void Init()
         {
-            SecondaryScreen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
-            SecondaryScreen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
+            var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+            SecondaryScreen.WIDTH = (int)bounds.Right;
+            SecondaryScreen.HEIGHT = (int)bounds.Bottom;
             System.Diagnostics.Debug.WriteLine("secondary: " + SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
             SecondaryScreen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
-            //this.Width = SecondaryScreen.WIDTH / SecondaryScreen.SCALE_FACTOR;
-            //this.Height = SecondaryScreen.HEIGHT / SecondaryScreen.SCALE_FACTOR;
-            this.Width = SecondaryScreen.WIDTH;
-            this.Height = 1024;
-            ApplicationView.PreferredLaunchViewSize = new Size(this.Width, this.Height);
+            this.Width = SecondaryScreen.WIDTH / SecondaryScreen.SCALE_FACTOR;
+            this.Height = SecondaryScreen.HEIGHT / SecondaryScreen.SCALE_FACTOR;
+            ApplicationView.PreferredLaunchViewSize = new Size(SecondaryScreen.WIDTH, SecondaryScreen.HEIGHT);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
             controller = new AwareCloudController();
             App app = App.Current as App;
