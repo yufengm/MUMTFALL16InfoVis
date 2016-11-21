@@ -1,7 +1,7 @@
 var wordCloud;
 var semanticCloud;
-var canvasWidth=1920;
-var canvasHeight=1080;
+var canvasWidth=1280;
+var canvasHeight=720;
 function setup() {
     frameRate(30);
     fullscreen();
