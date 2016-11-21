@@ -14,7 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         string docID;
         DocumentAttributes documentAttributes;
         ProcessedDocument[] processedDocuments;
-        int[] defaultTopicIndex;
+        int[] defaultTopicIndex;//the index of the topic
         private class JDocument
         {
             public string DocID = "";
@@ -192,7 +192,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             return false;
         }
         /// <summary>
-        /// Get all token that contains tokens in tempPD
+        /// Get all token objects contained tokens in tempPD
         /// </summary>
         /// <param name="tempPD"></param>
         /// <returns></returns>
@@ -215,8 +215,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
             return result;
         }
-
-        internal int GetTopicIndex() {
+        /// <summary>
+        /// Get the index of the topic
+        /// </summary>
+        /// <returns></returns>
+        internal int GetDefaultTopicIndex() {
             return defaultTopicIndex[0];
         }
     }

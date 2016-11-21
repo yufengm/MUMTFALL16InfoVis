@@ -348,7 +348,7 @@ master = function () {
    *  So if you change the amplitude of p5sound, it impacts all of the
    *  sound in this module.</p>
    *
-   *  <p>If no value is provided, returns a Web Audio API Gain Node</p>
+   *  <p>If no value is provided, returns a Web Audio API Gain WordNode</p>
    *
    *  @method  masterVolume
    *  @param {Number|Object} volume  Volume (amplitude) between 0.0
@@ -369,7 +369,7 @@ master = function () {
     } else if (vol) {
       vol.connect(p5sound.output.gain);
     } else {
-      // return the Gain Node
+      // return the Gain WordNode
       return p5sound.output.gain;
     }
   };
@@ -1351,7 +1351,7 @@ soundfile = function () {
     } else if (vol) {
       vol.connect(this.output.gain);
     } else {
-      // return the Gain Node
+      // return the Gain WordNode
       return this.output.gain;
     }
   };
@@ -2050,8 +2050,8 @@ soundfile = function () {
    *  @param {Object} [value]    An object to be passed as the
    *                             second parameter to the
    *                             callback function.
-   *  @return {Number} id ID of this cue,
-   *                      useful for removeCue(id)
+   *  @return {Number} guid ID of this cue,
+   *                      useful for removeCue(guid)
    *  @example
    *  <div><code>
    *  function setup() {
@@ -2111,7 +2111,7 @@ soundfile = function () {
     var cueLength = this._cues.length;
     for (var i = 0; i < cueLength; i++) {
       var cue = this._cues[i];
-      if (cue.id === id) {
+      if (cue.guid === id) {
         this.cues.splice(i, 1);
       }
     }
@@ -2148,7 +2148,7 @@ soundfile = function () {
   var Cue = function (callback, time, id, val) {
     this.callback = callback;
     this.time = time;
-    this.id = id;
+    this.guid = id;
     this.val = val;
   };
 }(sndcore, errorHandler, master);
@@ -4484,7 +4484,7 @@ oscillator = function () {
     } else if (vol) {
       vol.connect(self.output.gain);
     } else {
-      // return the Gain Node
+      // return the Gain WordNode
       return this.output.gain;
     }
   };
@@ -4545,7 +4545,7 @@ oscillator = function () {
       // so it can be re-connected if 
       this._freqMods.push(val);
     } else {
-      // return the Frequency Node
+      // return the Frequency WordNode
       return this.oscillator.frequency;
     }
   };
@@ -6356,7 +6356,7 @@ audioin = function () {
     // if _gotSources() i.e. developers determine which source to use
     if (p5sound.inputSources[self.currentSource]) {
       // set the audio source
-      var audioSource = p5sound.inputSources[self.currentSource].id;
+      var audioSource = p5sound.inputSources[self.currentSource].guid;
       var constraints = { audio: { optional: [{ sourceId: audioSource }] } };
       window.navigator.getUserMedia(constraints, this._onStream = function (stream) {
         self.stream = stream;
@@ -6565,7 +6565,7 @@ audioin = function () {
     if (p5sound.inputSources.length > 0 && num < p5sound.inputSources.length) {
       // set the current source
       self.currentSource = num;
-      console.log('set source to ' + p5sound.inputSources[self.currentSource].id);
+      console.log('set source to ' + p5sound.inputSources[self.currentSource].guid);
     } else {
       console.log('unable to set input source');
     }
@@ -6667,10 +6667,10 @@ filter = function () {
     /**
      *  The p5.Filter is built with a
      *  <a href="http://www.w3.org/TR/webaudio/#BiquadFilterNode">
-     *  Web Audio BiquadFilter Node</a>.
+     *  Web Audio BiquadFilter WordNode</a>.
      *  
      *  @property biquadFilter
-     *  @type {Object}  Web Audio Delay Node
+     *  @type {Object}  Web Audio Delay WordNode
      */
     this.biquad = this.ac.createBiquadFilter();
     this.input.connect(this.biquad);
@@ -6925,7 +6925,7 @@ delay = function () {
      *  Web Audio Delay Nodes</a>, one for each stereo channel.
      *  
      *  @property leftDelay
-     *  @type {Object}  Web Audio Delay Node
+     *  @type {Object}  Web Audio Delay WordNode
      */
     this.leftDelay = this.ac.createDelay();
     /**
@@ -6934,7 +6934,7 @@ delay = function () {
      *  Web Audio Delay Nodes</a>, one for each stereo channel.
      *  
      *  @property rightDelay
-     *  @type {Object}  Web Audio Delay Node
+     *  @type {Object}  Web Audio Delay WordNode
      */
     this.rightDelay = this.ac.createDelay();
     this._leftFilter = new p5.Filter();
@@ -7394,10 +7394,10 @@ reverb = function () {
     /**
      *  Internally, the p5.Convolver uses the a
      *  <a href="http://www.w3.org/TR/webaudio/#ConvolverNode">
-     *  Web Audio Convolver Node</a>.
+     *  Web Audio Convolver WordNode</a>.
      *  
      *  @property convolverNode
-     *  @type {Object}  Web Audio Convolver Node
+     *  @type {Object}  Web Audio Convolver WordNode
      */
     this.convolverNode = this.ac.createConvolver();
     this.input = this.ac.createGain();
@@ -7572,7 +7572,7 @@ reverb = function () {
   /**
    *  If you load multiple impulse files using the .addImpulse method,
    *  they will be stored as Objects in this Array. Toggle between them
-   *  with the <code>toggleImpulse(id)</code> method.
+   *  with the <code>toggleImpulse(guid)</code> method.
    *  
    *  @property impulses
    *  @type {Array} Array of Web Audio Buffers
@@ -7581,7 +7581,7 @@ reverb = function () {
   /**
    *  Load and assign a new Impulse Response to the p5.Convolver.
    *  The impulse is added to the <code>.impulses</code> array. Previous
-   *  impulses can be accessed with the <code>.toggleImpulse(id)</code>
+   *  impulses can be accessed with the <code>.toggleImpulse(guid)</code>
    *  method.
    *  
    *  @method  addImpulse

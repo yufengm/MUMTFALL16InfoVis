@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class SemanticGroup
     {
-        String id = "";//random group id
-        ConcurrentDictionary<string, string> group = new ConcurrentDictionary<string, string>();//The key is the cardID, value is group id
-
+        string id;
+        internal struct SemanticAttribute {
+            internal bool isHighlighted;
+        }
+        ConcurrentDictionary<string, Semantic> list = new ConcurrentDictionary<string, Semantic>();//Key is the doc id.
+        Dictionary<Token, SemanticAttribute> coolElements=new Dictionary<Token, SemanticAttribute>();
+        /// <summary>
+        /// The id of the semantic group. Always the same with topic id.
+        /// </summary>
         public string Id
         {
             get
@@ -25,51 +32,56 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        public SemanticGroup() {
-            id = Guid.NewGuid().ToString();
-        }
-        /// <summary>
-        /// Add a card to glow group
-        /// </summary>
-        /// <param name="cardID"></param>
-        internal void AddCard(string cardID) {
-            if (!group.Keys.Contains(cardID)) {
-                group.TryAdd(cardID, id);
-            }
-        }
-
-        /// <summary>
-        /// Remove a card from glow group
-        /// </summary>
-        /// <param name="cardID"></param>
-        internal void RemoveCard(string cardID)
+        internal Dictionary<Token, SemanticAttribute> CoolElements
         {
-            if (group.Keys.Contains(cardID))
+            get
             {
-                String removedStr = "";
-                group.TryRemove(cardID, out removedStr);
+                return coolElements;
+            }
+
+            set
+            {
+                coolElements = value;
             }
         }
-        /// <summary>
-        /// Get all card ids within a group.
-        /// </summary>
-        /// <returns></returns>
-        internal string[] GetCardID()
+
+        internal void AddToken(Token tk, SemanticAttribute sa)
         {
-            return group.Keys.ToArray();
+            if (!coolElements.Keys.Contains(tk))
+            {
+                coolElements.Add(tk, sa);
+            }
         }
 
-        /// <summary>
-        /// Check if the group contains a card
-        /// </summary>
-        /// <param name="cardID"></param>
-        /// <returns></returns>
-        internal bool HasCard(string cardID) {
-            return group.Keys.Contains(cardID);
+        internal void AddSemantic(string id, Semantic semantic)
+        {
+            if (!list.Keys.Contains(id)) {
+                list.TryAdd(id, semantic);
+            }
         }
 
-        internal int Count() {
-            return group.Count();
+        internal string GetDescription() {
+            return String.Join("", coolElements.Keys.Select(a=>a.OriginalWord));
+        }
+        internal IEnumerable<Token> GetToken() {
+            return coolElements.Keys;
+        }
+        internal IEnumerable<Semantic> GetSemantics()
+        {
+            return list.Values;
+        }
+
+        internal bool ShareWord(SemanticGroup sg2)
+        {
+            int count = 0;
+            foreach (Token tk1 in this.coolElements.Keys) {
+                foreach (Token tk2 in sg2.CoolElements.Keys) {
+                    if (tk1.EqualContent(tk2)) {
+                        count++;
+                    }
+                }
+            }
+            return count>3;
         }
     }
 }

@@ -938,7 +938,7 @@ var post = _dereq_('./tables/post');
 
 // File loaders /////////////////////////////////////////////////////////
 
-// Convert a Node.js Buffer to an ArrayBuffer
+// Convert a WordNode.js Buffer to an ArrayBuffer
 function toArrayBuffer(buffer) {
     var arrayBuffer = new ArrayBuffer(buffer.length);
     var data = new Uint8Array(arrayBuffer);
@@ -5054,7 +5054,7 @@ exports.sizeOf = sizeOf;
       // need this for IE due to out-of-order onreadystatechange(), binding script
       // execution to an event listener gives us control over when the script
       // is executed. See http://jaubourg.net/2010/07/loading-script-as-onclick-handler-of.html
-      script.htmlFor = script.id = '_reqwest_' + reqId
+      script.htmlFor = script.guid = '_reqwest_' + reqId
     }
 
     script.onload = script.onreadystatechange = function () {
@@ -8780,7 +8780,7 @@ var p5 = function(sketch, node, sync) {
   }
 
   this._start = function () {
-    // Find node if id given
+    // Find node if guid given
     if (this._userNode) {
       if (typeof this._userNode === 'string') {
         this._userNode = document.getElementById(this._userNode);
@@ -8808,7 +8808,7 @@ var p5 = function(sketch, node, sync) {
         loadingScreen = document.createElement('div');
         loadingScreen.innerHTML = 'Loading...';
         loadingScreen.style.position = 'absolute';
-        loadingScreen.id = this._loadingScreenId;
+        loadingScreen.guid = this._loadingScreenId;
         var node = this._userNode || document.body;
         node.appendChild(loadingScreen);
       }
@@ -10755,7 +10755,7 @@ p5.Element = function(elt, pInst) {
  * @example
  * <div class="norender"><code>
  * // in the html file:
- * &lt;div id="myContainer">&lt;/div>
+ * &lt;div guid="myContainer">&lt;/div>
  * // in the js file:
  * var cnv = createCanvas(100, 100);
  * cnv.parent("myContainer");
@@ -10767,9 +10767,9 @@ p5.Element = function(elt, pInst) {
  * </code></div>
  * <div class='norender'><code>
  * var div0 = createDiv('this is the parent');
- * div0.id('apples');
+ * div0.guid('apples');
  * var div1 = createDiv('this is the child');
- * div1.parent('apples'); // use id
+ * div1.parent('apples'); // use guid
  * </code></div>
  * <div class='norender'><code>
  * var elt = document.getElementById('myParentDiv');
@@ -10799,7 +10799,7 @@ p5.Element.prototype.parent = function(p) {
  * Sets the ID of the element. If no ID argument is passed in, it instead
  * returns the current ID of the element.
  *
- * @method id
+ * @method guid
  * @param  {String} [id] ID of the element
  * @return {p5.Element|String}
  * @example
@@ -10808,15 +10808,15 @@ p5.Element.prototype.parent = function(p) {
  *   var cnv = createCanvas(100, 100);
  *   // Assigns a CSS selector ID to
  *   // the canvas element.
- *   cnv.id("mycanvas");
+ *   cnv.guid("mycanvas");
  * }
  * </code></div>
  */
-p5.Element.prototype.id = function(id) {
+p5.Element.prototype.guid = function(id) {
   if (arguments.length === 0) {
-    return this.elt.id;
+    return this.elt.guid;
   } else {
-    this.elt.id = id;
+    this.elt.guid = id;
     this.width = this.elt.offsetWidth;
     this.height = this.elt.offsetHeight;
     return this;
@@ -13169,7 +13169,7 @@ p5.prototype.createCanvas = function(w, h, renderer) {
       c.parentNode.removeChild(c); //replace the existing defaultCanvas
     }
     c = document.createElement('canvas');
-    c.id = defaultId;
+    c.guid = defaultId;
   }
   else {
     if (isDefault) {
@@ -13179,7 +13179,7 @@ p5.prototype.createCanvas = function(w, h, renderer) {
         i++;
       }
       defaultId = 'defaultCanvas'+i;
-      c.id = defaultId;
+      c.guid = defaultId;
     } else { // resize the default canvas if new one is created
       c = this.canvas;
     }
@@ -13441,16 +13441,16 @@ window.performance.now = (function(){
     window.requestAnimationFrame = function(callback, element) {
       var currTime = new Date().getTime();
       var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      var id = window.setTimeout(function()
+      var guid = window.setTimeout(function()
         { callback(currTime + timeToCall); }, timeToCall);
       lastTime = currTime + timeToCall;
-      return id;
+      return guid;
     };
   }
 
   if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = function(id) {
-      clearTimeout(id);
+    window.cancelAnimationFrame = function(guid) {
+      clearTimeout(guid);
     };
   }
 }());
@@ -16528,7 +16528,7 @@ p5.prototype.ptouchY = 0;
  * The system variable touches[] contains an array of the positions of all
  * current touch points, relative to (0, 0) of the canvas, and IDs identifying a
  * unique touch as it moves. Each element in the array is an object with x, y,
- * and id properties.
+ * and guid properties.
  *
  * @property touches[]
  */
@@ -16584,7 +16584,7 @@ function getTouchInfo(canvas, e, i) {
   return {
     x: touch.clientX - rect.left,
     y: touch.clientY - rect.top,
-    id: touch.identifier
+    guid: touch.identifier
   };
 }
 
@@ -19763,7 +19763,7 @@ p5.prototype.loadStrings = function (path, callback, errorCallback) {
  * // Given the following CSV file called "mammals.csv"
  * // located in the project's "assets" folder:
  * //
- * // id,species,name
+ * // guid,species,name
  * // 0,Capra hircus,Goat
  * // 1,Panthera pardus,Leopard
  * // 2,Equus zebra,Zebra
@@ -20470,7 +20470,7 @@ p5.prototype.save = function (object, _filename, _options) {
  *
  *    json = {}; // new JSON Object
  *
- *    json.id = 0;
+ *    json.guid = 0;
  *    json.species = 'Panthera leo';
  *    json.name = 'Lion';
  *
@@ -20480,7 +20480,7 @@ p5.prototype.save = function (object, _filename, _options) {
  *
  *  // Saves the following to a file called "lion.json":
  *  // {
- *  //   "id": 0,
+ *  //   "guid": 0,
  *  //   "species": "Panthera leo",
  *  //   "name": "Lion"
  *  // }
@@ -20589,12 +20589,12 @@ function escapeHelper(content) {
  *  function setup() {
  *    table = new p5.Table();
  *
- *    table.addColumn('id');
+ *    table.addColumn('guid');
  *    table.addColumn('species');
  *    table.addColumn('name');
  *
  *    var newRow = table.addRow();
- *    newRow.setNum('id', table.getRowCount() - 1);
+ *    newRow.setNum('guid', table.getRowCount() - 1);
  *    newRow.setString('species', 'Panthera leo');
  *    newRow.setString('name', 'Lion');
  *
@@ -20603,7 +20603,7 @@ function escapeHelper(content) {
  *    }
  *
  *    // Saves the following to a file called 'new.csv':
- *    // id,species,name
+ *    // guid,species,name
  *    // 0,Panthera leo,Lion
  *  </code></div>
  */
@@ -20880,7 +20880,7 @@ p5.Table = function (rows) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -20896,7 +20896,7 @@ p5.Table = function (rows) {
 	* function setup() {
 	*   //add a row
 	*   var newRow = table.addRow();
-	*   newRow.setString("id", table.getRowCount() - 1);
+	*   newRow.setString("guid", table.getRowCount() - 1);
 	*   newRow.setString("species", "Canis Lupus");
 	*   newRow.setString("name", "Wolf");
 	*
@@ -20933,7 +20933,7 @@ p5.Table.prototype.addRow = function(row) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -20980,7 +20980,7 @@ p5.Table.prototype.removeRow = function(id) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21019,7 +21019,7 @@ p5.Table.prototype.getRow = function(r) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21070,7 +21070,7 @@ p5.Table.prototype.getRows = function() {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21132,7 +21132,7 @@ p5.Table.prototype.findRow = function(value, column) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21148,7 +21148,7 @@ p5.Table.prototype.findRow = function(value, column) {
 	* function setup() {
 	*   //add another goat
 	*   var newRow = table.addRow();
-	*   newRow.setString("id", table.getRowCount() - 1);
+	*   newRow.setString("guid", table.getRowCount() - 1);
 	*   newRow.setString("species", "Scape Goat");
 	*   newRow.setString("name", "Goat");
 	*
@@ -21292,7 +21292,7 @@ p5.Table.prototype.matchRows = function(regexp, column) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21339,7 +21339,7 @@ p5.Table.prototype.getColumn = function(value) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21380,7 +21380,7 @@ p5.Table.prototype.clearRows = function() {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21541,7 +21541,7 @@ p5.Table.prototype.trim = function(column) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21555,7 +21555,7 @@ p5.Table.prototype.trim = function(column) {
 	* }
 	*
 	* function setup() {
-	*   table.removeColumn("id");
+	*   table.removeColumn("guid");
 	*   println(table.getColumnCount());
 	* }
 	* </code>
@@ -21606,7 +21606,7 @@ p5.Table.prototype.removeColumn = function(c) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21652,7 +21652,7 @@ p5.Table.prototype.set = function(row, column, value) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21666,7 +21666,7 @@ p5.Table.prototype.set = function(row, column, value) {
 	* }
 	*
 	* function setup() {
-	*   table.setNum(1, "id", 1);
+	*   table.setNum(1, "guid", 1);
 	*
 	*   println(table.getColumn(0));
 	*   //["0", 1, "2"]
@@ -21711,7 +21711,7 @@ p5.Table.prototype.setString = function(row, column, value){
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21754,7 +21754,7 @@ p5.Table.prototype.get = function(row, column) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21769,7 +21769,7 @@ p5.Table.prototype.get = function(row, column) {
 	*
 	* function setup() {
 	*   println(table.getNum(1, 0) + 100);
-	*   //id 1 + 100 = 101
+	*   //guid 1 + 100 = 101
 	* }
 	* </code>
 	* </div>
@@ -21795,7 +21795,7 @@ p5.Table.prototype.getNum = function(row, column) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -21838,7 +21838,7 @@ p5.Table.prototype.getString = function(row, column) {
 	* // Given the CSV file "mammals.csv"
 	* // in the project's "assets" folder:
 	* //
-	* // id,species,name
+	* // guid,species,name
 	* // 0,Capra hircus,Goat
 	* // 1,Panthera pardus,Leopard
 	* // 2,Equus zebra,Zebra
@@ -22094,9 +22094,9 @@ var p5 = _dereq_('../core/core');
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22109,10 +22109,10 @@ var p5 = _dereq_('../core/core');
  *   var children = xml.getChildren("animal");
  *
  *   for (var i = 0; i < children.length; i++) {
- *     var id = children[i].getNumber("id");
+ *     var guid = children[i].getNumber("guid");
  *     var coloring = children[i].getString("species");
  *     var name = children[i].getContent();
- *     println(id + ", " + coloring + ", " + name);
+ *     println(guid + ", " + coloring + ", " + name);
  *   }
  * }
  *
@@ -22144,9 +22144,9 @@ p5.XML = function () {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22181,9 +22181,9 @@ p5.XML.prototype.getParent = function() {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22216,9 +22216,9 @@ p5.XML.prototype.getName = function() {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22255,9 +22255,9 @@ p5.XML.prototype.setName = function(name) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22292,9 +22292,9 @@ p5.XML.prototype.hasChildren = function() {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22330,9 +22330,9 @@ p5.XML.prototype.listChildren = function() {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22379,9 +22379,9 @@ p5.XML.prototype.getChildren = function(param) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22454,9 +22454,9 @@ p5.XML.prototype.addChild = function(node) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22527,9 +22527,9 @@ p5.XML.prototype.removeChild = function(param) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22564,9 +22564,9 @@ p5.XML.prototype.getAttributeCount = function() {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22581,7 +22581,7 @@ p5.XML.prototype.getAttributeCount = function() {
  * }
  *
  * // Sketch prints:
- * // ["id", "species"]
+ * // ["guid", "species"]
  * </code></div>
  */
 p5.XML.prototype.listAttributes = function() {
@@ -22601,9 +22601,9 @@ p5.XML.prototype.listAttributes = function() {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22644,9 +22644,9 @@ p5.XML.prototype.hasAttribute = function(name) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22657,7 +22657,7 @@ p5.XML.prototype.hasAttribute = function(name) {
  *
  * function setup() {
  *   var firstChild = xml.getChild("animal");
- *   println(firstChild.getNumber("id"));
+ *   println(firstChild.getNumber("guid"));
  * }
  *
  * // Sketch prints:
@@ -22685,9 +22685,9 @@ p5.XML.prototype.getNumber = function(name, defaultValue) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22723,9 +22723,9 @@ p5.XML.prototype.getString = function(name, defaultValue) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22766,9 +22766,9 @@ p5.XML.prototype.setAttribute = function(name, value) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;
@@ -22802,9 +22802,9 @@ p5.XML.prototype.getContent = function(defaultValue) {
  * //
  * // <?xml version="1.0"?>
  * // &lt;mammals&gt;
- * //   &lt;animal id="0" species="Capra hircus">Goat&lt;/animal&gt;
- * //   &lt;animal id="1" species="Panthera pardus">Leopard&lt;/animal&gt;
- * //   &lt;animal id="2" species="Equus zebra">Zebra&lt;/animal&gt;
+ * //   &lt;animal guid="0" species="Capra hircus">Goat&lt;/animal&gt;
+ * //   &lt;animal guid="1" species="Panthera pardus">Leopard&lt;/animal&gt;
+ * //   &lt;animal guid="2" species="Equus zebra">Zebra&lt;/animal&gt;
  * // &lt;/mammals&gt;
  *
  * var xml;

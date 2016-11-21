@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,7 +11,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class SemanticGroupController
     {
         CentralControllers controllers;
-        SemanticGroupList list;
+        CardGroupList cardList;
+        SemanticGroupList semanticList;
         internal SemanticGroupController(CentralControllers ctrls)
         {
             this.controllers = ctrls;
@@ -18,29 +20,33 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal void Init()
         {
-            list = new SemanticGroupList();
-            list.Init();
+            cardList = new CardGroupList();
+            cardList.Init();
+            semanticList = new SemanticGroupList();
+            Document[] docs = controllers.DocumentController.GetDocument();
+            semanticList.Init(docs, controllers.MlController);
         }
 
         internal void Deinit()
         {
-            list.Deinit();
+            cardList.Deinit();
+            semanticList.Deinit();
         }
         /// <summary>
         /// Find all groups that intersect with the card
         /// </summary>
         /// <param name="cardID"></param>
         /// <returns></returns>
-        internal async Task<SemanticGroup[]> GetAttachedGroups(string cardID)
+        internal async Task<CardGroup[]> GetAttachedGroups(string cardID)
         {
-            SemanticGroup[] groups = null;
+            CardGroup[] groups = null;
             CardStatus targetCard = await controllers.CardController.GetLiveCardStatus(cardID);
             if (targetCard == null)
             {
                 return null;
             }
-            List<SemanticGroup> tempList = new List<SemanticGroup>();
-            foreach (SemanticGroup gg in list.GetSemanticGroup().Values)
+            List<CardGroup> tempList = new List<CardGroup>();
+            foreach (CardGroup gg in cardList.GetCardGroup().Values)
             {
                 if (await IsIntersect(targetCard, gg))
                 {
@@ -50,7 +56,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             groups = tempList.ToArray();
             return groups;
         }
-        private async Task<bool> IsIntersect(CardStatus card, SemanticGroup gg)
+        /// <summary>
+        /// Get all the semantic groups
+        /// </summary>
+        /// <returns></returns>
+        internal IEnumerable<SemanticGroup> GetSemanticGroup()
+        {
+            return semanticList.List.Values;
+        }
+        private async Task<bool> IsIntersect(CardStatus card, CardGroup gg)
         {
             if (!gg.HasCard(card.cardID))
             {
@@ -71,9 +85,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Get all groups
         /// </summary>
         /// <returns></returns>
-        internal ConcurrentDictionary<string, SemanticGroup> GetGroups()
+        internal ConcurrentDictionary<string, CardGroup> GetGroups()
         {
-            return list.GetSemanticGroup();
+            return cardList.GetCardGroup();
         }
         /// <summary>
         /// When one card connect to at least 1 group, 
@@ -81,14 +95,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="cardID"></param>
         /// <param name="groups"></param>
-        internal void ConnectOneCardWithGroups(string cardID, SemanticGroup[] groups)
+        internal void ConnectOneCardWithGroups(string cardID, CardGroup[] groups)
         {
             //if no groups intersected, create a new group
             if (groups == null || groups.Length == 0)
             {
-                SemanticGroup newgg = new SemanticGroup();
+                CardGroup newgg = new CardGroup();
                 newgg.AddCard(cardID);
-                list.AddSemanticGroup(newgg);
+                cardList.AddCardGroup(newgg);
                 controllers.ConnectionController.UpdateCurrentStatus();
                 return;
             }
@@ -96,18 +110,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 List<string> newCardList = new List<string>();
                 //Remove the glow effects from groups
-                foreach (SemanticGroup gg in groups)
+                foreach (CardGroup gg in groups)
                 {
                     foreach (string id in gg.GetCardID())
                     {
                         newCardList.Add(id);
-                        list.RemoveGlow(id);
+                        cardList.RemoveGlow(id);
                         RemoveGlowEffect(id);
                     }
-                    list.RemoveSemanticGroup(gg);
+                    cardList.RemoveCardGroup(gg);
                 }
                 //Add all cards in the previous glow groups to the new group
-                SemanticGroup newgg = new SemanticGroup();
+                CardGroup newgg = new CardGroup();
                 newgg.AddCard(cardID);
                 AddGlowEffect(cardID, 0);
                 foreach (string id in newCardList)
@@ -115,7 +129,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     newgg.AddCard(id);
                     AddGlowEffect(id, 0);
                 }
-                list.AddSemanticGroup(newgg);
+                cardList.AddCardGroup(newgg);
                 controllers.ConnectionController.UpdateCurrentStatus();
                 return;
             }
@@ -126,22 +140,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="cardID"> The card id that trigger the event</param>
         internal async void ConnectGroupWithGroups(string cardID)
         {
-            SemanticGroup group = list.GetSemanticGroup(cardID);
-            List<SemanticGroup> tempList = new List<SemanticGroup>();
-            list.RemoveSemanticGroup(group);
+            CardGroup group = cardList.GeCardGroup(cardID);
+            List<CardGroup> tempList = new List<CardGroup>();
+            cardList.RemoveCardGroup(group);
             tempList.Add(group);
             foreach (string id in group.GetCardID())
             {
-                SemanticGroup[] groups = await GetAttachedGroups(id);
+                CardGroup[] groups = await GetAttachedGroups(id);
                 if (groups != null)
-                    foreach (SemanticGroup gg in groups)
+                    foreach (CardGroup gg in groups)
                     {
                         tempList.Add(gg);
-                        list.RemoveSemanticGroup(gg);
+                        cardList.RemoveCardGroup(gg);
                     }
             }
-            SemanticGroup newgg = new SemanticGroup();
-            foreach (SemanticGroup gg in tempList) {
+            CardGroup newgg = new CardGroup();
+            foreach (CardGroup gg in tempList) {
                 foreach (string c in gg.GetCardID()) {
                     RemoveGlowEffect(c);
                     newgg.AddCard(c);
@@ -150,7 +164,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             foreach (string c in newgg.GetCardID()) {
                 AddGlowEffect(c, 0);
             }
-            list.AddSemanticGroup(newgg);
+            cardList.AddCardGroup(newgg);
             controllers.ConnectionController.UpdateCurrentStatus();
         }
         /// <summary>
@@ -160,9 +174,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal async void DisconnectOneCardWithGroups(string cardID)
         {
             //Find the group that contains this card
-            SemanticGroup currentGroup = list.GetSemanticGroup(cardID);
+            CardGroup currentGroup = cardList.GeCardGroup(cardID);
             int colorIndex = 0;
-            Glow glow = list.GetGlow(cardID);
+            Glow glow = cardList.GetGlow(cardID);
             if (glow != null) {
                 colorIndex = glow.ColorIndex;
             }
@@ -173,15 +187,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 currentGroup.RemoveCard(cardID);
                 RemoveGlowEffect(cardID);
-                SemanticGroup[] groups = await GetGroupsFromCards(currentGroup.GetCardID());
+                CardGroup[] groups = await GetGroupsFromCards(currentGroup.GetCardID());
                 foreach (string id in currentGroup.GetCardID())
                 {
                     RemoveGlowEffect(id);
                 }
-                list.RemoveSemanticGroup(currentGroup);
-                foreach (SemanticGroup gg in groups)
+                cardList.RemoveCardGroup(currentGroup);
+                foreach (CardGroup gg in groups)
                 {
-                    list.AddSemanticGroup(gg);
+                    cardList.AddCardGroup(gg);
                     var ids = gg.GetCardID();
                     if (ids.Length > 1)
                     {
@@ -199,19 +213,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="cardIDs"></param>
         /// <returns></returns>
-        private async Task<SemanticGroup[]> GetGroupsFromCards(IEnumerable<string> cardIDs)
+        private async Task<CardGroup[]> GetGroupsFromCards(IEnumerable<string> cardIDs)
         {
             List<String> cardList = new List<string>();
             foreach (String card in cardIDs)
             {
                 cardList.Add(card);
             }
-            List<SemanticGroup> groups = new List<SemanticGroup>();
+            List<CardGroup> groups = new List<CardGroup>();
             while (cardList.Count > 0)
             {
                 String cardID = cardList[0];
                 cardList.Remove(cardID);
-                SemanticGroup newgg = new SemanticGroup();
+                CardGroup newgg = new CardGroup();
                 newgg.AddCard(cardID);
                 //Recursion
                 await GetConnectedCards(cardID, cardList, newgg);
@@ -226,7 +240,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="cards"></param>
         /// <param name="group"></param>
         /// <returns></returns>
-        private async Task GetConnectedCards(string card, List<string> cards, SemanticGroup group)
+        private async Task GetConnectedCards(string card, List<string> cards, CardGroup group)
         {
             if (cards.Count == 0)
             {
@@ -265,7 +279,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             CardStatus cardStatus = await controllers.CardController.GetLiveCardStatus(cardID);
             Glow glow = await controllers.GlowLayerController.AddGlow(cardStatus, colorIndex, this);
-            list.AddGlow(cardID, glow);
+            cardList.AddGlow(cardID, glow);
         }
         /// <summary>
         /// Remove the glow effect from the glow layer
@@ -273,7 +287,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="cardID"></param>
         internal void RemoveGlowEffect(string cardID)
         {
-            Glow glow = list.RemoveGlow(cardID);
+            Glow glow = cardList.RemoveGlow(cardID);
             controllers.GlowLayerController.RemoveGlowEffect(cardID);
         }
         /// <summary>
@@ -282,13 +296,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="colorIndex"></param>
         internal void UpdateConnectedColor(string cardID, int colorIndex)
         {
-            foreach (SemanticGroup group in list.GetSemanticGroup().Values)
+            foreach (CardGroup group in cardList.GetCardGroup().Values)
             {
                 if (group.HasCard(cardID))
                 {
                     foreach (string id in group.GetCardID())
                     {
-                        Glow glow = list.GetGlow(id);
+                        Glow glow = cardList.GetGlow(id);
                         glow.ColorIndex = colorIndex;
                     }
                 }
@@ -301,11 +315,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="vector">the vector of the manipulation</param>
         internal void UpdateConnectedPosition(string cardID, Point vector)
         {
-            SemanticGroup group = list.GetSemanticGroup(cardID);
+            CardGroup group = cardList.GeCardGroup(cardID);
             if (group != null)
                 foreach (string id in group.GetCardID())
                 {
-                    Glow glow = list.GetGlow(id);
+                    Glow glow = cardList.GetGlow(id);
                     if (glow != null)
                     {
                         glow.MoveBy(vector);

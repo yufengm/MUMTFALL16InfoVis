@@ -1,4 +1,4 @@
-function rectRect(node1, node2) {
+function nodeNodeIntersect(node1, node2) {
     var deltax = 0;
     var deltay = 0;
     var r1x = node1.x,
@@ -80,6 +80,6 @@ function getTextSize(txt, font, weight) {
     this.element = document.createElement('canvas');
     this.context = this.element.getContext("2d");
     this.context.font = font;
-    var tsize = {'w': this.context.measureText(txt).width + 10, 'h': weight};
+    var tsize = {'w': this.context.measureText(txt).width + 4, 'h': weight};
     return tsize;
 }

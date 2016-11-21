@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoLocatedCardSystem.SecondaryWindow.AwareCloudModule
+namespace CoLocatedCardSystem.ClusterModule
 {
-    enum CLOUDTILETYPE
+    enum NODETYPE
     {
-        WORD,
-        PICTURE
+        PICTURE, WORD, DOC
     }
 }

@@ -111,7 +111,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ClusterModule\ClusterDocs.cs" />
-    <Compile Include="ClusterModule\ClusterWord.cs" />
+    <Compile Include="ClusterModule\Node.cs" />
+    <Compile Include="ClusterModule\NODETYPE.cs" />
+    <Compile Include="ClusterModule\SemanticCluster.cs" />
     <Compile Include="CollaborationWindow\CollaborationWindowMainPage.xaml.cs">
       <DependentUpon>CollaborationWindowMainPage.xaml</DependentUpon>
     </Compile>
@@ -140,9 +142,12 @@
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\ResultCard\ResultCard.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\Glow.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroupController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\Semantic.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroup.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroupController.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\CardGroup.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\GlowInfo.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\CardGroupList.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroupList.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayer.cs" />
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayerController.cs" />
@@ -150,6 +155,7 @@
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\MLController.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\Topic.cs" />
     <Compile Include="CollaborationWindow\TableModule\AttributeHelper.cs" />
     <Compile Include="CollaborationWindow\TableModule\DataAttribute.cs" />
     <Compile Include="CollaborationWindow\TableModule\ATTRIBUTETYPE.cs" />
@@ -205,9 +211,6 @@
     <Compile Include="MyColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloudController.cs" />
-    <Compile Include="SecondaryWindow\AwareCloudModule\Cloud.cs" />
-    <Compile Include="SecondaryWindow\AwareCloudModule\CloudTile.cs" />
-    <Compile Include="SecondaryWindow\AwareCloudModule\CLOUDTILETYPE.cs" />
     <Compile Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml.cs">
       <DependentUpon>CollaborationWindowSecondaryPage.xaml</DependentUpon>
     </Compile>
@@ -231,14 +234,17 @@
     <Content Include="Assets\data\vast2006_short.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\p5\awarecloud.js\D3-template-2.html" />
     <Content Include="Assets\p5\awarecloud.js\Geometry.js" />
     <Content Include="Assets\p5\awarecloud.js\index.html" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.dom.js" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.js" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.sound.js" />
-    <Content Include="Assets\p5\awarecloud.js\Node.js" />
-    <Content Include="Assets\p5\awarecloud.js\sketch.js" />
+    <Content Include="Assets\p5\awarecloud.js\SemanticCloud.js" />
+    <Content Include="Assets\p5\awarecloud.js\SemanticNode.js" />
+    <Content Include="Assets\p5\awarecloud.js\main.js" />
     <Content Include="Assets\p5\awarecloud.js\WordCloud.js" />
+    <Content Include="Assets\p5\awarecloud.js\WordNode.js" />
     <Content Include="Assets\review\0004d84d-eabb-33d4-ba58-762fdd4d4919.jpg" />
     <Content Include="Assets\review\00419a85-b425-3338-a6e0-7319f8c447ef.jpg" />
     <Content Include="Assets\review\004730fc-01cc-363b-87c2-a38d3a569f20.jpg" />

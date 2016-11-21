@@ -46,8 +46,8 @@
    * Returns null if none found. You can also specify a container to search within.
    *
    * @method select
-   * @param  {String} name id, class, or tag name of element to search for
-   * @param  {String} [container] id, p5.Element, or HTML element to search within
+   * @param  {String} name guid, class, or tag name of element to search for
+   * @param  {String} [container] guid, p5.Element, or HTML element to search within
    * @return {Object/p5.Element|Null} p5.Element containing node found
    * @example
    * <div ><code class='norender'>
@@ -106,7 +106,7 @@
    *
    * @method selectAll
    * @param  {String} name class or tag name of elements to search for
-   * @param  {String} [container] id, p5.Element, or HTML element to search within
+   * @param  {String} [container] guid, p5.Element, or HTML element to search within
    * @return {Array} Array of p5.Elements containing nodes found
    * @example
    * <div class='norender'><code>
@@ -506,7 +506,7 @@
     if (arguments[0]){
       var ran = Math.random().toString(36).slice(2);
       var label = document.createElement('label');
-      checkbox.setAttribute('id', ran);
+      checkbox.setAttribute('guid', ran);
       label.htmlFor = ran;
       self.value(arguments[0]);
       label.appendChild(document.createTextNode(arguments[0]));
@@ -589,7 +589,7 @@
    * created. The .value() method will return the currently selected option.
    *
    * @method createRadio
-   * @param  {String} [divId] the id and name of the created div and input field respectively
+   * @param  {String} [divId] the guid and name of the created div and input field respectively
    * @return {Object/p5.Element} pointer to p5.Element holding created node
    * @example
    * <div><code>
@@ -668,7 +668,7 @@
         times++;
         var ran = Math.random().toString(36).slice(2);
         var label = document.createElement('label');
-        opt.setAttribute('id', "defaultradio"+count+"-"+times);
+        opt.setAttribute('guid', "defaultradio"+count+"-"+times);
         label.htmlFor = "defaultradio"+count+"-"+times;
         label.appendChild(document.createTextNode(name));
         elt.appendChild(label);
@@ -1089,8 +1089,8 @@
    * <div class='norender'><code>
    * var div0 = createDiv('this is the parent');
    * var div1 = createDiv('this is the child');
-   * div1.id('apples');
-   * div0.child('apples'); // use id
+   * div1.guid('apples');
+   * div0.child('apples'); // use guid
    * </code></div>
    * <div class='norender'><code>
    * var div0 = createDiv('this is the parent');
@@ -1983,8 +1983,8 @@
    *  @param {Object} [value]    An object to be passed as the
    *                             second parameter to the
    *                             callback function.
-   *  @return {Number} id ID of this cue,
-   *                      useful for removeCue(id)
+   *  @return {Number} guid ID of this cue,
+   *                      useful for removeCue(guid)
    *  @example
    *  <div><code>
    *  function setup() {
@@ -2030,7 +2030,7 @@
   p5.MediaElement.prototype.removeCue = function(id) {
     for (var i = 0; i < this._cues.length; i++) {
       var cue = this._cues[i];
-      if (cue.id === id) {
+      if (cue.guid === id) {
         this.cues.splice(i, 1);
       }
     }
@@ -2078,7 +2078,7 @@
   var Cue = function(callback, time, id, val) {
     this.callback = callback;
     this.time = time;
-    this.id = id;
+    this.guid = id;
     this.val = val;
   };
 

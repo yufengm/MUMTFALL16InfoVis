@@ -11,6 +11,6 @@ namespace CoLocatedCardSystem
     /// </summary>
     public enum User
     {
-        ALEX, BEN, CHRIS, DANNY
+        ALEX, BEN, CHRIS, DANNY, NONE
     }
 }
