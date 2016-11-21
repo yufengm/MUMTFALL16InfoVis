@@ -234,7 +234,6 @@
     <Content Include="Assets\data\vast2006_short.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\p5\awarecloud.js\D3-template-2.html" />
     <Content Include="Assets\p5\awarecloud.js\Geometry.js" />
     <Content Include="Assets\p5\awarecloud.js\index.html" />
     <Content Include="Assets\p5\awarecloud.js\libraries\p5.dom.js" />
