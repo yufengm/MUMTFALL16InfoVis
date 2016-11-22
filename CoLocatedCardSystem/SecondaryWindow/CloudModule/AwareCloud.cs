@@ -1,13 +1,9 @@
-﻿using CoLocatedCardSystem.ClusterModule;
-using CoLocatedCardSystem.CollaborationWindow;
+﻿using CoLocatedCardSystem.CollaborationWindow;
+using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using CoLocatedCardSystem.SecondaryWindow.Layers;
 using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
@@ -58,7 +54,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             }
             return null;
         }
-        internal CloudNode CreateCloudNode(string id, NODETYPE type, string sid)
+        internal CloudNode CreateCloudNode(string id, CloudNode.NODETYPE type, string sid)
         {
             CloudNode node = FindNode(id);
             if (node == null)
@@ -74,7 +70,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         internal void SetCloudNodeText(string id, string cloudText, string stemmedText)
         {
             var node = FindNode(id);
-            if (node != null && node.Type == NODETYPE.WORD)
+            if (node != null && node.Type == CloudNode.NODETYPE.WORD)
             {
                 node.CloudText = cloudText;
                 node.StemmedText = stemmedText;
@@ -93,6 +89,18 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 Size tsize = UIHelper.GetBoundingSize(node.CloudText, node.Weight);
                 node.W = (float)tsize.Width;
                 node.H = (float)tsize.Height;
+            }
+        }
+
+        internal void SetCloudNodeActive(string[] ids, CloudNode.ACTIVELEVEL level) {
+            if (ids != null) {
+                foreach(string id in ids)
+                {
+                    CloudNode node = FindNode(id);
+                    if (node != null) {
+                        node.SetActive(level);
+                    }
+                }
             }
         }
 
@@ -172,7 +180,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                     if (firstNode != secondNode)
                     {
                         double dist = 0;
-                        if (firstNode.Type == NODETYPE.DOC && secondNode.Type == NODETYPE.DOC)
+                        if (firstNode.Type == CloudNode.NODETYPE.DOC && secondNode.Type == CloudNode.NODETYPE.DOC)
                         {
                             dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y);
                         }
@@ -213,7 +221,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             double dist = Calculator.Distance(node.X + node.W / 2, node.Y + node.H / 2, node.SemanticNode.X, node.SemanticNode.Y) + 0.001;
             double atrc = 0;
             Point result = new Point();
-            if (node.Type == NODETYPE.DOC)
+            if (node.Type == CloudNode.NODETYPE.DOC)
             {
                 atrc = -100 * dist;
             }
@@ -234,11 +242,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             Point result = new Point();
             if (deltaXY.X > 0 && deltaXY.Y > 0)
             {
-                if (node1.Type == NODETYPE.DOC && node2.Type == NODETYPE.DOC)
+                if (node1.Type == CloudNode.NODETYPE.DOC && node2.Type == CloudNode.NODETYPE.DOC)
                 {
                     rpl = -5000 * Math.Max(deltaXY.X, deltaXY.Y);
                 }
-                else if (!(node1.Type == NODETYPE.DOC && node2.Type != NODETYPE.DOC))
+                else if (!(node1.Type == CloudNode.NODETYPE.DOC && node2.Type != CloudNode.NODETYPE.DOC))
                 {
                     if (node1.SemanticNode == node2.SemanticNode)
                     {

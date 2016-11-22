@@ -110,10 +110,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ClusterModule\ClusterDocs.cs" />
-    <Compile Include="ClusterModule\Node.cs" />
-    <Compile Include="ClusterModule\NODETYPE.cs" />
-    <Compile Include="ClusterModule\SemanticCluster.cs" />
     <Compile Include="CollaborationWindow\CollaborationWindowMainPage.xaml.cs">
       <DependentUpon>CollaborationWindowMainPage.xaml</DependentUpon>
     </Compile>

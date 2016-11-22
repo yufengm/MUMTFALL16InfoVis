@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CoLocatedCardSystem.CollaborationWindow;
 using CoLocatedCardSystem.SecondaryWindow.Layers;
 using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
@@ -8,7 +7,6 @@ using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using Windows.UI;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
-using CoLocatedCardSystem.ClusterModule;
 
 namespace CoLocatedCardSystem.SecondaryWindow
 {

@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CoLocatedCardSystem.SecondaryWindow.CloudModule;
-using Windows.Foundation;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
-using CoLocatedCardSystem.CollaborationWindow;
 using Windows.UI;
-using CoLocatedCardSystem.ClusterModule;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Graphics.Canvas.UI.Xaml;
-using Microsoft.Graphics.Canvas.Brushes;
 
 namespace CoLocatedCardSystem.SecondaryWindow.Layers
 {

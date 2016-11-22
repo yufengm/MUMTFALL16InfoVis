@@ -1,16 +1,17 @@
-﻿using CoLocatedCardSystem.ClusterModule;
-using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI;
+﻿using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 {
     class CloudNode
     {
+       internal enum ACTIVELEVEL
+        {
+            INACTIVE, SEARCHED, ONTABLE
+        }
+        internal enum NODETYPE
+        {
+            PICTURE, WORD, DOC
+        }
         string guid = "";
         NODETYPE type = NODETYPE.DOC;
         string cloudText = "test";
@@ -215,13 +216,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         }
         #endregion
 
-        internal void SetActive(bool isActive) {
-            if (isActive)
+        internal void SetActive(ACTIVELEVEL level)
+        {
+            switch (level)
             {
-                alpha = 255;
-            }
-            else {
-                alpha = 100;
+                case ACTIVELEVEL.INACTIVE:
+                    this.alpha = 100;
+                    break;
+                case ACTIVELEVEL.SEARCHED:
+                    this.alpha = 150;
+                    break;
+                case ACTIVELEVEL.ONTABLE:
+                    this.alpha = 255;
+                    break;
             }
         }
     }

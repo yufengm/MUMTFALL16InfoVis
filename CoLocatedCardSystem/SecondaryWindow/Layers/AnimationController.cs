@@ -1,11 +1,6 @@
-﻿using CoLocatedCardSystem.ClusterModule;
-using CoLocatedCardSystem.SecondaryWindow.CloudModule;
+﻿using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.System.Threading;
 
 namespace CoLocatedCardSystem.SecondaryWindow.Layers
