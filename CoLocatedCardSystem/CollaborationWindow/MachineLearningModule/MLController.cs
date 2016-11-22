@@ -1,6 +1,7 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,14 +67,36 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
 
         internal Token[] GetTopicToken(Document[] documents) {
             Token[] result = null;
+            String doctokens = "";
             foreach (Document doc in documents) {
                 for (int index = 0; index < doc.ProcessedDocument.Length; index++) {
                     Token[] tokens = doc.ProcessedDocument[index].List;
                     String rate = doc.DocumentAttributes.Rating[index];
-                    String id = doc.DocumentAttributes.Id;
+                    String id = doc.DocID;
                     String jpgs = doc.DocumentAttributes.Jpg[index];
+                    foreach( Token token in tokens)
+                    {
+                        if( token.WordType != WordType.STOPWORD && token.WordType != WordType.PUNCTUATION)
+                        {
+                            //Debug.WriteLine(token.StemmedWord);
+                            doctokens += token.StemmedWord + " ";
+                        }
+                    }
+                    doctokens += "|||||";
+                    Debug.WriteLine(doctokens);
                 }
             }
+
+            string arg = string.Format(@"E:\Courses\Information Visualization\Project\PythonScript\LDA.py"); // Path to the Python code
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(@"F:\Anaconda2\python.exe", arg );
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true; // Hide the command line window
+            p.StartInfo.RedirectStandardOutput = false;
+            p.StartInfo.RedirectStandardError = false;
+            Process processChild = Process.Start(p.StartInfo);
+
+            Debug.WriteLine("");
             return defaultTopicTokenList[0];
         }
     }
