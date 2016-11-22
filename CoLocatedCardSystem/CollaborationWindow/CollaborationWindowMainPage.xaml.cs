@@ -38,7 +38,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
         {
             base.OnNavigatedTo(e);
             lifeEventControl = (CollaborationWindowLifeEventControl)e.Parameter;
-            FilePath.CSVFile=lifeEventControl.TableFileDir;
+            FilePath.CSVFile = lifeEventControl.TableFileDir;
             FilePath.NewsArticle = lifeEventControl.DocFileDir;
             this.Loaded += CollaborationWindowMainPage_Loaded;
         }
@@ -60,6 +60,8 @@ namespace CoLocatedCardSystem.CollaborationWindow
             container.Height = Screen.HEIGHT;
             this.Content = container;
             controllers = new CentralControllers();
+            App app = App.Current as App;
+            app.CentralController = controllers;
             controllers.Init(Screen.WIDTH, Screen.HEIGHT);
             await Task.Delay(TimeSpan.FromSeconds(3));
             container.Children.Add(controllers.BaseLayerController.GetBaseLayer());
@@ -67,6 +69,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             container.Children.Add(controllers.CardLayerController.GetCardLayer());
             container.Children.Add(controllers.SortingBoxLayerController.GetSortingBoxLayer());
             container.Children.Add(controllers.MenuLayerController.GetMenuLayer());
+            app.AwareCloudController.AddInitialSemanticsGroup();
         }
 
         public void Deinit()

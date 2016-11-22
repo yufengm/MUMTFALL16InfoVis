@@ -1,4 +1,5 @@
 ﻿using CoLocatedCardSystem.ClusterModule;
+using CoLocatedCardSystem.CollaborationWindow;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.SecondaryWindow.AwareCloudModule;
@@ -27,9 +28,8 @@ namespace CoLocatedCardSystem
     /// </summary>
     sealed partial class App : Application
     {
-        ClusterDocs docs=new ClusterDocs();
         AwareCloudController awareCloudController;
-
+        CentralControllers centralController;
         internal AwareCloudController AwareCloudController
         {
             get
@@ -43,28 +43,19 @@ namespace CoLocatedCardSystem
             }
         }
 
-        internal ClusterDocs Docs
+        public CentralControllers CentralController
         {
             get
             {
-                return docs;
+                return centralController;
             }
 
             set
             {
-                docs = value;
+                centralController = value;
             }
         }
 
-        internal void AddWordToScreen(ClusterWord clusterWord) {
-            docs.AddWord(clusterWord);
-        }
-
-        internal void RemoveWord(string text, string cardID)
-        {
-            docs.RemoveWord(text, cardID);
-            awareCloudController.removeWord(text, cardID);
-        }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -74,8 +65,6 @@ namespace CoLocatedCardSystem
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
-
-
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

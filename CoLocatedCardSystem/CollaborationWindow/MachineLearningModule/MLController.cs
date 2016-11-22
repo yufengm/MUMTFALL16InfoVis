@@ -1,5 +1,7 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,21 +21,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             new string[] { "look" ,"stay" ,"time" , "see", "like" , "around" , "bed" , "us", "clean", "one" }
         };
 
-
+        ConcurrentDictionary<string, Topic> list;
+        //since the default topic idnex are numbers.
+        Dictionary<int, string> defaultMatch = new Dictionary<int, string>();
         Token[][] defaultTopicTokenList;
-
-        internal Token[][] DefaultTopicTokenList
-        {
-            get
-            {
-                return defaultTopicTokenList;
-            }
-
-            set
-            {
-                defaultTopicTokenList = value;
-            }
-        }
 
         public CentralControllers Controllers
         {
@@ -48,23 +39,48 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             }
         }
 
-        public MLController(CentralControllers ctrlers) {
-            this.controllers = ctrlers;
-        }
-        public void Init() {
-            defaultTopicTokenList = new Token[defaultTopicList.Length][];
-            for (int i = 0; i < defaultTopicList.Length; i++)
+        internal ConcurrentDictionary<string, Topic> List
+        {
+            get
             {
-                defaultTopicTokenList[i] = new Token[defaultTopicList[i].Length];
-                for (int j = 0; j < defaultTopicList[i].Length; j++)
-                {
-                    defaultTopicTokenList[i][j] = new Token();
-                    defaultTopicTokenList[i][j].OriginalWord = defaultTopicList[i][j];
-                    defaultTopicTokenList[i][j].Process();
-                }
+                return list;
+            }
+
+            set
+            {
+                list = value;
             }
         }
 
+        public MLController(CentralControllers ctrlers) {
+            this.controllers = ctrlers;
+        }
+        public void Init()
+        {
+            list = new ConcurrentDictionary<string, Topic>();
+            for (int i = 0; i < defaultTopicList.Length; i++)
+            {
+                Topic tp = new Topic();
+                tp.Id = Guid.NewGuid().ToString();
+                defaultMatch.Add(i, tp.Id);
+                for (int j = 0; j < defaultTopicList[i].Length; j++)
+                {
+                    Token tk = new Token();
+                    tk.OriginalWord = defaultTopicList[i][j];
+                    tk.Process();
+                    tp.AddToken(tk);
+                }
+                list.TryAdd(tp.Id, tp);
+            }
+        }
+        internal string GetDefaultTopicIDByIndex(int index)
+        {
+            return defaultMatch[index];
+        }
+        internal Topic GetTopicById(string topicID)
+        {
+            return list[topicID];
+        }
         internal Token[] GetTopicToken(Document[] documents) {
             Token[] result = null;
             String doctokens = "";

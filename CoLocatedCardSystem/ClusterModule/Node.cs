@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoLocatedCardSystem.ClusterModule
 {
-    class ClusterWord
+    class Node
     {
-        int type = 0;//0 for text, 1 for pic
+        NODETYPE type = NODETYPE.WORD;
         string owner = "";
         string color = "";
         string text="text";
@@ -16,20 +16,8 @@ namespace CoLocatedCardSystem.ClusterModule
         double weight =10;
         double x = 0, y = 0;
         bool highlight=false;
-        string group="";
+        SemanticCluster cluster;
         string[] connections;
-        public int Type
-        {
-            get
-            {
-                return type;
-            }
-
-            set
-            {
-                type = value;
-            }
-        }
 
         public string Text
         {
@@ -96,18 +84,7 @@ namespace CoLocatedCardSystem.ClusterModule
             }
         }
 
-        public string Group
-        {
-            get
-            {
-                return group;
-            }
 
-            set
-            {
-                group = value;
-            }
-        }
 
         public string[] Connections
         {
@@ -158,6 +135,32 @@ namespace CoLocatedCardSystem.ClusterModule
             set
             {
                 color = value;
+            }
+        }
+
+        internal NODETYPE Type
+        {
+            get
+            {
+                return type;
+            }
+
+            set
+            {
+                type = value;
+            }
+        }
+
+        internal SemanticCluster Cluster
+        {
+            get
+            {
+                return cluster;
+            }
+
+            set
+            {
+                cluster = value;
             }
         }
     }

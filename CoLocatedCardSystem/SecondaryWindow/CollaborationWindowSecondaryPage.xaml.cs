@@ -41,27 +41,30 @@ namespace CoLocatedCardSystem.SecondaryWindow
 
         private void Init()
         {
-            SecondaryScreen.WIDTH = (int)ApplicationView.GetForCurrentView().VisibleBounds.Width;
-            SecondaryScreen.HEIGHT = (int)ApplicationView.GetForCurrentView().VisibleBounds.Height;
-            System.Diagnostics.Debug.WriteLine("secondary: "+SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
+            var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+            SecondaryScreen.WIDTH = (int)bounds.Right;
+            SecondaryScreen.HEIGHT = (int)bounds.Bottom;
+            System.Diagnostics.Debug.WriteLine("secondary: " + SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
             SecondaryScreen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             this.Width = SecondaryScreen.WIDTH / SecondaryScreen.SCALE_FACTOR;
             this.Height = SecondaryScreen.HEIGHT / SecondaryScreen.SCALE_FACTOR;
-            ApplicationView.PreferredLaunchViewSize = new Size(this.Width, this.Height);
+            ApplicationView.PreferredLaunchViewSize = new Size(SecondaryScreen.WIDTH, SecondaryScreen.HEIGHT);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
             controller = new AwareCloudController();
             App app = App.Current as App;
             app.AwareCloudController = controller;
-            this.WordCloud.Width = this.Width ;
+            this.WordCloud.Width = this.Width;
             this.WordCloud.Height = this.Height;
+            System.Diagnostics.Debug.WriteLine(SecondaryScreen.SCALE_FACTOR + " " + this.WordCloud.Width + " " + this.WordCloud.Height);
             string src = "ms-appx-web:///Assets/p5/awarecloud.js/index.html";
             this.WordCloud.Navigate(new Uri(src));
             this.WordCloud.NavigationCompleted += WordCloud_NavigationCompleted;
-         }
+        }
 
         private void WordCloud_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            controller.init(this.WordCloud);
+            App app = App.Current as App;
+            controller.init(this.WordCloud, app.CentralController);
         }
     }
 }

@@ -11,6 +11,7 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.ConnectionModule;
 using CoLocatedCardSystem.CollaborationWindow.MachineLearningModule;
+using CoLocatedCardSystem.SecondaryWindow.AwareCloudModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {
@@ -158,7 +159,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             }
         }
 
-
         /// <summary>
         /// Initialize all documents
         /// </summary>
@@ -183,7 +183,6 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Initialize controllers
             touchController.Init();
             gestureController.Init();
-            semanticGroupController.Init();
             baseLayerController.Init(width, height);
             Coordination.Baselayer = baseLayerController.GetBaseLayer();//Set the base layer to the coordination helper
             cardLayerController.Init(width, height);
@@ -193,7 +192,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Load the documents, cards and add them to the card layer
             await documentController.Init(FilePath.NewsArticle);//Load the document
             mlController.Init();
-            //await tableController.Init(FilePath.CSVFile);
+            semanticGroupController.Init();
             cardController.Init();
             cardController.InitDocCard(documentController.GetDocument());
             //Load the sorting box and add them to the sorting box layer
