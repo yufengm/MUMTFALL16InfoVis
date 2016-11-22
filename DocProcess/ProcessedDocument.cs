@@ -10,7 +10,7 @@ namespace DocProcess
     class ProcessedDocument
     {
         Token[][] list;
-        Regex regex = new Regex("([\\s{}():;., \"“”])");
+        Regex regex = new Regex("([\\s{}():;!@#$%., \"“”])");
         string docID = "";
         string name = "";
         string[] time;
