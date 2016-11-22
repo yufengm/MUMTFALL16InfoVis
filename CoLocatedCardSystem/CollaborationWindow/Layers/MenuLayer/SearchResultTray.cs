@@ -97,6 +97,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             this.Children.Add(scrollViewer);
         }
 
+        internal void RecycleCurrentCards()
+        {
+            List<string> docIDs = new List<string>();
+            if (this.currentSearchResult != null&&currentSearchResult.Length>0) {
+                foreach (DocumentCard card in currentSearchResult) {
+                    docIDs.Add(card.Document.DocID);
+                }
+            }
+            if (docIDs.Count > 0)
+            {
+                menuLayerController.Controllers.ConnectionController.DehighLightSearchResult(docIDs.ToArray());
+            }
+        }
+
         private void HideButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -128,16 +142,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 stackPanel.Children.Clear();
                 stackCanvas.Clear();
                 cardToShow = MAXCARDTOSHOW > cards.Length ? cards.Length : MAXCARDTOSHOW;
-                foreach (Card card in cards)
+                List<string> docIDs = new List<string>();
+                foreach (DocumentCard card in cards)
                 {
                     Canvas canvas = new Canvas();
                     canvas.Width = blockSize.Width;
                     canvas.Height = blockSize.Height;
                     stackPanel.Children.Add(canvas);
                     stackCanvas.Add(canvas);
+                    docIDs.Add(card.Document.DocID);
+                }
+                if (docIDs.Count > 0) {
+                    menuLayerController.Controllers.ConnectionController.HightLightSearchResult(docIDs.ToArray());
                 }
                 ShowCard(0);
                 resultNum.Text = "Search: "+ content + " Result: " + cards.Length;
+                
             }
         }
         /// <summary>

@@ -66,6 +66,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
+        public Document Document
+        {
+            get
+            {
+                return document;
+            }
+
+            set
+            {
+                document = value;
+            }
+        }
+
         internal ResultCard(CardController cardController) : base(cardController)
         {
             

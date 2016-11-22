@@ -197,7 +197,8 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Load the sorting box and add them to the sorting box layer
             sortingBoxController.Init();
             SortingBoxLayerController.LoadBoxes(sortingBoxController.GetAllSortingBoxes());
-            connectionController.Init();
+            App app = App.Current as App;
+            connectionController.Init(app.AwareCloudController);
         }
 
         /// <summary>

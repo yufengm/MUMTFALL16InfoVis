@@ -1,6 +1,7 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.SecondaryWindow;
+using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
@@ -27,12 +28,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         public ConnectionController(CentralControllers centralControllers)
         {
             this.controllers = centralControllers;
-            app = App.Current as App;
-            awareCloudController = app.AwareCloudController;
         }
 
-        internal void Init()
+        internal void Init(AwareCloudController awaCtrls)
         {
+            awareCloudController = awaCtrls;
         }
         internal void Deinit() { }
 
@@ -86,7 +86,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         }
 
         internal void HightLightSearchResult(string[] ids) {
-            
+            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, CloudNode.ACTIVELEVEL.ONTABLE);
+        }
+
+        internal void DehighLightSearchResult(string[] ids)
+        {
+            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, CloudNode.ACTIVELEVEL.INACTIVE);
         }
     }
 }

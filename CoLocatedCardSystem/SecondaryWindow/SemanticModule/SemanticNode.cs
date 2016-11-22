@@ -105,7 +105,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 
             set
             {
-                x = value;
+                if (value > 0 && value < SecondaryScreen.WIDTH) {
+                    x = value;
+                }
             }
         }
 
@@ -118,7 +120,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 
             set
             {
-                y = value;
+                if (value > 0 && value < SecondaryScreen.HEIGHT)
+                {
+                    y = value;
+                }
             }
         }
 

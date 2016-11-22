@@ -93,6 +93,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// <param name="cards"></param>
         internal void ShowCardsInSearchResultTray(string content, DocumentCard[] cards)
         {
+            searchResultTray.RecycleCurrentCards();
             searchResultTray.AddCards(content, cards);
         }
 
