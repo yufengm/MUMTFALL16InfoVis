@@ -1,5 +1,7 @@
-﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.SecondaryWindow;
+using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
 {
@@ -24,7 +26,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         {
             if (awareCloudController != null)
             {
-               // awareCloudController.AddSemanticNode(group.Id, group.GetDescription());
+                // awareCloudController.AddSemanticNode(group.Id, group.GetDescription());
             }
         }
         /// <summary>
@@ -32,37 +34,41 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         /// </summary>
         internal async void UpdateCurrentStatus()
         {
-            //foreach (SemanticGroup gg in controllers.SemanticGroupController.GetGroups().Values)
-            //{
-            //    var cardIDs = gg.GetCardID();
-            //    List<Document> docs = new List<Document>();
-            //    double px = 0;
-            //    double py = 0;
-            //    List<User> ownerList = new List<User>();
-            //    foreach (string id in cardIDs)
-            //    {
-            //        Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
-            //        docs.Add(doc);
-            //        CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
-            //        px += cs.position.X;
-            //        py += cs.position.Y;
-            //        if (!ownerList.Contains(cs.owner))
-            //        {
-            //            ownerList.Add(cs.owner);
-            //        }
-            //    }
-            //    px /= gg.Count();
-            //    py /= gg.Count();
-            //    System.Diagnostics.Debug.WriteLine(gg.Id);
-            //    if (docs.Count > 0)
-            //    {
-            //        Token[] tks = controllers.MlController.GetTopicToken(docs.ToArray());
-            //        foreach (Token tk in tks)
-            //        {
-            //            //AddWordToken(tk, ownerList[0], MyColor.Color1, gg.Id, px, py);
-            //        }
-            //    }
-            //}
+            foreach (CardGroup gg in controllers.SemanticGroupController.GetGroups().Values)
+            {
+                var cardIDs = gg.GetCardID();
+                List<Document> docs = new List<Document>();
+                double px = 0;
+                double py = 0;
+                List<User> ownerList = new List<User>();
+                foreach (string id in cardIDs)
+                {
+                    Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
+                    docs.Add(doc);
+                    CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
+                    px += cs.position.X;
+                    py += cs.position.Y;
+                    if (!ownerList.Contains(cs.owner))
+                    {
+                        ownerList.Add(cs.owner);
+                    }
+                }
+                px /= gg.Count();
+                py /= gg.Count();
+                System.Diagnostics.Debug.WriteLine(gg.Id);
+                if (docs.Count > 0)
+                {
+                    Token[] tks = controllers.MlController.GetTopicToken(docs.ToArray());
+                    if (tks != null)
+                    {
+                        foreach (Token tk in tks)
+                        {
+                            //AddWordToken(tk, ownerList[0], MyColor.Color1, gg.Id, px, py);
+                        }
+
+                    }
+                }
+            }
         }
 
         //internal void AddWordToken(Token tk, User owner, Color color, String group, double x, double y)

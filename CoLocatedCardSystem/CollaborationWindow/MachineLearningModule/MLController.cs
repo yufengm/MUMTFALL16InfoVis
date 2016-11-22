@@ -110,7 +110,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             //p.StartInfo.RedirectStandardError = false;
             //Process processChild = Process.Start(p.StartInfo);
 
-            return defaultTopicTokenList[0];
+            return null;
         }
             
     }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
 {
@@ -41,6 +42,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                 if (card.isConnectAllowed() && attachedGroups != null)
                 {
                     gestureController.Controllers.SemanticGroupController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
+
                 }
             }
         }
