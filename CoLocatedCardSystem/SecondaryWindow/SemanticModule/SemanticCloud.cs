@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoLocatedCardSystem.SecondaryWindow.Layers;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
     {
         ConcurrentDictionary<string, SemanticNode> semanticNodes = new ConcurrentDictionary<string, SemanticNode>();
         double timeStep = 1 / 20.0;
-        double moveStep = 10;
+        double moveStep = AnimationController.INITALSTEP;
         double progress = 0;
         double optimal = 60;
         double energy = 0;

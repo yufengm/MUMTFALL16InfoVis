@@ -1,5 +1,6 @@
 ﻿using CoLocatedCardSystem.ClusterModule;
 using CoLocatedCardSystem.CollaborationWindow;
+using CoLocatedCardSystem.SecondaryWindow.Layers;
 using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
 using System;
 using System.Collections.Concurrent;
@@ -16,7 +17,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         ConcurrentDictionary<string, CloudNode> cloudNodes = new ConcurrentDictionary<string, CloudNode>();
         double timeStep = 1 / 30.0;
         double progress = 0;
-        double moveStep = 10;
+        double moveStep = AnimationController.INITALSTEP;
         double energy = 0;
         SemanticCloud semanticCloud;
         Random rand = new Random();

@@ -17,6 +17,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         AwareCloud awareCloud;
         Random rand = new Random();
         ThreadPoolTimer periodicTimer;
+        internal static double INITALSTEP = 2;
         internal SemanticCloud SemanticCloud
         {
             get
@@ -80,8 +81,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         internal void ResetMoveStep()
         {
-            semanticCloud.MoveStep = 10;
-            awareCloud.MoveStep = 10;
+            semanticCloud.MoveStep = INITALSTEP;
+            awareCloud.MoveStep = INITALSTEP;
         }
     }
 }
