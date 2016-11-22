@@ -49,13 +49,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         {
             foreach (CloudNode cnode in cloudNodes.Values)
             {
+                Color nodeColor = cnode.SemanticNode.Color;
+                nodeColor.A = cnode.Alpha;
                 if (cnode.Type == NODETYPE.DOC)
                 {
-                    args.DrawingSession.FillEllipse(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2, cnode.Weight / 2, cnode.Weight / 2, cnode.SemanticNode.Color);
+                    args.DrawingSession.FillEllipse(
+                        cnode.X + cnode.Weight / 2, 
+                        cnode.Y + cnode.Weight / 2, 
+                        cnode.Weight / 2, 
+                        cnode.Weight / 2, nodeColor);
                 }
                 if (cnode.Type == NODETYPE.WORD)
                 {
-                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, cnode.SemanticNode.Color);
+                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, nodeColor);
                 }
             }
         }

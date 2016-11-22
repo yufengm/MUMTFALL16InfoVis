@@ -17,7 +17,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         string image = null;
         string stemmedText = "test";
         string owner = "";
-        Color nodeColor = Colors.White;
         float x = 0;
         float y = 0;
         float vx = 0;
@@ -26,7 +25,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float weight = 15;
         float w = 15;
         float h = 15;
-
+        byte alpha = 100;
+        #region getter
         public string Guid
         {
             get
@@ -104,22 +104,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 owner = value;
             }
         }
-
-        public Color NodeColor
-        {
-            get
-            {
-                return nodeColor;
-            }
-
-            set
-            {
-                nodeColor = value;
-            }
-        }
-
-
-
         internal SemanticNode SemanticNode
         {
             get
@@ -132,7 +116,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 semanticNode = value;
             }
         }
-
         public float X
         {
             get
@@ -145,7 +128,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 x = value;
             }
         }
-
         public float Y
         {
             get
@@ -158,7 +140,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 y = value;
             }
         }
-
         public float Vx
         {
             get
@@ -171,7 +152,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 vx = value;
             }
         }
-
         public float Vy
         {
             get
@@ -184,7 +164,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 vy = value;
             }
         }
-
         public float Weight
         {
             get
@@ -197,7 +176,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 weight = value;
             }
         }
-
         public float W
         {
             get
@@ -210,7 +188,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 w = value;
             }
         }
-
         public float H
         {
             get
@@ -221,6 +198,30 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             set
             {
                 h = value;
+            }
+        }
+
+        public byte Alpha
+        {
+            get
+            {
+                return alpha;
+            }
+
+            set
+            {
+                alpha = value;
+            }
+        }
+        #endregion
+
+        internal void SetActive(bool isActive) {
+            if (isActive)
+            {
+                alpha = 255;
+            }
+            else {
+                alpha = 100;
             }
         }
     }
