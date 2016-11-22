@@ -32,14 +32,16 @@ namespace CoLocatedCardSystem.SecondaryWindow
         private async void Init()
         {
             var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
-            SecondaryScreen.WIDTH = (int)bounds.Right;
-            SecondaryScreen.HEIGHT = (int)bounds.Bottom;
+            //SecondaryScreen.WIDTH = (int)bounds.Right;
+            //SecondaryScreen.HEIGHT = (int)bounds.Bottom;
+            SecondaryScreen.WIDTH = 1280;
+            SecondaryScreen.HEIGHT = 720;
             container = new Canvas();
             container.Width = SecondaryScreen.WIDTH;
             container.Height = SecondaryScreen.HEIGHT;
             System.Diagnostics.Debug.WriteLine("secondary: " + SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
             SecondaryScreen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
-            this.Width = SecondaryScreen.WIDTH ;
+            this.Width = SecondaryScreen.WIDTH;
             this.Height = SecondaryScreen.HEIGHT;
             ApplicationView.PreferredLaunchViewSize = new Size(SecondaryScreen.WIDTH, SecondaryScreen.HEIGHT);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;

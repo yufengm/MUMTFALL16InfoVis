@@ -23,9 +23,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float vx = 0;
         float vy = 0;
         SemanticNode semanticNode = null;
-        float weight = 10;
-        float w = 10;
-        float h = 10;
+        float weight = 15;
+        float w = 15;
+        float h = 15;
 
         public string Guid
         {

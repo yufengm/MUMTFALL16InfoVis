@@ -13,7 +13,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
     class SemanticCloud
     {
         ConcurrentDictionary<string, SemanticNode> semanticNodes = new ConcurrentDictionary<string, SemanticNode>();
-        double timeStep = 1 / 30.0;
+        double timeStep = 1 / 20.0;
         double moveStep = 10;
         double progress = 0;
         double optimal = 60;

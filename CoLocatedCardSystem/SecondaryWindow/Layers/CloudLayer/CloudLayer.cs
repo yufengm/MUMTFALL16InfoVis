@@ -51,11 +51,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             {
                 if (cnode.Type == NODETYPE.DOC)
                 {
-                    args.DrawingSession.FillCircle(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2, cnode.Weight / 2,cnode.NodeColor);
+                    args.DrawingSession.FillEllipse(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2, cnode.Weight / 2, cnode.Weight / 2, cnode.SemanticNode.Color);
                 }
                 if (cnode.Type == NODETYPE.WORD)
                 {
-                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, cnode.NodeColor);
+                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, cnode.SemanticNode.Color);
                 }
             }
         }

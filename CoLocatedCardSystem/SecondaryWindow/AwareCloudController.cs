@@ -73,13 +73,6 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
         }
 
-
-        //internal void init(WebView v, CentralControllers ctrls)
-        //{
-        //    // this.webView = v;
-        //    this.controllers = ctrls;
-        //}
-
         internal void Init(int width, int height)
         {
             // this.webView = v;

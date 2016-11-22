@@ -47,7 +47,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         {
             foreach (SemanticNode snode in semanticNodes.Values)
             {
-                args.DrawingSession.DrawEllipse(snode.X, snode.Y, snode.Weight, snode.Weight, Colors.White,3);
+                args.DrawingSession.FillCircle(snode.X, snode.Y, snode.Weight, snode.Color);
             }
         }
 

@@ -24,6 +24,20 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                 cloudLayer = value;
             }
         }
+
+        internal AwareCloudController Controllers
+        {
+            get
+            {
+                return controllers;
+            }
+
+            set
+            {
+                controllers = value;
+            }
+        }
+
         internal CloudLayerController(AwareCloudController ctrls)
         {
             this.controllers = ctrls;

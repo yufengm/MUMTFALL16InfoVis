@@ -53,34 +53,17 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             semanticCloud = new SemanticCloud();
             awareCloud = new AwareCloud();
             awareCloud.Init(semanticCloud);
-            //for (int i = 0; i < 5; i++)
-            //{
-            //    semanticCloud.AddSemanticNode("node" + i, "test");
-            //}
-            //semanticCloud.ConnectSemanticNode("node0", "node1");
-            //semanticCloud.ConnectSemanticNode("node0", "node2");
-            //semanticCloud.ConnectSemanticNode("node0", "node3");
-            //semanticCloud.ConnectSemanticNode("node3", "node4");
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    string newid = "point" + i;
-            //    string sid = "node" + rand.Next(5);
-            //    awareCloud.CreateCloudNode(newid, NODETYPE.DOC, sid);
-            //}
-            //for (int i = 0; i < 200; i++)
-            //{
-            //    string newid = "text" + i;
-            //    string sid = "node" + rand.Next(semanticCloud.GetSemanticNodes().Count());
-            //    awareCloud.CreateCloudNode(newid, NODETYPE.WORD, sid);
-            //    awareCloud.SetCloudNodeText(newid, newid, newid);
-            //}
         }
         public void StartThread()
         {
-            TimeSpan period = TimeSpan.FromMilliseconds(33);
+            TimeSpan period = TimeSpan.FromMilliseconds(50);
 
             periodicTimer = ThreadPoolTimer.CreatePeriodicTimer((source) =>
             {
+                if (semanticCloud.MoveStep > awareCloud.MoveStep)
+                {
+                    awareCloud.MoveStep = semanticCloud.MoveStep;
+                }
                 semanticCloud.Update();
                 awareCloud.Update();
                 awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
@@ -88,8 +71,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             }, period);
         }
 
-        internal void Deinit() {
-            if (periodicTimer != null) {
+        internal void Deinit()
+        {
+            if (periodicTimer != null)
+            {
                 periodicTimer.Cancel();
             }
         }
