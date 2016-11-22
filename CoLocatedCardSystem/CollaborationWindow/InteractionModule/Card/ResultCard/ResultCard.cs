@@ -93,7 +93,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 titleTextBlock.Width = this.Width;
                 titleTextBlock.Height = this.Height;
-                titleTextBlock.Foreground = new SolidColorBrush(MyColor.Color1);
+                titleTextBlock.Foreground = new SolidColorBrush(MyColor.Wheat);
                 titleTextBlock.LineHeight = 1;
                 titleTextBlock.TextWrapping = TextWrapping.Wrap;
                 titleTextBlock.TextAlignment = TextAlignment.Center;
@@ -168,14 +168,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal void EnableCard()
         {
             isEnabled = true;
-            titleTextBlock.Foreground = new SolidColorBrush(MyColor.Color1);
+            titleTextBlock.Foreground = new SolidColorBrush(MyColor.Wheat);
             this.IsHitTestVisible = true;
         }
         internal void DisableCard()
         {
             isEnabled = false;
             titleTextBlock.Foreground = new SolidColorBrush(
-                Color.FromArgb(100, MyColor.Color3.R, MyColor.Color3.G, MyColor.Color3.B));
+                Color.FromArgb(100, MyColor.DarkGrassGreen.R, MyColor.DarkGrassGreen.G, MyColor.DarkGrassGreen.B));
             this.IsHitTestVisible = false;
         }
     }

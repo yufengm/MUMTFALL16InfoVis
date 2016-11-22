@@ -14,7 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         private Point glowPosition = new Point(0, 0);
         private double glowScale = 1;
         private double glowRotation = 0;
-        private Color[] glowColors = new Color[] { MyColor.Color3, MyColor.Color2, MyColor.Color1};
+        private Color[] glowColors = new Color[] { MyColor.DarkGrassGreen, MyColor.Grass, MyColor.Wheat};
         internal Size GlowSize
         {
             get

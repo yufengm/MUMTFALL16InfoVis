@@ -11,7 +11,6 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.ConnectionModule;
 using CoLocatedCardSystem.CollaborationWindow.MachineLearningModule;
-using CoLocatedCardSystem.SecondaryWindow.AwareCloudModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {

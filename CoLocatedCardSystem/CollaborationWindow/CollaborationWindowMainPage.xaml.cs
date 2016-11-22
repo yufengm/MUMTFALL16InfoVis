@@ -75,6 +75,8 @@ namespace CoLocatedCardSystem.CollaborationWindow
         public void Deinit()
         {
             controllers.Deinit();
+            App app = App.Current as App;
+            app.AwareCloudController.Deinit();
             container.Children.Remove(controllers.BaseLayerController.GetBaseLayer());
             container.Children.Remove(controllers.CardLayerController.GetCardLayer());
             container.Children.Remove(controllers.SortingBoxLayerController.GetSortingBoxLayer());

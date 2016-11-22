@@ -3,6 +3,7 @@
     "HtmlAgilityPack": "1.4.9.5",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "Newtonsoft.Json": "9.0.1",
+    "Win2D.uwp": "1.19.0",
     "WinRTXamlToolkit.Controls.DataVisualization.Windows": "1.8.1"
   },
   "frameworks": {

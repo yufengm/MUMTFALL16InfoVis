@@ -59,7 +59,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     this);
                 titleTextBlock.Width = attachedCard.Width;
                 titleTextBlock.Height = attachedCard.Height;
-                titleTextBlock.Foreground = new SolidColorBrush(MyColor.Color1);
+                titleTextBlock.Foreground = new SolidColorBrush(MyColor.Wheat);
                 titleTextBlock.LineHeight = 1;
                 titleTextBlock.TextWrapping = TextWrapping.Wrap;
                 titleTextBlock.TextAlignment = TextAlignment.Center;

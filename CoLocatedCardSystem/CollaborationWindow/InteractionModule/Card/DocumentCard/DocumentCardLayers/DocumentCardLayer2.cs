@@ -65,7 +65,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 label.FontSize = 4;
                 label.FontStretch = FontStretch.Normal;
                 label.Text = "High light:";
-                label.Foreground = new SolidColorBrush(MyColor.Color1);
+                label.Foreground = new SolidColorBrush(MyColor.Wheat);
                 grid.Children.Add(label);
                 Grid.SetRow(label, 0);
 

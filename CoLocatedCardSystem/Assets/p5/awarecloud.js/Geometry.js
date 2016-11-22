@@ -14,7 +14,7 @@ function nodeNodeIntersect(node1, node2) {
         if (dist < (r1w + r2w) / 2) {
             var ol = (r1w + r2w) / 2 - dist;
             deltax = abs(r1x - r2x) * ol / dist;
-            deltay = abs(r1y - r2y) * ol / dist
+            deltay = abs(r1y - r2y) * ol / dist;
         }
     } else {
         if (r1x + r1w < r2x) {

@@ -53,7 +53,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             if (isKeyWord)
             {
-                this.Background = new SolidColorBrush(MyColor.Color3);
+                this.Background = new SolidColorBrush(MyColor.DarkGrassGreen);
             }
             else
             {
@@ -67,7 +67,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             tb.VerticalAlignment = VerticalAlignment.Bottom;
             tb.Width = boxSize.Width;
             tb.Height = boxSize.Height;
-            tb.Foreground = new SolidColorBrush(MyColor.Color1);
+            tb.Foreground = new SolidColorBrush(MyColor.Wheat);
             this.Width = boxSize.Width;
             this.Height = boxSize.Height;
             this.Children.Add(tb);            
@@ -98,12 +98,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         internal void HighLight()
         {
-            this.Background = new SolidColorBrush(MyColor.Color6);
+            this.Background = new SolidColorBrush(MyColor.Yellow);
             isHighlighted = true;
         }
         internal void DeHighLight()
         {
-            this.Background = new SolidColorBrush(MyColor.Color3);
+            this.Background = new SolidColorBrush(MyColor.DarkGrassGreen);
             isHighlighted = false;
         }
         private void Tile_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)

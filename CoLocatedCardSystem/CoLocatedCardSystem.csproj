@@ -210,10 +210,22 @@
     </Compile>
     <Compile Include="MyColor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecondaryWindow\AwareCloudModule\AwareCloudController.cs" />
+    <Compile Include="SecondaryWindow\AwareCloudController.cs" />
+    <Compile Include="SecondaryWindow\CloudModule\AwareCloud.cs" />
+    <Compile Include="SecondaryWindow\CloudModule\CloudNode.cs" />
     <Compile Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml.cs">
       <DependentUpon>CollaborationWindowSecondaryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SecondaryWindow\Layers\AnimationController.cs" />
+    <Compile Include="SecondaryWindow\Layers\BaseLayer\BaseLayer.cs" />
+    <Compile Include="SecondaryWindow\Layers\BaseLayer\BaseLayerController.cs" />
+    <Compile Include="SecondaryWindow\Layers\CloudLayer\CloudLayer.cs" />
+    <Compile Include="SecondaryWindow\Layers\CloudLayer\CloudLayerController.cs" />
+    <Compile Include="SecondaryWindow\Layers\SemanticLayer\SemanticLayer.cs" />
+    <Compile Include="SecondaryWindow\Layers\SemanticLayer\SemanticLayerController.cs" />
+    <Compile Include="SecondaryWindow\SemanticModule\SemanticCloud.cs" />
+    <Compile Include="SecondaryWindow\SemanticModule\SemanticNode.cs" />
+    <Compile Include="SecondaryWindow\Tool\Calculator.cs" />
     <Compile Include="SecondaryWindow\Tool\SecondaryScreen.cs" />
     <Compile Include="SecondaryWindow\SecondaryWindowLifeEventControl.cs" />
     <Compile Include="User.cs" />

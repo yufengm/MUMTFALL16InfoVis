@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
-using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
-using CoLocatedCardSystem.ClusterModule;
+﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.SecondaryWindow;
-using Windows.UI;
-using CoLocatedCardSystem.SecondaryWindow.AwareCloudModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
 {
@@ -30,7 +24,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         {
             if (awareCloudController != null)
             {
-                awareCloudController.AddSemanticNode(group.Id, group.GetDescription());
+               // awareCloudController.AddSemanticNode(group.Id, group.GetDescription());
             }
         }
         /// <summary>

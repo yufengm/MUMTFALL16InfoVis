@@ -15,6 +15,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer
         CentralControllers controllers;
         Dictionary<Card, int> zIndexList = new Dictionary<Card, int>();
 
+        internal CardLayer CardLayer
+        {
+            get
+            {
+                return cardLayer;
+            }
+
+            set
+            {
+                cardLayer = value;
+            }
+        }
+
         internal CardLayerController(CentralControllers ctrls)
         {
             this.controllers = ctrls;
