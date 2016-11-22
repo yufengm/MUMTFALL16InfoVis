@@ -29,7 +29,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
                 r2y = node2.Y,
                 r2w = node2.W,
                 r2h = node2.H;
-            if (node1.Type == NODETYPE.DOC && node2.Type == NODETYPE.DOC)
+            if (node1.Type == CloudNode.NODETYPE.DOC && node2.Type == CloudNode.NODETYPE.DOC)
             {
                 var dist = Distance(r1x, r1y, r2x, r2y);
                 if (dist < (r1w + r2w) / 2)

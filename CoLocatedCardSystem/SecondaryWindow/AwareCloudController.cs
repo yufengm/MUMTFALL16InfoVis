@@ -124,11 +124,11 @@ namespace CoLocatedCardSystem.SecondaryWindow
             {
                 foreach (Semantic sem in sg.GetSemantics())
                 {
-                    animationController.AwareCloud.CreateCloudNode(sem.DocID, NODETYPE.DOC, sg.Id);
+                    animationController.AwareCloud.CreateCloudNode(sem.DocID, CloudNode.NODETYPE.DOC, sg.Id);
                 }
                 foreach (Token tk in sg.GetToken())
                 {
-                    animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, NODETYPE.WORD, sg.Id);
+                    animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, CloudNode.NODETYPE.WORD, sg.Id);
                     animationController.AwareCloud.SetCloudNodeText(sg.Id + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
                     animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 20);
                 }

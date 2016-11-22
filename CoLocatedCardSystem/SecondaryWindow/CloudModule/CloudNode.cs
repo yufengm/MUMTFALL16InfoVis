@@ -12,7 +12,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         {
             PICTURE, WORD, DOC
         }
-        string guid = "";
+        string guid = "";// for docs, the id is the doc id, for word, the id is doc+stemmedword
         NODETYPE type = NODETYPE.DOC;
         string cloudText = "test";
         string image = null;

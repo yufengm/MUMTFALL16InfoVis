@@ -40,7 +40,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             {
                 Color nodeColor = cnode.SemanticNode.Color;
                 nodeColor.A = cnode.Alpha;
-                if (cnode.Type == NODETYPE.DOC)
+                if (cnode.Type == CloudNode.NODETYPE.DOC)
                 {
                     args.DrawingSession.FillEllipse(
                         cnode.X + cnode.Weight / 2, 
@@ -48,7 +48,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                         cnode.Weight / 2, 
                         cnode.Weight / 2, nodeColor);
                 }
-                if (cnode.Type == NODETYPE.WORD)
+                if (cnode.Type == CloudNode.NODETYPE.WORD)
                 {
                     args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, nodeColor);
                 }

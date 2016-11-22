@@ -10,6 +10,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         private CentralControllers controllers;
         AwareCloudController awareCloudController;
         App app;
+
+        internal AwareCloudController AwareCloudController
+        {
+            get
+            {
+                return awareCloudController;
+            }
+
+            set
+            {
+                awareCloudController = value;
+            }
+        }
+
         public ConnectionController(CentralControllers centralControllers)
         {
             this.controllers = centralControllers;
@@ -71,40 +85,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             }
         }
 
-        //internal void AddWordToken(Token tk, User owner, Color color, String group, double x, double y)
-        //{
-        //    Node cw = new Node();
-        //    cw.Owner = owner.ToString();
-        //    cw.Color = color.R + "," + color.G + "," + color.B;
-        //    cw.Text = tk.OriginalWord;
-        //    cw.StemmedText = tk.StemmedWord;
-        //    cw.X = x;
-        //    cw.Y = y;
-        //    cw.Type = 0;
-        //    cw.Weight = 20;
-        //    cw.Group = group;
-        //    cw.Highlight = true;
-        //    app.AddWordToScreen(cw);
-        //}
-
-        //internal void AddImageToken(String imgUrl, User owner, Color color, String group, double x, double y)
-        //{
-        //    Node cw = new Node();
-        //    cw.Owner = owner.ToString();
-        //    cw.Color = color.R + "," + color.G + "," + color.B;
-        //    cw.Text = imgUrl;
-        //    cw.StemmedText = imgUrl;
-        //    cw.X = x;
-        //    cw.Y = y;
-        //    cw.Type = 1;
-        //    cw.Weight = 20;
-        //    cw.Group = group;
-        //    cw.Highlight = true;
-        //    app.AddWordToScreen(cw);
-        //}
-        //internal void RemoveToken(Token tk, String cardID)
-        //{
-        //    app.RemoveWord(tk.StemmedWord, cardID);
-        //}
+        internal void HightLightSearchResult(string[] ids) {
+            
+        }
     }
 }
