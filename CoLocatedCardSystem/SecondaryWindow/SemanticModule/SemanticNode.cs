@@ -1,4 +1,5 @@
-﻿using CoLocatedCardSystem.SecondaryWindow.CloudModule;
+﻿using CoLocatedCardSystem.CollaborationWindow;
+using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using System.Collections.Concurrent;
 using Windows.UI;
 
@@ -11,7 +12,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         ConcurrentBag<CloudNode> cloudNodes = new ConcurrentBag<CloudNode>();
         string semantic = "";
         User owner = User.NONE;
-        Color color = Colors.White;
+        int h=0, s=0, v=0;
         float x = 0;
         float y = 0;
         float vx = 0;
@@ -80,19 +81,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             set
             {
                 owner = value;
-            }
-        }
-
-        public Color Color
-        {
-            get
-            {
-                return color;
-            }
-
-            set
-            {
-                color = value;
             }
         }
 
@@ -166,6 +154,45 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             }
         }
 
+        public int H
+        {
+            get
+            {
+                return h;
+            }
+
+            set
+            {
+                h = value;
+            }
+        }
+
+        public int S
+        {
+            get
+            {
+                return s;
+            }
+
+            set
+            {
+                s = value;
+            }
+        }
+
+        public int V
+        {
+            get
+            {
+                return v;
+            }
+
+            set
+            {
+                v = value;
+            }
+        }
+
         internal void RemoveCloudNode(CloudNode node)
         {
             this.cloudNodes.TryTake(out node);
@@ -177,6 +204,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 
         public void AddCloudNode(CloudNode node) {
             this.cloudNodes.Add(node);
+        }
+
+        public Color GetColor() {
+            return UIHelper.HsvToRgb(h, s, v);
         }
     }
 }

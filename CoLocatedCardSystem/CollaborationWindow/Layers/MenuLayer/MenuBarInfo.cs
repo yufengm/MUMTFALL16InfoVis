@@ -20,6 +20,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         DeleteButtonAttr deleteButtonInfo = new DeleteButtonAttr();
         SearchButtonAttr searchButtonInfo = new SearchButtonAttr();
         SearchResultTrayAttr searchResultInfo = new SearchResultTrayAttr();
+        User owner = User.NONE;
         protected static Dictionary<User, MenuBarInfo> menubarInfoList = new Dictionary<User, MenuBarInfo>();
         internal Size Size
         {
@@ -105,6 +106,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             }
         }
 
+        public User Owner
+        {
+            get
+            {
+                return owner;
+            }
+
+            set
+            {
+                owner = value;
+            }
+        }
+
         static MenuBarInfo()
         {
             menubarInfoList.Add(User.ALEX, InitAlex());
@@ -132,6 +146,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             info.cardInitPosition = new Point(info.Size.Height + 260*Screen.SCALE_FACTOR, Screen.HEIGHT / 2);
             info.scale = 1;
             info.rotate = 90;
+            info.owner = User.ALEX;
             return info;
         }
         /// <summary>
@@ -145,7 +160,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             info.cardInitPosition = new Point(Screen.WIDTH / 2, Screen.HEIGHT - info.size.Height - 260 * Screen.SCALE_FACTOR);
             info.scale = 1;
             info.rotate = 0;
-
+            info.owner = User.BEN;
             return info;
         }
         /// <summary>
@@ -159,6 +174,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             info.cardInitPosition = new Point(Screen.WIDTH - info.size.Height - 260 * Screen.SCALE_FACTOR, Screen.HEIGHT / 2);
             info.scale = 1;
             info.rotate = 270;
+            info.owner = User.CHRIS;
             return info;
         }
         /// <summary>
@@ -172,6 +188,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             info.cardInitPosition = new Point(Screen.WIDTH/ 2, info.Size.Height + 260 * Screen.SCALE_FACTOR);
             info.scale = 1;
             info.rotate = 180;
+            info.owner = User.DANNY;
             return info;
         }
 

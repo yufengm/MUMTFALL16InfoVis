@@ -106,9 +106,8 @@ namespace CoLocatedCardSystem.SecondaryWindow
             foreach (SemanticGroup sg in sgroups)
             {
                 animationController.SemanticCloud.AddSemanticNode(sg.Id, sg.GetDescription());
-                animationController.SemanticCloud.SetSemanticNodeColor(sg.Id,
-                    Color.FromArgb(255, Convert.ToByte(colorRand.Next(205) + 50),
-                    Convert.ToByte(colorRand.Next(205) + 50), Convert.ToByte(colorRand.Next(100))));
+                int h = colorRand.Next(200);
+                animationController.SemanticCloud.SetSemanticNodeColor(sg.Id, h, 1, 1);
             }
             foreach (SemanticGroup sg1 in sgroups)
             {

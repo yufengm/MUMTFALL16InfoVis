@@ -85,13 +85,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             }
         }
 
-        internal void HightLightSearchResult(string[] ids) {
-            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, CloudNode.ACTIVELEVEL.ONTABLE);
+        internal void HightLightSearchResult(string[] ids, User user) {
+            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, true);
         }
 
-        internal void DehighLightSearchResult(string[] ids)
+        internal void DehighLightSearchResult(string[] ids, User user)
         {
-            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, CloudNode.ACTIVELEVEL.INACTIVE);
+            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, false);
         }
     }
 }

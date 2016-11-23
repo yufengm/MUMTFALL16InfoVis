@@ -29,18 +29,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         MenuLayerController menuLayerController;
         Storyboard showBoard = new Storyboard();
         Storyboard hideBoard = new Storyboard();
+        MenuBarInfo info;
         public SearchResultTray(MenuLayerController controller)
         {
             this.menuLayerController = controller;
         }
         public void Init(MenuBarInfo info)
         {
+            this.info = info;
             this.Background = new SolidColorBrush(Color.FromArgb(255,209,219,189));
-            this.Width = info.SearchResultInfo.Size.Width;
-            this.Height = info.SearchResultInfo.Size.Height;
+            this.Width = this.info.SearchResultInfo.Size.Width;
+            this.Height = this.info.SearchResultInfo.Size.Height;
             scrollViewer = new ScrollViewer();
-            scrollViewer.Width = info.SearchResultInfo.Size.Width;
-            scrollViewer.Height = info.SearchResultInfo.Size.Height;
+            scrollViewer.Width = this.info.SearchResultInfo.Size.Width;
+            scrollViewer.Height = this.info.SearchResultInfo.Size.Height;
             scrollViewer.HorizontalScrollMode = ScrollMode.Enabled;
             scrollViewer.VerticalScrollMode = ScrollMode.Disabled;
             scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -49,7 +51,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             stackPanel.Height = scrollViewer.Height;
             stackPanel.Orientation = Orientation.Horizontal;
             scrollViewer.Content = stackPanel;
-            MAXCARDTOSHOW = (int)(info.SearchResultInfo.Size.Width / blockSize.Width) + 1;
+            MAXCARDTOSHOW = (int)(this.info.SearchResultInfo.Size.Width / blockSize.Width) + 1;
             scrollViewer.ViewChanged += ScrollViewer_ViewChanged;
 
             hideButton = new Button();
@@ -107,7 +109,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             }
             if (docIDs.Count > 0)
             {
-                menuLayerController.Controllers.ConnectionController.DehighLightSearchResult(docIDs.ToArray());
+                menuLayerController.Controllers.ConnectionController.DehighLightSearchResult(docIDs.ToArray(), info.Owner);
             }
         }
 
@@ -153,7 +155,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                     docIDs.Add(card.Document.DocID);
                 }
                 if (docIDs.Count > 0) {
-                    menuLayerController.Controllers.ConnectionController.HightLightSearchResult(docIDs.ToArray());
+                    menuLayerController.Controllers.ConnectionController.HightLightSearchResult(docIDs.ToArray(), info.Owner);
                 }
                 ShowCard(0);
                 resultNum.Text = "Search: "+ content + " Result: " + cards.Length;
@@ -225,7 +227,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                         stackCanvas[i].Children.Add(resultCard);
                     }
                 }
-                for (int i = startCardID + cardToShow; i < stackCanvas.Count; i++)
+                for (int i = startCardID + cardToShow+1; i < stackCanvas.Count; i++)
                 {
                     if (stackCanvas[i].Children.Count != 0)
                         stackCanvas[i].Children.Clear();

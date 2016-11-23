@@ -1,13 +1,10 @@
 ﻿using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
+using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 {
     class CloudNode
     {
-       internal enum ACTIVELEVEL
-        {
-            INACTIVE, SEARCHED, ONTABLE
-        }
         internal enum NODETYPE
         {
             PICTURE, WORD, DOC
@@ -26,7 +23,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float weight = 15;
         float w = 15;
         float h = 15;
-        byte alpha = 100;
+        Dictionary<User, bool> user_search = new Dictionary<User, bool>();
+        Dictionary<User, bool> user_interact = new Dictionary<User, bool>();
+        Dictionary<User, bool> user_highlight = new Dictionary<User, bool>();
         #region getter
         public string Guid
         {
@@ -201,34 +200,68 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 h = value;
             }
         }
-
-        public byte Alpha
+        public Dictionary<User, bool> User_search
         {
             get
             {
-                return alpha;
+                return user_search;
             }
 
             set
             {
-                alpha = value;
+                user_search = value;
+            }
+        }
+
+        public Dictionary<User, bool> User_interact
+        {
+            get
+            {
+                return user_interact;
+            }
+
+            set
+            {
+                user_interact = value;
+            }
+        }
+
+        public Dictionary<User, bool> User_highlight
+        {
+            get
+            {
+                return user_highlight;
+            }
+
+            set
+            {
+                user_highlight = value;
             }
         }
         #endregion
-
-        internal void SetActive(ACTIVELEVEL level)
+        internal CloudNode()
         {
-            switch (level)
+            user_search.Add(User.ALEX, false);
+            user_search.Add(User.BEN, false);
+            user_search.Add(User.CHRIS, false);
+            user_search.Add(User.DANNY, false);
+            user_interact.Add(User.ALEX, false);
+            user_interact.Add(User.BEN, false);
+            user_interact.Add(User.CHRIS, false);
+            user_interact.Add(User.DANNY, false);
+            user_highlight.Add(User.ALEX, false);
+            user_highlight.Add(User.BEN, false);
+            user_highlight.Add(User.CHRIS, false);
+            user_highlight.Add(User.DANNY, false);
+        }
+        internal void SetSearch(User user, bool active)
+        {
+            if (!user_search.ContainsKey(user))
             {
-                case ACTIVELEVEL.INACTIVE:
-                    this.alpha = 100;
-                    break;
-                case ACTIVELEVEL.SEARCHED:
-                    this.alpha = 150;
-                    break;
-                case ACTIVELEVEL.ONTABLE:
-                    this.alpha = 255;
-                    break;
+                user_search.Add(user, active);
+            }
+            else {
+                user_search[user] = active;
             }
         }
     }

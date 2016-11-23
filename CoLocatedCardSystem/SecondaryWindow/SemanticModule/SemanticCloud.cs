@@ -75,12 +75,14 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             }
         }
 
-        internal void SetSemanticNodeColor(string snid, Color color)
+        internal void SetSemanticNodeColor(string snid, int h, int s, int v)
         {
             SemanticNode semanticNode = FindNode(snid);
             if (semanticNode != null)
             {
-                semanticNode.Color = color;
+                semanticNode.H = h;
+                semanticNode.S = s;
+                semanticNode.V = v;
             }
         }
         internal void Update()

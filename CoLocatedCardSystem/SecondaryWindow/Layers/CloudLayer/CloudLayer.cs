@@ -4,6 +4,10 @@ using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using CoLocatedCardSystem.CollaborationWindow;
+using Microsoft.Graphics.Canvas.Brushes;
+using Microsoft.Graphics.Canvas.Geometry;
+using System.Numerics;
 
 namespace CoLocatedCardSystem.SecondaryWindow.Layers
 {
@@ -38,19 +42,36 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         {
             foreach (CloudNode cnode in cloudNodes.Values)
             {
-                Color nodeColor = cnode.SemanticNode.Color;
-                nodeColor.A = cnode.Alpha;
                 if (cnode.Type == CloudNode.NODETYPE.DOC)
                 {
-                    args.DrawingSession.FillEllipse(
-                        cnode.X + cnode.Weight / 2, 
-                        cnode.Y + cnode.Weight / 2, 
-                        cnode.Weight / 2, 
-                        cnode.Weight / 2, nodeColor);
+                    using (var cpb = new CanvasPathBuilder(args.DrawingSession))
+                    {
+                        Color nodeColor = UIHelper.HsvToRgb(cnode.SemanticNode.H,
+                            cnode.SemanticNode.S,
+                            cnode.User_search[User.ALEX] ? 1 : 0.5*cnode.SemanticNode.V);
+                        cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
+                        cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                            cnode.Weight / 2, cnode.Weight / 2,
+                            (float)Math.PI / 2, (float)(Math.PI));
+                        cpb.EndFigure(CanvasFigureLoop.Closed);
+                        args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
+                    }
+                    using (var cpb = new CanvasPathBuilder(args.DrawingSession))
+                    {
+                        Color nodeColor = UIHelper.HsvToRgb(cnode.SemanticNode.H,
+                            cnode.SemanticNode.S,
+                            cnode.User_search[User.CHRIS] ? 1 : 0.5 * cnode.SemanticNode.V);
+                        cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
+                        cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                            cnode.Weight / 2, cnode.Weight / 2,
+                            (float)Math.PI / 2, (float)(-Math.PI));
+                        cpb.EndFigure(CanvasFigureLoop.Closed);
+                        args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
+                    }
                 }
-                if (cnode.Type == CloudNode.NODETYPE.WORD)
+                else if (cnode.Type == CloudNode.NODETYPE.WORD)
                 {
-                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, nodeColor);
+                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, MyColor.Wheat);
                 }
             }
         }

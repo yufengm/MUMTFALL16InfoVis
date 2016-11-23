@@ -92,13 +92,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             }
         }
 
-        internal void SetCloudNodeActive(string[] ids, CloudNode.ACTIVELEVEL level) {
+        internal void SetCloudNodeActive(string[] ids, User user, bool active) {
             if (ids != null) {
                 foreach(string id in ids)
                 {
                     CloudNode node = FindNode(id);
                     if (node != null) {
-                        node.SetActive(level);
+                        node.SetSearch(user, active);
                     }
                 }
             }
