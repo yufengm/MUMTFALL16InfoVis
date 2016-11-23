@@ -52,7 +52,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                         cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
                         cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
                             cnode.Weight / 2, cnode.Weight / 2,
-                            (float)Math.PI / 2, (float)(Math.PI));
+                            (float)-Math.PI / 2, (float)(-Math.PI*2/3));
+                        cpb.EndFigure(CanvasFigureLoop.Closed);
+                        args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
+                    }
+                    using (var cpb = new CanvasPathBuilder(args.DrawingSession))
+                    {
+                        Color nodeColor = UIHelper.HsvToRgb(cnode.SemanticNode.H,
+                            cnode.SemanticNode.S,
+                            cnode.User_search[User.BEN] ? 1 : 0.5 * cnode.SemanticNode.V);
+                        cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
+                        cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                            cnode.Weight / 2, cnode.Weight / 2,
+                            (float)(Math.PI / 6), (float)(Math.PI * 2 / 3));
                         cpb.EndFigure(CanvasFigureLoop.Closed);
                         args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
                     }
@@ -64,7 +76,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                         cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
                         cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
                             cnode.Weight / 2, cnode.Weight / 2,
-                            (float)Math.PI / 2, (float)(-Math.PI));
+                            (float)-Math.PI / 2, (float)(Math.PI * 2 / 3));
                         cpb.EndFigure(CanvasFigureLoop.Closed);
                         args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
                     }

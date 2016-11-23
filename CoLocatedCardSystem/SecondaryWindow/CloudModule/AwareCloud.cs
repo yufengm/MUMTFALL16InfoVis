@@ -223,11 +223,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             Point result = new Point();
             if (node.Type == CloudNode.NODETYPE.DOC)
             {
-                atrc = -100 * dist;
+                atrc = -30 * dist;
             }
             else
             {
-                atrc = -1000 * dist;
+                atrc = -500 * dist;
             }
             result.X = atrc * (node.X + node.W / 2 - node.SemanticNode.X) / dist;
             result.Y = atrc * (node.Y + node.H / 2 - node.SemanticNode.Y) / dist;

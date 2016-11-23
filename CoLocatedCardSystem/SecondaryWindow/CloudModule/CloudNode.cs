@@ -20,9 +20,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float vx = 0;
         float vy = 0;
         SemanticNode semanticNode = null;
-        float weight = 15;
-        float w = 15;
-        float h = 15;
+        float weight = 20;
+        float w = 20;
+        float h = 20;
         Dictionary<User, bool> user_search = new Dictionary<User, bool>();
         Dictionary<User, bool> user_interact = new Dictionary<User, bool>();
         Dictionary<User, bool> user_highlight = new Dictionary<User, bool>();
