@@ -81,10 +81,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
         {
             return list[topicID];
         }
-        internal Token[] GetTopicToken(Document[] documents) {
+        internal Token[] GetTopicToken( Document[] documents) {
             Token[] result = null;
             String doctokens = "";
-            foreach (Document doc in documents) {
+            foreach ( Document doc in documents) {
                 for (int index = 0; index < doc.ProcessedDocument.Length; index++) {
                     Token[] tokens = doc.ProcessedDocument[index].List;
                     String rate = doc.DocumentAttributes.Rating[index];
@@ -97,21 +97,42 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                             doctokens += token.StemmedWord + " ";
                         }
                     }
-                    doctokens += "|||||";
-                    Debug.WriteLine(doctokens);
+                    doctokens += "|||";
+                    //Debug.WriteLine(doctokens);
                 }
             }
-            //string arg = string.Format(@"E:\Courses\Information Visualization\Project\PythonScript\LDA.py"); // Path to the Python code
-            //Process p = new Process();
-            //p.StartInfo = new ProcessStartInfo(@"F:\Anaconda2\python.exe", arg);
-            //p.StartInfo.UseShellExecute = false;
-            //p.StartInfo.CreateNoWindow = true; // Hide the command line window
-            //p.StartInfo.RedirectStandardOutput = false;
-            //p.StartInfo.RedirectStandardError = false;
-            //Process processChild = Process.Start(p.StartInfo);
+            LDACommandLineOptions option = new LDACommandLineOptions();
+            option.beta = 0.1;
+            option.K = 5;
+            option.niters = 50;
+            option.savestep = 100;
+            option.twords = 20;
+            option.dir = @"E:\Courses\Information Visualization\Project";
+            option.data = doctokens;
+            option.est = true;
+            option.modelName = "model-final";
+            option.wordMapFileName = "wordmap.txt";
 
-            return null;
+            result = new Token[ option.K * option.twords ];
+
+            Estimator estimator = new Estimator();
+            estimator.init( option );
+            List<Dictionary<string, double>>  topicWordProbpairs = estimator.estimate();
+            int i = 0;
+            foreach ( Dictionary<string, double> dic in topicWordProbpairs )
+            {
+                foreach (String key in dic.Keys)
+                {
+                    Token temp = new Token();
+                    temp.OriginalWord = key;
+                    temp.Process();
+                    Debug.WriteLine( key );
+                    result[i] = temp;
+                    i++;
+                }
+            }
+            return result;
         }
             
     }
-        }
+}

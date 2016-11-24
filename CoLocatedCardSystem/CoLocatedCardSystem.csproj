@@ -150,8 +150,18 @@
     <Compile Include="CollaborationWindow\Layers\MenuLayer\RecycleBin.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\ArrayInitializers.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\Constants.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\Conversion.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\Estimator.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\Inferencer.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\LDACommandLineOptions.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\LDADataset.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\MLDocument.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\MLController.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\Model.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\Topic.cs" />
+    <Compile Include="CollaborationWindow\MachineLearningModule\WordDictionary.cs" />
     <Compile Include="CollaborationWindow\TableModule\AttributeHelper.cs" />
     <Compile Include="CollaborationWindow\TableModule\DataAttribute.cs" />
     <Compile Include="CollaborationWindow\TableModule\ATTRIBUTETYPE.cs" />
@@ -1417,12 +1427,16 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\VirtualKeyboard\VirtualKeyboard.csproj">
       <Project>{AE0C085E-2AF7-4428-90C8-7E8994E377B1}</Project>
       <Name>VirtualKeyboard</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CommandLine">
+      <HintPath>E:\Courses\Information Visualization\Project\LDA\packages\CommandLineParser.1.9.71\lib\net35\CommandLine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
