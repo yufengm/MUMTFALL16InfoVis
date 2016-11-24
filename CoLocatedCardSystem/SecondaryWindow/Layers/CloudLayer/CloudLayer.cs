@@ -44,46 +44,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             {
                 if (cnode.Type == CloudNode.NODETYPE.DOC)
                 {
-                    using (var cpb = new CanvasPathBuilder(args.DrawingSession))
+                    Color nodeColor = MyColor.Yellow;
+                    if (cnode.User_action[User.NONE].select)
                     {
-                        Color nodeColor = UIHelper.HsvToRgb(cnode.SemanticNode.H,
-                            cnode.SemanticNode.S,
-                            cnode.User_search[User.ALEX] ? 1 : 0.5*cnode.SemanticNode.V);
-                        cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
-                        cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
-                            cnode.Weight / 2, cnode.Weight / 2,
-                            (float)-Math.PI / 2, (float)(-Math.PI*2/3));
-                        cpb.EndFigure(CanvasFigureLoop.Closed);
-                        args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
+                        args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                            cnode.Weight / 2, nodeColor);
                     }
-                    using (var cpb = new CanvasPathBuilder(args.DrawingSession))
-                    {
-                        Color nodeColor = UIHelper.HsvToRgb(cnode.SemanticNode.H,
-                            cnode.SemanticNode.S,
-                            cnode.User_search[User.BEN] ? 1 : 0.5 * cnode.SemanticNode.V);
-                        cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
-                        cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
-                            cnode.Weight / 2, cnode.Weight / 2,
-                            (float)(Math.PI / 6), (float)(Math.PI * 2 / 3));
-                        cpb.EndFigure(CanvasFigureLoop.Closed);
-                        args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
-                    }
-                    using (var cpb = new CanvasPathBuilder(args.DrawingSession))
-                    {
-                        Color nodeColor = UIHelper.HsvToRgb(cnode.SemanticNode.H,
-                            cnode.SemanticNode.S,
-                            cnode.User_search[User.CHRIS] ? 1 : 0.5 * cnode.SemanticNode.V);
-                        cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
-                        cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
-                            cnode.Weight / 2, cnode.Weight / 2,
-                            (float)-Math.PI / 2, (float)(Math.PI * 2 / 3));
-                        cpb.EndFigure(CanvasFigureLoop.Closed);
-                        args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
-                    }
+                    DrawArc(args, cnode, User.ALEX);
+                    DrawArc(args, cnode, User.BEN);
+                    DrawArc(args, cnode, User.CHRIS);
                 }
                 else if (cnode.Type == CloudNode.NODETYPE.WORD)
                 {
-                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, MyColor.Wheat);
+                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, cnode.User_action[User.NONE].default_color);
                 }
             }
         }
@@ -91,6 +64,45 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         internal void UpdateCloudNode(ConcurrentDictionary<string, CloudNode> cloudNodes)
         {
             this.cloudNodes = cloudNodes;
+        }
+
+        private void DrawArc(CanvasDrawEventArgs args, CloudNode cnode, User user)
+        {
+            using (var cpb = new CanvasPathBuilder(args.DrawingSession))
+            {
+                Color nodeColor = Colors.White;
+                if (cnode.User_action[user].searched)
+                {
+                    nodeColor = cnode.User_action[user].highlight_color;
+                }
+                else
+                {
+                    nodeColor = cnode.User_action[user].default_color;
+                }
+                cpb.BeginFigure(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2);
+                float startArc = 0;
+                float swap = 0;
+                switch (user)
+                {
+                    case User.ALEX:
+                        startArc = (float)-Math.PI / 2;
+                        swap = (float)(-Math.PI * 2 / 3);
+                        break;
+                    case User.BEN:
+                        startArc = (float)(Math.PI / 6);
+                        swap = (float)(Math.PI * 2 / 3);
+                        break;
+                    case User.CHRIS:
+                        startArc = (float)-Math.PI / 2;
+                        swap = (float)(Math.PI * 2 / 3);
+                        break;
+                }
+                cpb.AddArc(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                    cnode.Weight / 2 - 2, cnode.Weight / 2 - 2,
+                    startArc, swap);
+                cpb.EndFigure(CanvasFigureLoop.Closed);
+                args.DrawingSession.FillGeometry(CanvasGeometry.CreatePath(cpb), nodeColor);
+            }
         }
     }
 }

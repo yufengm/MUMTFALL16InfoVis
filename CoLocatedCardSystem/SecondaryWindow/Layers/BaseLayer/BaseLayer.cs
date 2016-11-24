@@ -21,7 +21,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             background = new Rectangle();
             background.Width = width;
             background.Height = height;
-            background.Fill = new SolidColorBrush(MyColor.DarkBlue);
+            background.Fill = new SolidColorBrush(MyColor.DarkGrassGreen);
             this.Children.Add(background);
         }       
     }

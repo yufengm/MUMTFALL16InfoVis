@@ -10,7 +10,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class SemanticGroup
     {
-        string id;
+        string id;//same with the topic id
         internal struct SemanticAttribute {
             internal bool isHighlighted;
         }

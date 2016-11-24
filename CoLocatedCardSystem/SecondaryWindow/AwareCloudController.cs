@@ -7,6 +7,7 @@ using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using Windows.UI;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.Tool;
 
 namespace CoLocatedCardSystem.SecondaryWindow
 {
@@ -102,12 +103,13 @@ namespace CoLocatedCardSystem.SecondaryWindow
         internal void AddInitialSemanticsGroup()
         {
             var sgroups = controllers.SemanticGroupController.GetSemanticGroup();
-            Random colorRand = new Random();
             foreach (SemanticGroup sg in sgroups)
             {
-                animationController.SemanticCloud.AddSemanticNode(sg.Id, sg.GetDescription());
-                int h = colorRand.Next(200);
-                animationController.SemanticCloud.SetSemanticNodeColor(sg.Id, h, 1, 1);
+                string newID = sg.Id;
+                int h = Rand.Next(255);
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
             }
             foreach (SemanticGroup sg1 in sgroups)
             {
@@ -121,13 +123,61 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
             foreach (SemanticGroup sg in sgroups)
             {
+                string newID = sg.Id;
+                SemanticNode node = animationController.SemanticCloud.FindNode(sg.Id);
+                int h = node.H;
+                string preID = sg.Id;
+
+                newID = sg.Id + User.ALEX.ToString() + User.BEN.ToString();
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
+                animationController.SemanticCloud.ConnectSemanticNode(newID, preID);
+
+                newID = sg.Id + User.ALEX.ToString() + User.CHRIS.ToString();
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
+                animationController.SemanticCloud.ConnectSemanticNode(newID, preID);
+
+                newID = sg.Id + User.BEN.ToString() + User.CHRIS.ToString();
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
+                animationController.SemanticCloud.ConnectSemanticNode(newID, preID);
+
+                newID = sg.Id + User.ALEX.ToString();
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
+                animationController.SemanticCloud.ConnectSemanticNode(newID, sg.Id + User.ALEX.ToString() + User.BEN.ToString());
+                animationController.SemanticCloud.ConnectSemanticNode(newID, sg.Id + User.ALEX.ToString() + User.CHRIS.ToString());
+
+                newID = sg.Id + User.BEN.ToString();
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
+                animationController.SemanticCloud.ConnectSemanticNode(newID, sg.Id + User.ALEX.ToString() + User.BEN.ToString());
+                animationController.SemanticCloud.ConnectSemanticNode(newID, sg.Id + User.BEN.ToString() + User.CHRIS.ToString());
+
+                newID = sg.Id + User.CHRIS.ToString();
+                animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
+                animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
+                animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
+                animationController.SemanticCloud.ConnectSemanticNode(newID, sg.Id + User.ALEX.ToString() + User.CHRIS.ToString());
+                animationController.SemanticCloud.ConnectSemanticNode(newID, sg.Id + User.BEN.ToString() + User.CHRIS.ToString());
+            }
+            foreach (SemanticGroup sg in sgroups)
+            {
                 foreach (Semantic sem in sg.GetSemantics())
                 {
-                    animationController.AwareCloud.CreateCloudNode(sem.DocID, CloudNode.NODETYPE.DOC, sg.Id);
+                    animationController.AwareCloud.CreateCloudNode(sem.DocID, CloudNode.NODETYPE.DOC, sg.Id, User.NONE);
+                    animationController.AwareCloud.SetCloudNodeDoc(sem.DocID, sem.DocID);
+
                 }
                 foreach (Token tk in sg.GetToken())
                 {
-                    animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, CloudNode.NODETYPE.WORD, sg.Id);
+                    animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, CloudNode.NODETYPE.WORD, sg.Id, User.NONE);
                     animationController.AwareCloud.SetCloudNodeText(sg.Id + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
                     animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 20);
                 }

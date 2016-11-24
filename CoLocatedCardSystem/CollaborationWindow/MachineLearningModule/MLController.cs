@@ -61,7 +61,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             for (int i = 0; i < defaultTopicList.Length; i++)
             {
                 Topic tp = new Topic();
-                tp.Id = Guid.NewGuid().ToString();
+                tp.Id = Guid.NewGuid().ToString();//gen topic id
                 defaultMatch.Add(i, tp.Id);
                 for (int j = 0; j < defaultTopicList[i].Length; j++)
                 {

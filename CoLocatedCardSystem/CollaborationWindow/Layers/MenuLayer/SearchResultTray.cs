@@ -109,7 +109,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             }
             if (docIDs.Count > 0)
             {
-                menuLayerController.Controllers.ConnectionController.DehighLightSearchResult(docIDs.ToArray(), info.Owner);
+                menuLayerController.Controllers.ConnectionController.RemovetSearchResultFromSecondary(docIDs.ToArray(), info.Owner);
             }
         }
 
@@ -155,7 +155,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                     docIDs.Add(card.Document.DocID);
                 }
                 if (docIDs.Count > 0) {
-                    menuLayerController.Controllers.ConnectionController.HightLightSearchResult(docIDs.ToArray(), info.Owner);
+                    menuLayerController.Controllers.ConnectionController.ShowSearchResultToSecondary(docIDs.ToArray(), info.Owner);
                 }
                 ShowCard(0);
                 resultNum.Text = "Search: "+ content + " Result: " + cards.Length;

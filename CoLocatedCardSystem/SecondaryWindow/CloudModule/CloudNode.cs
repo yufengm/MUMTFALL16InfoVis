@@ -1,5 +1,8 @@
-﻿using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
+﻿using CoLocatedCardSystem.CollaborationWindow;
+using CoLocatedCardSystem.SecondaryWindow.SemanticModule;
 using System.Collections.Generic;
+using Windows.UI;
+using System;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 {
@@ -9,23 +12,32 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         {
             PICTURE, WORD, DOC
         }
-        string guid = "";// for docs, the id is the doc id, for word, the id is doc+stemmedword
+        internal class UserAction
+        {
+            internal bool select = false;
+            internal bool highlight = false;
+            internal bool searched = false;
+            internal Color select_color = MyColor.DarkBlue;
+            internal Color highlight_color = MyColor.DarkBlue;
+            internal Color searched_color = MyColor.DarkBlue;
+            internal Color default_color = MyColor.DarkBlue;
+        }
+        string guid = "";// for docs, the id is the doc id + user name, for word, the id is doc+stemmedword
+        string docID = "";
         NODETYPE type = NODETYPE.DOC;
         string cloudText = "test";
         string image = null;
         string stemmedText = "test";
-        string owner = "";
         float x = 0;
         float y = 0;
         float vx = 0;
         float vy = 0;
         SemanticNode semanticNode = null;
-        float weight = 20;
-        float w = 20;
-        float h = 20;
-        Dictionary<User, bool> user_search = new Dictionary<User, bool>();
-        Dictionary<User, bool> user_interact = new Dictionary<User, bool>();
-        Dictionary<User, bool> user_highlight = new Dictionary<User, bool>();
+        SemanticNode topicNode = null;
+        float weight = 22;
+        float w = 22;
+        float h = 22;
+        Dictionary<User, UserAction> user_action = new Dictionary<User, UserAction>();
         #region getter
         public string Guid
         {
@@ -89,19 +101,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             set
             {
                 stemmedText = value;
-            }
-        }
-
-        public string Owner
-        {
-            get
-            {
-                return owner;
-            }
-
-            set
-            {
-                owner = value;
             }
         }
         internal SemanticNode SemanticNode
@@ -188,6 +187,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 w = value;
             }
         }
+
         public float H
         {
             get
@@ -200,69 +200,99 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 h = value;
             }
         }
-        public Dictionary<User, bool> User_search
+
+        internal Dictionary<User, UserAction> User_action
         {
             get
             {
-                return user_search;
+                return user_action;
             }
 
             set
             {
-                user_search = value;
+                user_action = value;
             }
         }
 
-        public Dictionary<User, bool> User_interact
+        public string DocID
         {
             get
             {
-                return user_interact;
+                return docID;
             }
 
             set
             {
-                user_interact = value;
+                docID = value;
             }
         }
 
-        public Dictionary<User, bool> User_highlight
+        internal SemanticNode TopicNode
         {
             get
             {
-                return user_highlight;
+                return topicNode;
             }
 
             set
             {
-                user_highlight = value;
+                topicNode = value;
             }
         }
+
         #endregion
         internal CloudNode()
         {
-            user_search.Add(User.ALEX, false);
-            user_search.Add(User.BEN, false);
-            user_search.Add(User.CHRIS, false);
-            user_search.Add(User.DANNY, false);
-            user_interact.Add(User.ALEX, false);
-            user_interact.Add(User.BEN, false);
-            user_interact.Add(User.CHRIS, false);
-            user_interact.Add(User.DANNY, false);
-            user_highlight.Add(User.ALEX, false);
-            user_highlight.Add(User.BEN, false);
-            user_highlight.Add(User.CHRIS, false);
-            user_highlight.Add(User.DANNY, false);
+            user_action.Add(User.ALEX, new UserAction());
+            user_action.Add(User.BEN, new UserAction());
+            user_action.Add(User.CHRIS, new UserAction());
+            user_action.Add(User.DANNY, new UserAction());
+            user_action.Add(User.NONE, new UserAction());
         }
+
         internal void SetSearch(User user, bool active)
         {
-            if (!user_search.ContainsKey(user))
-            {
-                user_search.Add(user, active);
+            user_action[user].searched = active;
+        }
+
+        //Get the name of the the new semantic node that this node shoud be added to
+        internal string GetSemanticNode_Searched()
+        {
+            string result = topicNode.Guid;
+            foreach (KeyValuePair<User, UserAction> ua in user_action) {
+                if (ua.Value.searched) {
+                    result += ua.Key.ToString();
+                }
             }
-            else {
-                user_search[user] = active;
-            }
+            return result;
+        }
+
+        internal void SetColor(double H, double S, double V)
+        {
+            user_action[User.ALEX].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
+            user_action[User.ALEX].default_color = UIHelper.HsvToRgb(H, S, 0.5);
+            user_action[User.ALEX].highlight_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.ALEX].select_color = UIHelper.HsvToRgb(H, S, 1);
+
+            user_action[User.BEN].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
+            user_action[User.BEN].default_color = UIHelper.HsvToRgb(H, S, 0.5);
+            user_action[User.BEN].highlight_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.BEN].select_color = UIHelper.HsvToRgb(H, S, 1);
+
+            user_action[User.CHRIS].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
+            user_action[User.CHRIS].default_color = UIHelper.HsvToRgb(H, S, 0.5);
+            user_action[User.CHRIS].highlight_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.CHRIS].select_color = UIHelper.HsvToRgb(H, S, 1);
+
+            user_action[User.DANNY].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
+            user_action[User.DANNY].default_color = UIHelper.HsvToRgb(H, S, 0.5);
+            user_action[User.DANNY].highlight_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.DANNY].select_color = UIHelper.HsvToRgb(H, S, 1);
+
+            user_action[User.NONE].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
+            user_action[User.NONE].default_color = UIHelper.HsvToRgb(H, S, 0.5);
+            user_action[User.NONE].highlight_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.NONE].select_color = UIHelper.HsvToRgb(H, S, 1);
         }
     }
 }

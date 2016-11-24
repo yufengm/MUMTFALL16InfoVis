@@ -17,7 +17,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         float y = 0;
         float vx = 0;
         float vy = 0;
-        float weight = 10;
+        float weight = 30;
+        float optimal = 50;
 
         public string Guid
         {
@@ -190,6 +191,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             set
             {
                 v = value;
+            }
+        }
+
+        public float Optimal
+        {
+            get
+            {
+                return optimal;
+            }
+
+            set
+            {
+                optimal = value;
             }
         }
 

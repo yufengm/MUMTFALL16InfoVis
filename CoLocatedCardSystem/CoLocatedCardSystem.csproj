@@ -195,6 +195,7 @@
     <Compile Include="CollaborationWindow\CollaborationWindowLifeEventControl.cs" />
     <Compile Include="CollaborationWindow\Tool\Coordination.cs" />
     <Compile Include="CollaborationWindow\Tool\FilePath.cs" />
+    <Compile Include="CollaborationWindow\Tool\Rand.cs" />
     <Compile Include="CollaborationWindow\Tool\Screen.cs" />
     <Compile Include="CollaborationWindow\Tool\UIHelper.cs" />
     <Compile Include="CollaborationWindow\TouchModule\Touch.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="SecondaryWindow\Layers\SemanticLayer\SemanticLayer.cs" />
     <Compile Include="SecondaryWindow\Layers\SemanticLayer\SemanticLayerController.cs" />
     <Compile Include="SecondaryWindow\SemanticModule\SemanticCloud.cs" />
+    <Compile Include="SecondaryWindow\SemanticModule\SemanticCloudInfo.cs" />
     <Compile Include="SecondaryWindow\SemanticModule\SemanticNode.cs" />
     <Compile Include="SecondaryWindow\Tool\Calculator.cs" />
     <Compile Include="SecondaryWindow\Tool\SecondaryScreen.cs" />

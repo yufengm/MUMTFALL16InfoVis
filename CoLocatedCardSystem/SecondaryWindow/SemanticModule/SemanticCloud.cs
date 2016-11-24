@@ -1,4 +1,5 @@
-﻿using CoLocatedCardSystem.SecondaryWindow.Layers;
+﻿using CoLocatedCardSystem.CollaborationWindow.Tool;
+using CoLocatedCardSystem.SecondaryWindow.Layers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,9 +18,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         double timeStep = 1 / 20.0;
         double moveStep = AnimationController.INITALSTEP;
         double progress = 0;
-        double optimal = 60;
         double energy = 0;
-        Random rand = new Random();
 
         public double MoveStep
         {
@@ -34,19 +33,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             }
         }
 
-        internal ConcurrentDictionary<string, SemanticNode> GetSemanticNodes() {
-            return semanticNodes;
-        }
-        internal void Push(SemanticNode node)
+        internal ConcurrentDictionary<string, SemanticNode> GetSemanticNodes()
         {
-            semanticNodes.TryAdd(node.Guid, node);
+            return semanticNodes;
         }
 
         internal SemanticNode FindNode(string id)
         {
-            if (semanticNodes.Keys.Contains(id))
+            foreach (string key in semanticNodes.Keys)
             {
-                return semanticNodes[id];
+                if (id.Equals(key))
+                {
+                    return semanticNodes[key];
+                }
             }
             return null;
         }
@@ -56,11 +55,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             if (semanticNode == null)
             {
                 semanticNode = new SemanticNode();
-                semanticNode.X = rand.Next(SecondaryScreen.WIDTH);
-                semanticNode.Y = rand.Next(SecondaryScreen.HEIGHT);
+                semanticNode.X = SecondaryScreen.WIDTH / 2 + Rand.Next(10) - 5;
+                semanticNode.Y = SecondaryScreen.HEIGHT / 2 + Rand.Next(10) - 5;
                 semanticNode.Semantic = semantic;
                 semanticNode.Guid = snid;
-                this.Push(semanticNode);
+                semanticNodes.TryAdd(semanticNode.Guid, semanticNode);
             }
         }
 
@@ -85,12 +84,31 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 semanticNode.V = v;
             }
         }
+
+
+        internal void SetSemanticNodePosition(string sid, float x, float y)
+        {
+            SemanticNode semanticNode = FindNode(sid);
+            if (semanticNode != null)
+            {
+                semanticNode.X = x;
+                semanticNode.Y = y;
+            }
+        }
+
+        internal void SetSemanticNodeOptimal(string id, int optimal)
+        {
+            SemanticNode semanticNode = FindNode(id);
+            if (semanticNode != null)
+            {
+                semanticNode.Optimal = optimal;
+            }
+        }
         internal void Update()
         {
             double energy0 = this.energy;
             this.energy = 0;
             Point center = new Point();
-            
             foreach (SemanticNode firstNode in this.semanticNodes.Values)
             {
                 Point f = new Point();
@@ -112,24 +130,23 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 Point borderRepel = this.CalBorderRepel(firstNode);
                 f.X += borderRepel.X;
                 f.Y += borderRepel.Y;
+                this.energy += f.X * f.X + f.Y * f.Y;
                 Point acc = new Point();
                 acc.X = f.X / firstNode.Weight;
                 acc.Y = f.Y / firstNode.Weight;
                 firstNode.Vx += (float)(acc.X / this.timeStep);
                 firstNode.Vy += (float)(acc.Y / this.timeStep);
-                var speed = Calculator.Distance(0, 0, firstNode.Vy, firstNode.Vy);
-                if (speed > 10)
+                var speed = Calculator.Distance(0, 0, firstNode.Vx, firstNode.Vy);
+                if (speed > 100)
                 {
-                    firstNode.Vx = 10 * (float)(firstNode.Vx / speed);
-                    firstNode.Vy = 10 * (float)(firstNode.Vy / speed);
-                    speed = 10;
+                    firstNode.Vx = 100 * (float)(firstNode.Vx / speed);
+                    firstNode.Vy = 100 * (float)(firstNode.Vy / speed);
+                    speed = 100;
                 }
                 firstNode.X += (float)((this.timeStep * firstNode.Vx + acc.X * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
                 center.X += firstNode.X;
                 firstNode.Y += (float)((this.timeStep * firstNode.Vy + acc.Y * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
                 center.Y += firstNode.Y;
-                var fLength = Calculator.Distance(0, 0, f.X, f.Y);
-                this.energy += fLength * fLength;
             }
             center.X = SecondaryScreen.WIDTH / 2 - center.X / this.semanticNodes.Count();
             center.Y = SecondaryScreen.HEIGHT / 2 - center.Y / this.semanticNodes.Count();
@@ -165,11 +182,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             double atrc = 0;
             Point result = new Point();
             if (node.X < SecondaryScreen.WIDTH / 10 ||
-                node.X > SecondaryScreen.WIDTH - 100 ||
+                node.X > SecondaryScreen.WIDTH - SecondaryScreen.WIDTH / 10 ||
                 node.Y < SecondaryScreen.HEIGHT / 10 ||
-                node.Y > SecondaryScreen.HEIGHT - 100)
+                node.Y > SecondaryScreen.HEIGHT - SecondaryScreen.HEIGHT / 10)
             {
-                atrc = -30000;
+                atrc = -100;
             }
             result.X = atrc * (node.X - SecondaryScreen.WIDTH / 2) / dist;
             result.Y = atrc * (node.Y - SecondaryScreen.HEIGHT / 2) / dist;
@@ -178,8 +195,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 
         private Point CalAttraction(SemanticNode firstNode, SemanticNode secondNode)
         {
-            double dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y);
-            double atrc = dist * dist / this.optimal;
+            double dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y) + 0.001;
+            double opt = firstNode.Optimal + secondNode.Optimal;
+            double atrc = dist * dist / opt;
             Point result = new Point();
             result.X = atrc * (secondNode.X - firstNode.X) / dist;
             result.Y = atrc * (secondNode.Y - firstNode.Y) / dist;
@@ -188,8 +206,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 
         private Point CalRepel(SemanticNode firstNode, SemanticNode secondNode)
         {
-            double dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y);
-            double rpl = -10 * this.optimal * this.optimal / dist;
+            double dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y) + 0.001;
+            double opt = firstNode.Optimal + secondNode.Optimal;
+            double rpl = -2 * opt * opt / dist;
             Point result = new Point();
             result.X = rpl * (secondNode.X - firstNode.X) / dist;
             result.Y = rpl * (secondNode.Y - firstNode.Y) / dist;

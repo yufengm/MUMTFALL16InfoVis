@@ -85,11 +85,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             }
         }
 
-        internal void HightLightSearchResult(string[] ids, User user) {
+        internal void ShowSearchResultToSecondary(string[] ids, User user) {
             awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, true);
         }
 
-        internal void DehighLightSearchResult(string[] ids, User user)
+        internal void RemovetSearchResultFromSecondary(string[] ids, User user)
         {
             awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, false);
         }

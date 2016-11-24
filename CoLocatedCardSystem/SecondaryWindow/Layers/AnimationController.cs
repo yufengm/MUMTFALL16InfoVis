@@ -12,7 +12,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         AwareCloud awareCloud;
         Random rand = new Random();
         ThreadPoolTimer periodicTimer;
-        internal static double INITALSTEP = 2;
+        internal static double INITALSTEP = 10;
+        TimeSpan period = TimeSpan.FromMilliseconds(10);
+        double timerCount = 0;
+        double timerExeBound = 50;
         internal SemanticCloud SemanticCloud
         {
             get
@@ -52,18 +55,25 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         public void StartThread()
         {
-            TimeSpan period = TimeSpan.FromMilliseconds(50);
-
             periodicTimer = ThreadPoolTimer.CreatePeriodicTimer((source) =>
             {
-                if (semanticCloud.MoveStep > awareCloud.MoveStep)
+                if (timerCount > timerExeBound)
                 {
-                    awareCloud.MoveStep = semanticCloud.MoveStep;
+                    if (semanticCloud.MoveStep > awareCloud.MoveStep)
+                    {
+                        awareCloud.MoveStep = semanticCloud.MoveStep;
+                    }
+                    semanticCloud.Update();
+                    awareCloud.Update();
+                    awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
+                    awareCloudController.UpdateCloudNode(awareCloud.GetCloudNodes());
+                    timerExeBound = -4.5 * awareCloud.MoveStep + 50;
+                    timerExeBound = timerExeBound < 5 ? 5 : timerExeBound;
+                    timerCount = 0;
                 }
-                semanticCloud.Update();
-                awareCloud.Update();
-                awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
-                awareCloudController.UpdateCloudNode(awareCloud.GetCloudNodes());
+                else {
+                    timerCount += period.Milliseconds;
+                }
             }, period);
         }
 
