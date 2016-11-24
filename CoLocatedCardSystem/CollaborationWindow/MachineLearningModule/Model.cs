@@ -711,11 +711,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                 return false;
             }
 
-            Debug.WriteLine("Model loaded:");
-            Debug.WriteLine("\talpha:" + alpha);
-            Debug.WriteLine("\tbeta:" + beta);
-            Debug.WriteLine("\tM:" + M);
-            Debug.WriteLine("\tV:" + V);
+            //Debug.WriteLine("Model loaded:");
+            //Debug.WriteLine("\talpha:" + alpha);
+            //Debug.WriteLine("\tbeta:" + beta);
+            //Debug.WriteLine("\tM:" + M);
+            //Debug.WriteLine("\tV:" + V);
 
 
             nw = ArrayInitializers.ZerosInt(V, K);

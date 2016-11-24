@@ -42,13 +42,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
 
         public List<Dictionary<string, double>> estimate()
         {
-            Debug.WriteLine("Sampling " + trnModel.niters + " iteration!");
-
             int lastIter = trnModel.liter;
             for (trnModel.liter = lastIter + 1; trnModel.liter < trnModel.niters + lastIter; trnModel.liter++)
             {
-                Debug.WriteLine("Iteration " + trnModel.liter + " ...");
-
                 // for all z_i
                 for (int m = 0; m < trnModel.M; m++)
                 {
@@ -69,16 +65,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                 {
                     if (trnModel.liter % option.savestep == 0)
                     {
-                        Debug.WriteLine("Saving the model at iteration " + trnModel.liter + " ...");
                         computeTheta();
                         computePhi();
                         trnModel.saveModel("model-" + Conversion.ZeroPad(trnModel.liter, 5));
                     }
                 }
             }// end iterations		
-
-            Debug.WriteLine("Gibbs sampling completed!\n");
-            Debug.WriteLine("Saving the final model!\n");
             computeTheta();
             computePhi();
             trnModel.liter--;

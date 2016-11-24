@@ -38,13 +38,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
         //inference new model ~ getting data from a specified dataset
         public Model inference(LDADataset newData)
         {
-            Debug.WriteLine("init new model");
             Model newModel = new Model();
 
             newModel.initNewModel(option, newData, trnModel);
             this.newModel = newModel;
-
-            Debug.WriteLine("Sampling " + niters + " iteration for inference!");
+            
             for (newModel.liter = 1; newModel.liter <= niters; newModel.liter++)
             {
                 //System.out.println("Iteration " + newModel.liter + " ...");
@@ -88,9 +86,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             //System.out.println("inference");
 
             newModel = new Model();
-            if (!newModel.initNewModel(option, trnModel)) return null;
-
-            Debug.WriteLine("Sampling " + niters + " iteration for inference!");
+            if (!newModel.initNewModel(option, trnModel)) return null;           
 
             for (newModel.liter = 1; newModel.liter <= niters; newModel.liter++)
             {

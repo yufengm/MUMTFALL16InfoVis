@@ -52,7 +52,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             }
         }
 
-        public MLController(CentralControllers ctrlers) {
+        public MLController(CentralControllers ctrlers)
+        {
             this.controllers = ctrlers;
         }
         public void Init()
@@ -81,15 +82,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
         {
             return list[topicID];
         }
-        internal Token[] GetTopicToken( Document[] documents) {
+        internal Token[] GetTopicToken(Document[] documents)
+        {
             Token[] result = null;
             String doctokens = "";
-            foreach ( Document doc in documents) {
-                for (int index = 0; index < doc.ProcessedDocument.Length; index++) {
+            foreach (Document doc in documents)
+            {
+                for (int index = 0; index < doc.ProcessedDocument.Length; index++)
+                {
                     Token[] tokens = doc.ProcessedDocument[index].List;
-                    String rate = doc.DocumentAttributes.Rating[index];
-                    String id = doc.DocumentAttributes.Id;
-                    String jpgs = doc.DocumentAttributes.Jpg[index];
                     foreach (Token token in tokens)
                     {
                         if (token.WordType == WordType.REGULAR)
@@ -104,35 +105,33 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             LDACommandLineOptions option = new LDACommandLineOptions();
             option.beta = 0.1;
             option.K = 5;
-            option.niters = 50;
+            option.niters = 10;
             option.savestep = 100;
             option.twords = 20;
-            option.dir = @"E:\Courses\Information Visualization\Project";
             option.data = doctokens;
             option.est = true;
             option.modelName = "model-final";
-            option.wordMapFileName = "wordmap.txt";
 
-            result = new Token[ option.K * option.twords ];
+            result = new Token[option.K * option.twords];
 
             Estimator estimator = new Estimator();
-            estimator.init( option );
-            List<Dictionary<string, double>>  topicWordProbpairs = estimator.estimate();
+            estimator.init(option);
+            List<Dictionary<string, double>> topicWordProbpairs = estimator.estimate();
             int i = 0;
-            foreach ( Dictionary<string, double> dic in topicWordProbpairs )
+            foreach (Dictionary<string, double> dic in topicWordProbpairs)
             {
                 foreach (String key in dic.Keys)
                 {
                     Token temp = new Token();
                     temp.OriginalWord = key;
                     temp.Process();
-                    Debug.WriteLine( key );
+                    Debug.WriteLine(key);
                     result[i] = temp;
                     i++;
                 }
             }
             return result;
         }
-            
+
     }
 }

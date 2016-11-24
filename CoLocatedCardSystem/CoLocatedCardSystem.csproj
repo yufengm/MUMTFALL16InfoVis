@@ -90,6 +90,7 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <Content Include="Assets\close.png" />
+    <Content Include="Assets\CommandLine.dll" />
     <Content Include="Assets\data\phonelog.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

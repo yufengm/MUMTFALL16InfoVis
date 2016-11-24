@@ -57,7 +57,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         {
             periodicTimer = ThreadPoolTimer.CreatePeriodicTimer((source) =>
             {
-                if (timerCount > timerExeBound)
+                if (timerCount >= timerExeBound)
                 {
                     if (semanticCloud.MoveStep > awareCloud.MoveStep)
                     {
@@ -68,11 +68,12 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                     awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
                     awareCloudController.UpdateCloudNode(awareCloud.GetCloudNodes());
                     timerExeBound = -4.5 * awareCloud.MoveStep + 50;
-                    timerExeBound = timerExeBound < 5 ? 5 : timerExeBound;
+                    timerExeBound = timerExeBound < 10 ? 10 : timerExeBound;
+                    timerExeBound = timerExeBound > 50 ? 50 : timerExeBound;
                     timerCount = 0;
                 }
                 else {
-                    timerCount += period.Milliseconds;
+                    timerCount += 10;
                 }
             }, period);
         }
