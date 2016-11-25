@@ -68,6 +68,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                     {
                         animationController.AwareCloud.CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD, sn.Guid, User.NONE);
                         animationController.AwareCloud.SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
+                        animationController.AwareCloud.SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 20);
                     }
                 }
             }

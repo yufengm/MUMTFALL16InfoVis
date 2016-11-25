@@ -111,7 +111,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             UpdateTransform();
             //initialize the background rectangle
             background = new Rectangle();
-            UIHelper.InitializeUI(
+            Calculator.InitializeUI(
                new Point(-0.5 * info.SortingBoxSize.Width, -0.5 * info.SortingBoxSize.Height), 0, 1,
                new Size(info.SortingBoxSize.Width, info.SortingBoxSize.Height),
                background);
@@ -126,7 +126,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.Children.Add(background);
 
             textBlockTop = new TextBlock();
-            UIHelper.InitializeUI(
+            Calculator.InitializeUI(
                 new Point(-0.5 * info.SortingBoxSize.Width, -0.5 * info.SortingBoxSize.Height), 0, 1,
                 new Size(info.SortingBoxSize.Width, info.SortingBoxSize.Height),
                 textBlockTop);
@@ -140,7 +140,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             textBlockTop.VerticalAlignment = VerticalAlignment.Center;
 
             textBlockBottom = new TextBlock();
-            UIHelper.InitializeUI(
+            Calculator.InitializeUI(
                 new Point(.5 * info.SortingBoxSize.Width, .5 * info.SortingBoxSize.Height), 180, 1,
                 new Size(info.SortingBoxSize.Width, info.SortingBoxSize.Height),
                 textBlockBottom);

@@ -40,7 +40,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
             container.Width = SecondaryScreen.WIDTH;
             container.Height = SecondaryScreen.HEIGHT;
             System.Diagnostics.Debug.WriteLine("secondary: " + SecondaryScreen.WIDTH + " " + SecondaryScreen.HEIGHT);
-            SecondaryScreen.SCALE_FACTOR = 1 / DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+            SecondaryScreen.SCALE_FACTOR = 1.0f / (float) DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
             this.Width = SecondaryScreen.WIDTH;
             this.Height = SecondaryScreen.HEIGHT;
             ApplicationView.PreferredLaunchViewSize = new Size(SecondaryScreen.WIDTH, SecondaryScreen.HEIGHT);

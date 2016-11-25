@@ -83,7 +83,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             {
                 node.CloudText = cloudText;
                 node.StemmedText = stemmedText;
-                Size tsize = UIHelper.GetBoundingSize(node.CloudText, node.Weight);
+                Size tsize = Calculator.GetBoundingSize(node.CloudText, node.Weight);
                 node.W = (float)tsize.Width;
                 node.H = (float)tsize.Height;
             }
@@ -102,7 +102,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             if (node != null)
             {
                 node.Weight = (float)weight;
-                Size tsize = UIHelper.GetBoundingSize(node.CloudText, node.Weight);
+                Size tsize = Calculator.GetBoundingSize(node.CloudText, node.Weight);
                 node.W = (float)tsize.Width;
                 node.H = (float)tsize.Height;
             }

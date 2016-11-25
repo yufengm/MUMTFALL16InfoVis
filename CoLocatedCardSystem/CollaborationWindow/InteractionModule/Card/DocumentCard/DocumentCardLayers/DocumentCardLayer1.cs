@@ -51,7 +51,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 //Move the textblock - 1 / 2 width and -1 / 2 height to the center.
-                UIHelper.InitializeUI(
+                Calculator.InitializeUI(
                     new Point(-0.5 * attachedCard.Width, -0.5 * attachedCard.Height),
                     0,
                     1,

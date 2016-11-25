@@ -114,7 +114,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 titleTextBlock.VerticalAlignment = VerticalAlignment.Center;
                 titleTextBlock.FontStretch = FontStretch.Normal;
                 titleTextBlock.FontWeight = FontWeights.Bold;
-                UIHelper.InitializeUI(
+                Calculator.InitializeUI(
                     new Point(-0.5 * this.Width, -0.5 * this.Height),
                     0,
                     1,

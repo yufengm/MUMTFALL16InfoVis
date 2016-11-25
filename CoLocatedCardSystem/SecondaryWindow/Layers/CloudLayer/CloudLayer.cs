@@ -9,6 +9,7 @@ using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
 using System.Numerics;
 using Windows.Foundation;
+using Microsoft.Graphics.Canvas.Text;
 
 namespace CoLocatedCardSystem.SecondaryWindow.Layers
 {
@@ -57,8 +58,14 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                 }
                 else if (cnode.Type == CloudNode.NODETYPE.WORD)
                 {
-                    args.DrawingSession.DrawText(cnode.CloudText, cnode.X, cnode.Y, cnode.User_action[User.NONE].default_color);
-                    args.DrawingSession.DrawRectangle(new Rect(cnode.X, cnode.Y, cnode.W, cnode.H), Colors.White);
+                    CanvasTextFormat format = new CanvasTextFormat();
+                    format.FontSize = cnode.Weight;
+                    format.FontStretch = Windows.UI.Text.FontStretch.Expanded;
+                    format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
+                    args.DrawingSession.DrawText(cnode.CloudText, 
+                        new Rect(cnode.X, cnode.Y, cnode.W, cnode.H), 
+                        cnode.User_action[User.NONE].default_color,
+                        format);
                 }
             }
         }

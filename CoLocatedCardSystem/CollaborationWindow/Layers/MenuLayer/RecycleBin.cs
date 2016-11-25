@@ -40,11 +40,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             closeTrashBin.ImageSource = new BitmapImage(new Uri(@"ms-appx:///Assets/trashIcon-1.png"));
             openTrashBin.ImageSource = new BitmapImage(new Uri(@"ms-appx:///Assets/trashIcon-2.png"));
             bg.Fill = closeTrashBin;
-            UIHelper.InitializeUI(new Point(-radius, -radius),
+            Calculator.InitializeUI(new Point(-radius, -radius),
                 0, 1,
                 new Size(2 * radius, 2 * radius),
                 bg);
-            UIHelper.InitializeUI(new Point(x, y),
+            Calculator.InitializeUI(new Point(x, y),
                 0, 1,
                 new Size(2 * radius, 2 * radius),
                 this);

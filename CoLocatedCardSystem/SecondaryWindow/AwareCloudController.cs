@@ -199,7 +199,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
                 {
                     animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, CloudNode.NODETYPE.WORD, sg.Id, User.NONE);
                     animationController.AwareCloud.SetCloudNodeText(sg.Id + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                    animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 10);
+                    animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 20);
                 }
             }
             animationController.ResetMoveStep();

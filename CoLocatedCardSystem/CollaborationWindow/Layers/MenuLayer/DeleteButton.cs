@@ -33,7 +33,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             notificationBlock.Text = "The Sorting Box will be deleted when it's dragged into this.";
             notificationBlock.TextWrapping = TextWrapping.Wrap;
             Point position = new Point(250, -60);
-            UIHelper.InitializeUI(position, 0, 1, info.DeleteButtonInfo.Size, notificationBlock);
+            Calculator.InitializeUI(position, 0, 1, info.DeleteButtonInfo.Size, notificationBlock);
             notificationBlock.Visibility = Visibility.Collapsed;
         }
 

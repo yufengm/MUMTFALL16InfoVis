@@ -1,6 +1,8 @@
 ﻿using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using System;
 using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace CoLocatedCardSystem.SecondaryWindow
 {
@@ -100,6 +102,15 @@ namespace CoLocatedCardSystem.SecondaryWindow
                 }
             }
             return new Point(deltax, deltay);
+        }
+
+        internal static Size GetBoundingSize(string cloudText, float weight)
+        {
+            TextBlock tb = new TextBlock { Text = cloudText, FontSize = weight };
+            tb.Padding = new Thickness(0.5, 0.5, 0.5, 0);
+            tb.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            Size boundSize = new Size(tb.DesiredSize.Width * 1.2, tb.DesiredSize.Height);
+            return boundSize;
         }
     }
 }

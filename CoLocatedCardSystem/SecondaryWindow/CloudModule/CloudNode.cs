@@ -269,30 +269,30 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 
         internal void SetColor(double H, double S, double V)
         {
-            user_action[User.ALEX].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
-            user_action[User.ALEX].default_color = UIHelper.HsvToRgb(H, S, 0.5);
-            user_action[User.ALEX].highlight_color = UIHelper.HsvToRgb(H, S, 1);
-            user_action[User.ALEX].select_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.ALEX].searched_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.75);
+            user_action[User.ALEX].default_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.5);
+            user_action[User.ALEX].highlight_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
+            user_action[User.ALEX].select_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
 
-            user_action[User.BEN].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
-            user_action[User.BEN].default_color = UIHelper.HsvToRgb(H, S, 0.5);
-            user_action[User.BEN].highlight_color = UIHelper.HsvToRgb(H, S, 1);
-            user_action[User.BEN].select_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.BEN].searched_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.75);
+            user_action[User.BEN].default_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.5);
+            user_action[User.BEN].highlight_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
+            user_action[User.BEN].select_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
 
-            user_action[User.CHRIS].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
-            user_action[User.CHRIS].default_color = UIHelper.HsvToRgb(H, S, 0.5);
-            user_action[User.CHRIS].highlight_color = UIHelper.HsvToRgb(H, S, 1);
-            user_action[User.CHRIS].select_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.CHRIS].searched_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.75);
+            user_action[User.CHRIS].default_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.5);
+            user_action[User.CHRIS].highlight_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
+            user_action[User.CHRIS].select_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
 
-            user_action[User.DANNY].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
-            user_action[User.DANNY].default_color = UIHelper.HsvToRgb(H, S, 0.5);
-            user_action[User.DANNY].highlight_color = UIHelper.HsvToRgb(H, S, 1);
-            user_action[User.DANNY].select_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.DANNY].searched_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.75);
+            user_action[User.DANNY].default_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.5);
+            user_action[User.DANNY].highlight_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
+            user_action[User.DANNY].select_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
 
-            user_action[User.NONE].searched_color = UIHelper.HsvToRgb(H, S, 0.75);
-            user_action[User.NONE].default_color = UIHelper.HsvToRgb(H, S, 0.5);
-            user_action[User.NONE].highlight_color = UIHelper.HsvToRgb(H, S, 1);
-            user_action[User.NONE].select_color = UIHelper.HsvToRgb(H, S, 1);
+            user_action[User.NONE].searched_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.75);
+            user_action[User.NONE].default_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 0.5);
+            user_action[User.NONE].highlight_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
+            user_action[User.NONE].select_color = CollaborationWindow.Calculator.HsvToRgb(H, S, 1);
         }
     }
 }

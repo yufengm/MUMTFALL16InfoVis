@@ -39,7 +39,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         {
             MenuBarInfo info = MenuBarInfo.GetMenuBarInfo(user);
             this.owner = user;
-            UIHelper.InitializeUI(info.Position, info.Rotate, info.Scale, info.Size, this);
+            Calculator.InitializeUI(info.Position, info.Rotate, info.Scale, info.Size, this);
             LoadUI(info);
         }
         /// <summary>
@@ -105,21 +105,21 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             createSortingBoxButton.Click += KeyboardButton_Click;
             RegisterPointerEvent(createSortingBoxButton);
             createSortingBoxButton.IsTextScaleFactorEnabled = false;
-            UIHelper.InitializeUI(info.SortingBoxButtonInfo.Position, 0, 1, info.SortingBoxButtonInfo.Size, createSortingBoxButton);
+            Calculator.InitializeUI(info.SortingBoxButtonInfo.Position, 0, 1, info.SortingBoxButtonInfo.Size, createSortingBoxButton);
         }
         private void LoadDeleteButton(MenuBarInfo info)
         {
             deleteButton = new DeleteButton();
             deleteButton.Init(info);
             RegisterPointerEvent(deleteButton);
-            UIHelper.InitializeUI(info.DeleteButtonInfo.Position, 0, 1, info.DeleteButtonInfo.Size, deleteButton);
+            Calculator.InitializeUI(info.DeleteButtonInfo.Position, 0, 1, info.DeleteButtonInfo.Size, deleteButton);
         }
         private void LoadVirtualKeyboard(MenuBarInfo info)
         {
             //Initialize the text block
             textbox = new TextBox();
             textbox.AcceptsReturn = true;
-            UIHelper.InitializeUI(info.InputTextBoxInfo.Position, 0, 1, info.InputTextBoxInfo.Size, textbox);
+            Calculator.InitializeUI(info.InputTextBoxInfo.Position, 0, 1, info.InputTextBoxInfo.Size, textbox);
             textbox.Visibility = Visibility.Collapsed;
             textbox.TextChanged += Textbox_TextChanged;
             textbox.IsEnabled = false;
@@ -128,7 +128,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             virtualKeyboard.InitialLayout = KeyboardLayouts.English;
             virtualKeyboard.Visibility = Visibility.Collapsed;
             RegisterPointerEvent(virtualKeyboard);
-            UIHelper.InitializeUI(info.KeyboardInfo.Position, 0, 1, info.KeyboardInfo.Size, virtualKeyboard);
+            Calculator.InitializeUI(info.KeyboardInfo.Position, 0, 1, info.KeyboardInfo.Size, virtualKeyboard);
         }
         private void LoadSearchButton(MenuBarInfo info)
         {
@@ -138,7 +138,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             searchButton.Click += KeyboardButton_Click;
             RegisterPointerEvent(searchButton);
             searchButton.IsTextScaleFactorEnabled = false;
-            UIHelper.InitializeUI(info.SearchButtonInfo.Position, 0, 1, info.SearchButtonInfo.Size, searchButton);
+            Calculator.InitializeUI(info.SearchButtonInfo.Position, 0, 1, info.SearchButtonInfo.Size, searchButton);
         }
         private void LoadSearchResultTray(MenuBarInfo info)
         {
@@ -146,7 +146,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             searchResultTray = new SearchResultTray(menuLayerController);
             searchResultTray.Init(info);
             RegisterPointerEvent(searchResultTray);
-            UIHelper.InitializeUI(info.SearchResultInfo.Position, 0, 1, info.SearchResultInfo.Size, searchResultTray);
+            Calculator.InitializeUI(info.SearchResultInfo.Position, 0, 1, info.SearchResultInfo.Size, searchResultTray);
         }
         private void RegisterPointerEvent(FrameworkElement element)
         {

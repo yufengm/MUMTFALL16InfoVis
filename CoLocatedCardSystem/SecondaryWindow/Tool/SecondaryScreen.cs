@@ -10,6 +10,6 @@ namespace CoLocatedCardSystem.SecondaryWindow
     {
         public static int WIDTH = 1920;
         public static int HEIGHT = 1080;
-        public static double SCALE_FACTOR = 0;
+        public static float SCALE_FACTOR = 1;
     }
 }
