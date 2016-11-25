@@ -11,8 +11,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class SemanticGroupController
     {
         CentralControllers controllers;
-        CardGroupList cardList;
-        SemanticGroupList semanticList;
+        CardGroupList cardList;//card clusters
+        SemanticGroupList semanticList;//semantic groups
         internal SemanticGroupController(CentralControllers ctrls)
         {
             this.controllers = ctrls;
@@ -31,6 +31,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             cardList.Deinit();
             semanticList.Deinit();
+        }
+        /// <summary>
+        /// Get all the semantic groups
+        /// </summary>
+        /// <returns></returns>
+        internal IEnumerable<SemanticGroup> GetSemanticGroup()
+        {
+            return semanticList.GetSemanticGroup();
         }
         /// <summary>
         /// Find all groups that intersect with the card
@@ -56,14 +64,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             groups = tempList.ToArray();
             return groups;
         }
-        /// <summary>
-        /// Get all the semantic groups
-        /// </summary>
-        /// <returns></returns>
-        internal IEnumerable<SemanticGroup> GetSemanticGroup()
-        {
-            return semanticList.List.Values;
-        }
+
         private async Task<bool> IsIntersect(CardStatus card, CardGroup gg)
         {
             if (!gg.HasCard(card.cardID))
@@ -82,7 +83,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
 
         /// <summary>
-        /// Get all groups
+        /// Get all card groups
         /// </summary>
         /// <returns></returns>
         internal ConcurrentDictionary<string, CardGroup> GetGroups()

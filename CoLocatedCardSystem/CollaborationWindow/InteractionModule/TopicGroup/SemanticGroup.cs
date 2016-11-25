@@ -1,4 +1,5 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.MachineLearningModule;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,11 +12,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class SemanticGroup
     {
         string id;//same with the topic id
-        internal struct SemanticAttribute {
-            internal bool isHighlighted;
-        }
-        ConcurrentDictionary<string, Semantic> list = new ConcurrentDictionary<string, Semantic>();//Key is the doc id.
-        Dictionary<Token, SemanticAttribute> coolElements=new Dictionary<Token, SemanticAttribute>();
+        ConcurrentBag<string> docList = new ConcurrentBag<string>();//Key is the doc id.
+        Topic topic;
         /// <summary>
         /// The id of the semantic group. Always the same with topic id.
         /// </summary>
@@ -32,56 +30,46 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        internal Dictionary<Token, SemanticAttribute> CoolElements
+        internal void AddDoc(string doc)
         {
-            get
-            {
-                return coolElements;
-            }
-
-            set
-            {
-                coolElements = value;
-            }
-        }
-
-        internal void AddToken(Token tk, SemanticAttribute sa)
-        {
-            if (!coolElements.Keys.Contains(tk))
-            {
-                coolElements.Add(tk, sa);
-            }
-        }
-
-        internal void AddSemantic(string id, Semantic semantic)
-        {
-            if (!list.Keys.Contains(id)) {
-                list.TryAdd(id, semantic);
+            if (!docList.Contains(doc)) {
+                docList.Add(doc);
             }
         }
 
         internal string GetDescription() {
-            return String.Join("", coolElements.Keys.Select(a=>a.OriginalWord));
+            return String.Join("", topic.GetToken().Select(a=>a.OriginalWord));
         }
         internal IEnumerable<Token> GetToken() {
-            return coolElements.Keys;
+            return topic.GetToken();
         }
-        internal IEnumerable<Semantic> GetSemantics()
+        internal IEnumerable<string> GetDocs()
         {
-            return list.Values;
+            return docList.ToArray();
         }
 
         internal bool ShareWord(SemanticGroup sg2)
         {
             int count = 0;
-            foreach (Token tk1 in this.coolElements.Keys) {
-                foreach (Token tk2 in sg2.CoolElements.Keys) {
+            foreach (Token tk1 in this.topic.GetToken()) {
+                foreach (Token tk2 in sg2.topic.GetToken()) {
                     if (tk1.EqualContent(tk2)) {
                         count++;
                     }
                 }
             }
             return count>3;
+        }
+
+        internal void AddToken(Token tk, Topic.SemanticAttribute sa)
+        {
+            topic.AddToken(tk, sa);
+        }
+
+        internal void SetTopic(Topic tp)
+        {
+            this.id = tp.Id;
+            this.topic = tp;
         }
     }
 }

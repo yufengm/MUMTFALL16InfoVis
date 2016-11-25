@@ -18,7 +18,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         double progress = 0;
         double moveStep = AnimationController.INITALSTEP;
         double energy = 0;
-        SemanticCloud semanticCloud;
+        AnimationController animationController;
+        public AwareCloud(AnimationController ctrls)
+        {
+            this.animationController = ctrls;
+        }
         public double MoveStep
         {
             get
@@ -31,18 +35,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 moveStep = value;
             }
         }
-
-        internal void Init(SemanticCloud sc)
+        internal void Init()
         {
-            this.semanticCloud = sc;
         }
-
         internal ConcurrentDictionary<string, CloudNode> GetCloudNodes()
         {
             return cloudNodes;
         }
-
-
         internal CloudNode FindNode(string id)
         {
             if (cloudNodes.Keys.Contains(id))
@@ -61,9 +60,21 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.Type = type;
                 cloudNodes.TryAdd(node.Guid, node);
                 AddCloudNodeToGroup(node.Guid, sid);
-                node.TopicNode=semanticCloud.FindNode(sid);
+                node.TopicNode = animationController.SemanticCloud.FindNode(sid);
             }
             return node;
+        }
+        internal void RemoveWordFromSemantic()
+        {
+            List<string> tobeRemoved = new List<string>();
+            foreach (KeyValuePair<string, CloudNode> pair in cloudNodes) {
+                if (pair.Value.Type == CloudNode.NODETYPE.WORD) {
+                    tobeRemoved.Add(pair.Key);
+                }
+            }
+            foreach (string key in tobeRemoved) {
+                RemoveCloudNode(key);
+            }
         }
         internal void SetCloudNodeText(string id, string cloudText, string stemmedText)
         {
@@ -77,7 +88,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.H = (float)tsize.Height;
             }
         }
-        internal void SetCloudNodeDoc(string id, string docID) {
+        internal void SetCloudNodeDoc(string id, string docID)
+        {
             var node = FindNode(id);
             if (node != null && node.Type == CloudNode.NODETYPE.DOC)
             {
@@ -95,41 +107,41 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.H = (float)tsize.Height;
             }
         }
-
         internal void SetCloudNodeActive(string[] ids, User user, bool active)
         {
             if (ids != null)
             {
                 foreach (string id in ids)
                 {
-                    CloudNode node = FindNode(id);                    
+                    CloudNode node = FindNode(id);
                     if (node != null)
                     {
                         node.SetSearch(user, active);
-                        string newid=node.GetSemanticNode_Searched();
-                        SemanticNode sn=semanticCloud.FindNode(newid);
+                        string newid = node.GetSemanticNode_Searched();
+                        SemanticNode sn = animationController.SemanticCloud.FindNode(newid);
                         if (sn != null)
                         {
                             AddCloudNodeToGroup(node.Guid, sn.Guid);
                         }
-                        else {
+                        else
+                        {
                             AddCloudNodeToGroup(node.Guid, node.TopicNode.Guid);
                         }
                     }
                 }
+                animationController.SemanticCloud.UpdateTopicWord();
+                this.moveStep = AnimationController.INITALSTEP;
+                animationController.SemanticCloud.MoveStep = AnimationController.INITALSTEP;
             }
-            this.moveStep = AnimationController.INITALSTEP;
-            semanticCloud.MoveStep = AnimationController.INITALSTEP;
         }
-
         private void RemoveCloudNode(string id)
         {
-            if (cloudNodes.ContainsKey(id)) {
+            if (cloudNodes.ContainsKey(id))
+            {
                 CloudNode node;
                 cloudNodes.TryRemove(id, out node);
             }
         }
-
         internal void SetCloudNodePosition(string id, double xposi, double yposi)
         {
             CloudNode node = FindNode(id);
@@ -139,10 +151,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.Y = (float)yposi;
             }
         }
-
         internal void AddCloudNodeToGroup(string id, string snid)
         {
-            SemanticNode semanticNode = semanticCloud.FindNode(snid);
+            SemanticNode semanticNode = animationController.SemanticCloud.FindNode(snid);
             if (semanticNode != null)
             {
                 CloudNode node = FindNode(id);
@@ -169,18 +180,18 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 Point f = new Point();
                 foreach (CloudNode secondNode in cloudNodes.Values)
                 {
-                    if (firstNode != secondNode && Calculator.Distance(firstNode, secondNode) < SecondaryScreen.WIDTH/10)
+                    if (firstNode != secondNode && Calculator.Distance(firstNode, secondNode) < SecondaryScreen.WIDTH / 10)
                     {
                         Point repel = this.CalRepel(firstNode, secondNode);
                         f.X += repel.X;
                         f.Y += repel.Y;
                         this.energy += repel.X * repel.X + repel.Y * repel.Y;
                     }
-                }             
+                }
                 Point attraction = this.CalCenterAttraction(firstNode);
                 f.X += attraction.X;
                 f.Y += attraction.Y;
-                this.energy += cloudNodes.Count*(attraction.X * attraction.X + attraction.Y * attraction.Y);
+                this.energy += cloudNodes.Count * (attraction.X * attraction.X + attraction.Y * attraction.Y);
                 Point acc = new Point();
                 acc.X = f.X / firstNode.Weight;
                 acc.Y = f.Y / firstNode.Weight;
@@ -198,7 +209,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             }
             this.UpdateStrengthLength(energy0);
         }
-
         private void UpdateStrengthLength(double energy0)
         {
             if (this.energy < energy0)
@@ -216,9 +226,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 this.moveStep *= 0.9;
             }
         }
-
         private Point CalCenterAttraction(CloudNode node)
         {
+            if (node.SemanticNode == null) {
+                return new Point();
+            }
             double dist = Calculator.Distance(node.X + node.W / 2, node.Y + node.H / 2, node.SemanticNode.X, node.SemanticNode.Y) + 0.001;
             double atrc = 0;
             Point result = new Point();
@@ -234,7 +246,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             result.Y = atrc * (node.Y + node.H / 2 - node.SemanticNode.Y) / dist;
             return result;
         }
-
         private Point CalRepel(CloudNode node1, CloudNode node2)
         {
             double dist = Calculator.Distance(node1, node2) + 0.0001;

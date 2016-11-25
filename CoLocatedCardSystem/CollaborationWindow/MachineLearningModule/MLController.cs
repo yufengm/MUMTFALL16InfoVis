@@ -19,12 +19,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             new string[] { "breakfast" , "stay" , "free" , "clean" , "like" , "park" , "good" , "well" , "disney" , "day" },
             new string[] { "stay" ,"nice","clean" ,"area","night" ,"place","pool" ,"day" ,"one" ,"get"},
             new string[] { "look" ,"stay" ,"time" , "see", "like" , "around" , "bed" , "us", "clean", "one" }
-        };
-
-        ConcurrentDictionary<string, Topic> list;
-        //since the default topic idnex are numbers.
-        Dictionary<int, string> defaultMatch = new Dictionary<int, string>();
-        Token[][] defaultTopicTokenList;
+        };        
 
         public CentralControllers Controllers
         {
@@ -39,16 +34,16 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             }
         }
 
-        internal ConcurrentDictionary<string, Topic> List
+        public string[][] DefaultTopicList
         {
             get
             {
-                return list;
+                return defaultTopicList;
             }
 
             set
             {
-                list = value;
+                defaultTopicList = value;
             }
         }
 
@@ -58,80 +53,75 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
         }
         public void Init()
         {
-            list = new ConcurrentDictionary<string, Topic>();
-            for (int i = 0; i < defaultTopicList.Length; i++)
-            {
-                Topic tp = new Topic();
-                tp.Id = Guid.NewGuid().ToString();//gen topic id
-                defaultMatch.Add(i, tp.Id);
-                for (int j = 0; j < defaultTopicList[i].Length; j++)
-                {
-                    Token tk = new Token();
-                    tk.OriginalWord = defaultTopicList[i][j];
-                    tk.Process();
-                    tp.AddToken(tk);
-                }
-                list.TryAdd(tp.Id, tp);
-            }
         }
-        internal string GetDefaultTopicIDByIndex(int index)
+        internal async Task<Topic> GetTopicToken(string[] docID)
         {
-            return defaultMatch[index];
+            Document[] docs = controllers.DocumentController.GetDocument(docID);
+            return await GetTopicToken(docs);
         }
-        internal Topic GetTopicById(string topicID)
+        internal async Task<Topic> GetTopicToken(Document[] documents)
         {
-            return list[topicID];
+            return await Task.Run(() =>
+             {
+                 Topic topic = new Topic();
+                 string doctokens = "";
+                 foreach (Document doc in documents)
+                 {
+                     for (int index = 0; index < doc.ProcessedDocument.Length; index++)
+                     {
+                         Token[] tokens = doc.ProcessedDocument[index].List;
+                         foreach (Token token in tokens)
+                         {
+                             if (token.WordType == WordType.REGULAR && token.StemmedWord.Length > 1)
+                             {
+                                 doctokens += token.StemmedWord + " ";
+                             }
+                         }
+                         doctokens += "|||";
+                     }
+                 }
+                 LDACommandLineOptions option = new LDACommandLineOptions();
+                 option.beta = 0.1;
+                 option.K = 1;
+                 option.niters = 10;
+                 option.savestep = 100;
+                 option.twords = 10;
+                 option.data = doctokens;
+                 option.est = true;
+                 option.modelName = "model-final";
+
+
+                 string[] resultStr = new string[option.K * option.twords];
+
+                 Estimator estimator = new Estimator();
+                 estimator.init(option);
+                 List<Dictionary<string, double>> topicWordProbpairs = estimator.estimate();
+                 int i = 0;
+                 foreach (Dictionary<string, double> dic in topicWordProbpairs)
+                 {
+                     foreach (String key in dic.Keys)
+                     {
+                         resultStr[i] = key;
+                         i++;
+                     }
+                 }
+                 foreach (string r in resultStr)
+                 {
+                     Token tk = controllers.DocumentController.FindToken(r, documents);
+                     if (tk != null)
+                     {
+                         topic.AddToken(tk);
+                     }
+                     else
+                     {
+                         tk = new Token();
+                         tk.OriginalWord = r;
+                         tk.Process();
+                         topic.AddToken(tk);
+                     }
+                 }
+                 return topic;
+             });
         }
-        internal Token[] GetTopicToken(Document[] documents)
-        {
-            Token[] result = null;
-            String doctokens = "";
-            foreach (Document doc in documents)
-            {
-                for (int index = 0; index < doc.ProcessedDocument.Length; index++)
-                {
-                    Token[] tokens = doc.ProcessedDocument[index].List;
-                    foreach (Token token in tokens)
-                    {
-                        if (token.WordType == WordType.REGULAR)
-                        {
-                            doctokens += token.StemmedWord + " ";
-                        }
-                    }
-                    doctokens += "|||";
-                    //Debug.WriteLine(doctokens);
-                }
-            }
-            LDACommandLineOptions option = new LDACommandLineOptions();
-            option.beta = 0.1;
-            option.K = 5;
-            option.niters = 10;
-            option.savestep = 100;
-            option.twords = 20;
-            option.data = doctokens;
-            option.est = true;
-            option.modelName = "model-final";
-
-            result = new Token[option.K * option.twords];
-
-            Estimator estimator = new Estimator();
-            estimator.init(option);
-            List<Dictionary<string, double>> topicWordProbpairs = estimator.estimate();
-            int i = 0;
-            foreach (Dictionary<string, double> dic in topicWordProbpairs)
-            {
-                foreach (String key in dic.Keys)
-                {
-                    Token temp = new Token();
-                    temp.OriginalWord = key;
-                    temp.Process();
-                    Debug.WriteLine(key);
-                    result[i] = temp;
-                    i++;
-                }
-            }
-            return result;
-        }
-
     }
 }

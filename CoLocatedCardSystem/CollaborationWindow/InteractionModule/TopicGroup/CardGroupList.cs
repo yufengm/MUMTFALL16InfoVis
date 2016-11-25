@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
+    /// <summary>
+    /// Card glows and list of glow effect
+    /// </summary>
     class CardGroupList
     {
         Dictionary<string, Glow> glowEffectList;// A list of the glow objects. key: card id, value Glow object

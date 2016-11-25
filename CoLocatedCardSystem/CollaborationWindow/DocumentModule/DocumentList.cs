@@ -48,5 +48,16 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         internal Document[] GetDocument() {
             return list.Values.ToArray();
         }
+
+        internal Document[] GetDocument(string[] docID)
+        {
+            List<Document> result = new List<Document>();
+            foreach (string id in docID) {
+                if (list.Keys.Contains(id)) {
+                    result.Add(list[id]);
+                }
+            }
+            return result.ToArray();
+        }
     }
 }

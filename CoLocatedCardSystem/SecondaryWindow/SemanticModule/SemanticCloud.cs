@@ -1,4 +1,7 @@
-﻿using CoLocatedCardSystem.CollaborationWindow.Tool;
+﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using CoLocatedCardSystem.CollaborationWindow.Tool;
+using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using CoLocatedCardSystem.SecondaryWindow.Layers;
 using System;
 using System.Collections.Concurrent;
@@ -19,6 +22,12 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         double moveStep = AnimationController.INITALSTEP;
         double progress = 0;
         double energy = 0;
+        private AnimationController animationController;
+
+        public SemanticCloud(AnimationController animationController)
+        {
+            this.animationController = animationController;
+        }
 
         public double MoveStep
         {
@@ -36,6 +45,32 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         internal ConcurrentDictionary<string, SemanticNode> GetSemanticNodes()
         {
             return semanticNodes;
+        }
+        internal async void UpdateTopicWord()
+        {
+            animationController.AwareCloud.RemoveWordFromSemantic();
+            foreach (KeyValuePair<string, SemanticNode> pair in semanticNodes)
+            {
+                pair.Value.RemoveWordNode();
+            }
+            foreach (SemanticNode sn in semanticNodes.Values)
+            {
+                ConcurrentBag<CloudNode> docNodes = sn.GetDocNode();
+                if (docNodes != null && docNodes.Count > 0)
+                {
+                    List<string> docList = new List<string>();
+                    foreach (CloudNode cn in docNodes)
+                    {
+                        docList.Add(cn.DocID);
+                    }
+                    Topic topic = await animationController.AwareCloudController.GetSubTopicToken(docList.ToArray());
+                    foreach (Token tk in topic.GetToken())
+                    {
+                        animationController.AwareCloud.CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD, sn.Guid, User.NONE);
+                        animationController.AwareCloud.SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
+                    }
+                }
+            }
         }
 
         internal SemanticNode FindNode(string id)

@@ -2,6 +2,7 @@
 using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using System.Collections.Concurrent;
 using Windows.UI;
+using System;
 
 namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 {
@@ -9,10 +10,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
     {
         string guid = "";
         ConcurrentBag<SemanticNode> connections = new ConcurrentBag<SemanticNode>();
-        ConcurrentBag<CloudNode> cloudNodes = new ConcurrentBag<CloudNode>();
+        ConcurrentDictionary<CloudNode.NODETYPE, ConcurrentBag<CloudNode>> cloudNodes = new ConcurrentDictionary<CloudNode.NODETYPE, ConcurrentBag<CloudNode>>();
         string semantic = "";
         User owner = User.NONE;
-        int h=0, s=0, v=0;
+        int h = 0, s = 0, v = 0;
         float x = 0;
         float y = 0;
         float vx = 0;
@@ -46,19 +47,21 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             }
         }
 
-        internal ConcurrentBag<CloudNode> CloudNodes
+        internal ConcurrentBag<CloudNode> GetDocNode()
         {
-            get
-            {
-                return cloudNodes;
+            if (!cloudNodes.Keys.Contains(CloudNode.NODETYPE.DOC)) {
+                return null;
             }
-
-            set
-            {
-                cloudNodes = value;
-            }
+            return cloudNodes[CloudNode.NODETYPE.DOC];
         }
-
+        internal ConcurrentBag<CloudNode> GetWordNode()
+        {
+            if (!cloudNodes.Keys.Contains(CloudNode.NODETYPE.WORD))
+            {
+                return null;
+            }
+            return cloudNodes[CloudNode.NODETYPE.WORD];
+        }
         public string Semantic
         {
             get
@@ -94,7 +97,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 
             set
             {
-                if (value > 0 && value < SecondaryScreen.WIDTH) {
+                if (value > 0 && value < SecondaryScreen.WIDTH)
+                {
                     x = value;
                 }
             }
@@ -206,22 +210,29 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 optimal = value;
             }
         }
+        internal void RemoveWordNode()
+        {
+            ConcurrentBag<CloudNode> delete = new ConcurrentBag<CloudNode>();
+            cloudNodes.TryRemove(CloudNode.NODETYPE.WORD, out delete);
+        }
 
         internal void RemoveCloudNode(CloudNode node)
         {
-            this.cloudNodes.TryTake(out node);
+            this.cloudNodes[node.Type].TryTake(out node);
         }
 
-        public void Connect(SemanticNode node) {
+        public void Connect(SemanticNode node)
+        {
             this.connections.Add(node);
         }
 
-        public void AddCloudNode(CloudNode node) {
-            this.cloudNodes.Add(node);
-        }
-
-        public Color GetColor() {
-            return UIHelper.HsvToRgb(h, s, v);
+        public void AddCloudNode(CloudNode node)
+        {
+            if (!cloudNodes.Keys.Contains(node.Type))
+            {
+                cloudNodes.TryAdd(node.Type, new ConcurrentBag<CloudNode>());
+            }
+            this.cloudNodes[node.Type].Add(node);
         }
     }
 }

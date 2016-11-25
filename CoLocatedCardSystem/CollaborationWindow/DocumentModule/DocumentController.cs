@@ -56,12 +56,34 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         internal Document GetDocument(string docID) {
             return list.GetDocument(docID);
         }
+
+        internal Document[] GetDocument(string[] docID)
+        {
+            return list.GetDocument(docID);
+        }
+
         /// <summary>
         /// Get all documents
         /// </summary>
         /// <returns></returns>
         internal Document[] GetDocument() {
             return list.GetDocument();
-        }      
+        }
+        /// <summary>
+        /// Find the existed word in documents. 
+        /// </summary>
+        /// <param name="word"></param>
+        /// <param name="documents"></param>
+        /// <returns></returns>
+        internal Token FindToken(string word, Document[] documents)
+        {
+            foreach (Document doc in documents) {
+                Token result= doc.FindToken(word);
+                if (result != null) {
+                    return result;
+                }
+            }
+            return null;
+        }
     }
 }

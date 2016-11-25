@@ -35,8 +35,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         SemanticNode semanticNode = null;
         SemanticNode topicNode = null;
         float weight = 22;
-        float w = 22;
-        float h = 22;
+        float w = 20;
+        float h = 20;
         Dictionary<User, UserAction> user_action = new Dictionary<User, UserAction>();
         #region getter
         public string Guid

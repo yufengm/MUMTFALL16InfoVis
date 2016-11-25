@@ -35,14 +35,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
             awareCloudController = awaCtrls;
         }
         internal void Deinit() { }
-
-        internal void AddSemanticCluster(SemanticGroup group)
-        {
-            if (awareCloudController != null)
-            {
-                // awareCloudController.AddSemanticNode(group.Id, group.GetDescription());
-            }
-        }
         /// <summary>
         /// Save the status of the current connected cards
         /// </summary>
@@ -50,42 +42,34 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         {
             foreach (CardGroup gg in controllers.SemanticGroupController.GetGroups().Values)
             {
-                var cardIDs = gg.GetCardID();
-                List<Document> docs = new List<Document>();
-                double px = 0;
-                double py = 0;
-                List<User> ownerList = new List<User>();
-                foreach (string id in cardIDs)
-                {
-                    Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
-                    docs.Add(doc);
-                    CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
-                    px += cs.position.X;
-                    py += cs.position.Y;
-                    if (!ownerList.Contains(cs.owner))
+                if (gg.Count() > 1) {
+                    var cardIDs = gg.GetCardID();
+                    List<Document> docs = new List<Document>();
+                    double px = 0;
+                    double py = 0;
+                    List<User> ownerList = new List<User>();
+                    foreach (string id in cardIDs)
                     {
-                        ownerList.Add(cs.owner);
-                    }
-                }
-                px /= gg.Count();
-                py /= gg.Count();
-                System.Diagnostics.Debug.WriteLine(gg.Id);
-                if (docs.Count > 0)
-                {
-                    Token[] tks = controllers.MlController.GetTopicToken(docs.ToArray());
-                    if (tks != null)
-                    {
-                        foreach (Token tk in tks)
+                        Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
+                        docs.Add(doc);
+                        CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
+                        px += cs.position.X;
+                        py += cs.position.Y;
+                        if (!ownerList.Contains(cs.owner))
                         {
-                            //AddWordToken(tk, ownerList[0], MyColor.Color1, gg.Id, px, py);
+                            ownerList.Add(cs.owner);
                         }
-
                     }
+                    px /= gg.Count();
+                    py /= gg.Count();
+
+                    //Token[] tks = controllers.MlController.GetTopicToken(docs.ToArray());
                 }
             }
         }
 
         internal void ShowSearchResultToSecondary(string[] ids, User user) {
+
             awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, true);
         }
 

@@ -222,5 +222,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         internal int GetDefaultTopicIndex() {
             return defaultTopicIndex[0];
         }
+
+        internal Token FindToken(string word) {
+            for (int index = 0; index < ProcessedDocument.Length; index++)
+            {
+                Token[] tokens = ProcessedDocument[index].List;
+                foreach (Token token in tokens)
+                {
+                    if (token.WordType == WordType.REGULAR && token.StemmedWord.Equals(word))
+                    {
+                        return token;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

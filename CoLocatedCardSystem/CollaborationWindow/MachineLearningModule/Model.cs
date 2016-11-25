@@ -91,7 +91,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             beta = 0.1;
             niters = 2000;
             liter = 0;
-            twords = 20;
+            twords = 10;
 
             z = null;
             nw = null;

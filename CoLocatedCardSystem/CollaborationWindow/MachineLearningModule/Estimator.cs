@@ -23,7 +23,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             trnModel.K = option.K;
             trnModel.savestep = option.savestep;
             trnModel.niters = option.niters;
-
+            trnModel.twords = option.twords;
             if (option.est)
             {
                 if (!trnModel.initNewModel(option))

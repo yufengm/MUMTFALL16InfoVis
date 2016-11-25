@@ -139,7 +139,6 @@
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\ResultCard\ResultCard.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\Glow.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\Semantic.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroup.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroupController.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\CardGroup.cs" />
@@ -161,7 +160,7 @@
     <Compile Include="CollaborationWindow\MachineLearningModule\MLDocument.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\MLController.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\Model.cs" />
-    <Compile Include="CollaborationWindow\MachineLearningModule\Topic.cs" />
+    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\Topic.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\WordDictionary.cs" />
     <Compile Include="CollaborationWindow\TableModule\AttributeHelper.cs" />
     <Compile Include="CollaborationWindow\TableModule\DataAttribute.cs" />
@@ -224,7 +223,7 @@
     <Compile Include="SecondaryWindow\CollaborationWindowSecondaryPage.xaml.cs">
       <DependentUpon>CollaborationWindowSecondaryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SecondaryWindow\Layers\AnimationController.cs" />
+    <Compile Include="SecondaryWindow\AnimationController.cs" />
     <Compile Include="SecondaryWindow\Layers\BaseLayer\BaseLayer.cs" />
     <Compile Include="SecondaryWindow\Layers\BaseLayer\BaseLayerController.cs" />
     <Compile Include="SecondaryWindow\Layers\CloudLayer\CloudLayer.cs" />
@@ -235,6 +234,7 @@
     <Compile Include="SecondaryWindow\SemanticModule\SemanticCloudInfo.cs" />
     <Compile Include="SecondaryWindow\SemanticModule\SemanticNode.cs" />
     <Compile Include="SecondaryWindow\Tool\Calculator.cs" />
+    <Compile Include="SecondaryWindow\Tool\ColorPicker.cs" />
     <Compile Include="SecondaryWindow\Tool\SecondaryScreen.cs" />
     <Compile Include="SecondaryWindow\SecondaryWindowLifeEventControl.cs" />
     <Compile Include="User.cs" />

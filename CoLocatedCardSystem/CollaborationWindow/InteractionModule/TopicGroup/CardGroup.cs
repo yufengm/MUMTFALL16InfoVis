@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
+    /// <summary>
+    /// The card Clusters
+    /// </summary>
     class CardGroup
     {
         String id = "";//random group id

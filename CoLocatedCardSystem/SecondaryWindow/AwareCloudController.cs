@@ -8,6 +8,8 @@ using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using Windows.UI;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.CollaborationWindow.Tool;
+using System.Threading.Tasks;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 
 namespace CoLocatedCardSystem.SecondaryWindow
 {
@@ -72,6 +74,24 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
         }
 
+        public CentralControllers Controllers
+        {
+            get
+            {
+                return controllers;
+            }
+
+            set
+            {
+                controllers = value;
+            }
+        }
+
+        internal Task<Topic> GetSubTopicToken(string[] docList)
+        {
+            return controllers.MlController.GetTopicToken(docList);
+        }
+
         internal void Init(int width, int height)
         {
             // this.webView = v;
@@ -106,7 +126,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
             foreach (SemanticGroup sg in sgroups)
             {
                 string newID = sg.Id;
-                int h = Rand.Next(255);
+                int h = ColorPicker.GetColorHue();
                 animationController.SemanticCloud.AddSemanticNode(newID, sg.GetDescription());
                 animationController.SemanticCloud.SetSemanticNodeColor(newID, h, 1, 1);
                 animationController.SemanticCloud.SetSemanticNodeOptimal(newID, 20);
@@ -169,17 +189,17 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
             foreach (SemanticGroup sg in sgroups)
             {
-                foreach (Semantic sem in sg.GetSemantics())
+                foreach (string docID in sg.GetDocs())
                 {
-                    animationController.AwareCloud.CreateCloudNode(sem.DocID, CloudNode.NODETYPE.DOC, sg.Id, User.NONE);
-                    animationController.AwareCloud.SetCloudNodeDoc(sem.DocID, sem.DocID);
+                    animationController.AwareCloud.CreateCloudNode(docID, CloudNode.NODETYPE.DOC, sg.Id, User.NONE);
+                    animationController.AwareCloud.SetCloudNodeDoc(docID, docID);
 
                 }
                 foreach (Token tk in sg.GetToken())
                 {
                     animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, CloudNode.NODETYPE.WORD, sg.Id, User.NONE);
                     animationController.AwareCloud.SetCloudNodeText(sg.Id + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                    animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 20);
+                    animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 10);
                 }
             }
             animationController.ResetMoveStep();

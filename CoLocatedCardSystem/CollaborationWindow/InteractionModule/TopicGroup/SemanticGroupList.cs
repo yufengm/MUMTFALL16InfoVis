@@ -7,49 +7,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static CoLocatedCardSystem.CollaborationWindow.InteractionModule.SemanticGroup;
+using static CoLocatedCardSystem.CollaborationWindow.InteractionModule.Topic;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class SemanticGroupList
     {
-        ConcurrentDictionary<string, SemanticGroup> list = new ConcurrentDictionary<string, SemanticGroup>();
-
-        internal ConcurrentDictionary<string, SemanticGroup> List
-        {
-            get
-            {
-                return list;
-            }
-
-            set
-            {
-                list = value;
-            }
-        }
+        ConcurrentDictionary<string, SemanticGroup> list = new ConcurrentDictionary<string, SemanticGroup>();// key is the topic id
+        Dictionary<int, string> defaultMatch = new Dictionary<int, string>();//match the inital topic id with the topic id.
 
         internal void Init(Document[] docs, MLController mlController)
         {
-            foreach (KeyValuePair<string, Topic> pair in mlController.List)
+            for (int i = 0; i < mlController.DefaultTopicList.Length; i++)
             {
-                SemanticGroup group = new SemanticGroup();
-                group.Id = pair.Key;
-                foreach (Token tk in pair.Value.List)
+                Topic tp = new Topic();
+                tp.Id = Guid.NewGuid().ToString();//gen topic id
+                defaultMatch.Add(i, tp.Id);
+                for (int j = 0; j < mlController.DefaultTopicList[i].Length; j++)
                 {
+                    Token tk = new Token();
+                    tk.OriginalWord = mlController.DefaultTopicList[i][j];
+                    tk.Process();
                     SemanticAttribute sa = new SemanticAttribute();
                     sa.isHighlighted = false;
-                    group.AddToken(tk, sa);
+                    tp.AddToken(tk, sa);
                 }
-                list.TryAdd(group.Id, group);
+                SemanticGroup sg = new SemanticGroup();
+                sg.SetTopic(tp);
+                list.TryAdd(tp.Id, sg);
             }
             foreach (Document doc in docs)
             {
-                Semantic semantic = new Semantic();
-                semantic.DocID = doc.DocID;
-                semantic.Created = false;
-                semantic.Owner = User.NONE;
-                string topicID = mlController.GetDefaultTopicIDByIndex(doc.GetDefaultTopicIndex());
-                list[topicID].AddSemantic(semantic.DocID, semantic);
+                string topicID =  defaultMatch[doc.GetDefaultTopicIndex()];
+                list[topicID].AddDoc(doc.DocID);
             }
+        }
+
+        internal IEnumerable<SemanticGroup> GetSemanticGroup()
+        {
+            return list.Values;
         }
 
         internal void Deinit()
