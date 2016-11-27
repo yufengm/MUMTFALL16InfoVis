@@ -45,13 +45,14 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         private void Canvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            //foreach (SemanticNode snode in semanticNodes.Values)
-            //{
-            //    args.DrawingSession.FillCircle(snode.X, snode.Y, 5, MyColor.Wheat);
-            //    foreach (SemanticNode csnode in snode.Connections) {
-            //        args.DrawingSession.DrawLine(snode.X, snode.Y, csnode.X, csnode.Y, MyColor.Wheat);
-            //    }
-            //}
+            foreach (SemanticNode snode in semanticNodes.Values)
+            {
+                args.DrawingSession.FillCircle(snode.X, snode.Y, 5, MyColor.Wheat);
+                foreach (SemanticNode csnode in snode.Connections)
+                {
+                    args.DrawingSession.DrawLine(snode.X, snode.Y, csnode.X, csnode.Y, MyColor.Wheat);
+                }
+            }
         }
 
         internal void UpdateSemanticNode(ConcurrentDictionary<string, SemanticNode> semanticNodes)

@@ -79,15 +79,15 @@ namespace CoLocatedCardSystem.SecondaryWindow
                     awareCloud.Update();
                     awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
                     awareCloudController.UpdateCloudNode(awareCloud.GetCloudNodes());
-                    timerExeBound = -4.5 * awareCloud.MoveStep + 50;
-                    timerExeBound = timerExeBound < 10 ? 10 : timerExeBound;
-                    timerExeBound = timerExeBound > 50 ? 50 : timerExeBound;
-                    timerCount = 0;
-                }
+                timerExeBound = -4.5 * awareCloud.MoveStep + 50;
+                timerExeBound = timerExeBound < 10 ? 10 : timerExeBound;
+                timerExeBound = timerExeBound > 50 ? 50 : timerExeBound;
+                timerCount = 0;
+            }
                 else {
-                    timerCount += 10;
-                }
-            }, period);
+                timerCount += 10;
+            }
+        }, period);
         }
 
         internal void Deinit()

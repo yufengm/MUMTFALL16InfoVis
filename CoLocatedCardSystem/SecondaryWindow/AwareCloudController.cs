@@ -189,17 +189,19 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
             foreach (SemanticGroup sg in sgroups)
             {
+                SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id);
                 foreach (string docID in sg.GetDocs())
                 {
                     animationController.AwareCloud.CreateCloudNode(docID, CloudNode.NODETYPE.DOC, sg.Id, User.NONE);
                     animationController.AwareCloud.SetCloudNodeDoc(docID, docID);
-
+                    animationController.AwareCloud.SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                 }
                 foreach (Token tk in sg.GetToken())
                 {
                     animationController.AwareCloud.CreateCloudNode(sg.Id + tk.StemmedWord, CloudNode.NODETYPE.WORD, sg.Id, User.NONE);
                     animationController.AwareCloud.SetCloudNodeText(sg.Id + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
                     animationController.AwareCloud.SetCloudNodeWeight(sg.Id + tk.StemmedWord, 20);
+                    animationController.AwareCloud.SetCloudNodePosition(sn.Guid + tk.StemmedWord, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                 }
             }
             animationController.ResetMoveStep();

@@ -67,12 +67,15 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         internal void RemoveWordFromSemantic()
         {
             List<string> tobeRemoved = new List<string>();
-            foreach (KeyValuePair<string, CloudNode> pair in cloudNodes) {
-                if (pair.Value.Type == CloudNode.NODETYPE.WORD) {
+            foreach (KeyValuePair<string, CloudNode> pair in cloudNodes)
+            {
+                if (pair.Value.Type == CloudNode.NODETYPE.WORD)
+                {
                     tobeRemoved.Add(pair.Key);
                 }
             }
-            foreach (string key in tobeRemoved) {
+            foreach (string key in tobeRemoved)
+            {
                 RemoveCloudNode(key);
             }
         }
@@ -178,31 +181,36 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             foreach (CloudNode firstNode in cloudNodes.Values)
             {
                 Point f = new Point();
+                Point replEng = new Point();
+                int replCount = 0;
                 foreach (CloudNode secondNode in cloudNodes.Values)
                 {
                     if (firstNode != secondNode && Calculator.Distance(firstNode, secondNode) < SecondaryScreen.WIDTH / 10)
                     {
+                        replCount += 1;
                         Point repel = this.CalRepel(firstNode, secondNode);
                         f.X += repel.X;
                         f.Y += repel.Y;
-                        this.energy += repel.X * repel.X + repel.Y * repel.Y;
+                        replEng.X += repel.X;
+                        replEng.Y += repel.Y;
                     }
                 }
+                this.energy += replEng.X * replEng.X + replEng.Y * replEng.Y;
                 Point attraction = this.CalCenterAttraction(firstNode);
                 f.X += attraction.X;
                 f.Y += attraction.Y;
-                this.energy += cloudNodes.Count * (attraction.X * attraction.X + attraction.Y * attraction.Y);
+                this.energy += attraction.X * attraction.X + attraction.Y * attraction.Y;
                 Point acc = new Point();
                 acc.X = f.X / firstNode.Weight;
                 acc.Y = f.Y / firstNode.Weight;
                 firstNode.Vx += (float)acc.X;
                 firstNode.Vy += (float)acc.Y;
                 double speed = Calculator.Distance(0, 0, firstNode.Vx, firstNode.Vy);
-                if (speed > 100)
+                if (speed > 120)
                 {
                     firstNode.Vx = (float)(100 * firstNode.Vx / speed);
                     firstNode.Vy = (float)(100 * firstNode.Vy / speed);
-                    speed = 100;
+                    speed = 120;
                 }
                 firstNode.X += (float)((this.timeStep * firstNode.Vx + acc.X * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
                 firstNode.Y += (float)((this.timeStep * firstNode.Vy + acc.Y * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
@@ -228,7 +236,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         }
         private Point CalCenterAttraction(CloudNode node)
         {
-            if (node.SemanticNode == null) {
+            if (node.SemanticNode == null)
+            {
                 return new Point();
             }
             double dist = Calculator.Distance(node.X + node.W / 2, node.Y + node.H / 2, node.SemanticNode.X, node.SemanticNode.Y) + 0.001;
@@ -236,11 +245,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             Point result = new Point();
             if (node.Type == CloudNode.NODETYPE.DOC)
             {
-                atrc = -80 * dist;
+                atrc = -160 * dist;
             }
             else
             {
-                atrc = -40 * dist;
+                atrc = -100 * dist;
             }
             result.X = atrc * (node.X + node.W / 2 - node.SemanticNode.X) / dist;
             result.Y = atrc * (node.Y + node.H / 2 - node.SemanticNode.Y) / dist;
@@ -262,7 +271,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 {
                     if (node1.SemanticNode == node2.SemanticNode)
                     {
-                        rpl = -9000 * Math.Min(deltaXY.X, deltaXY.Y);
+                        rpl = -9000 * Math.Max(deltaXY.X, deltaXY.Y);
                     }
                     else
                     {
