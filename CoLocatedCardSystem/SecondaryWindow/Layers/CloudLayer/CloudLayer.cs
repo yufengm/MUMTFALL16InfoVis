@@ -49,11 +49,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                 if (cnode.Type == CloudNode.NODETYPE.DOC)
                 {
                     Color nodeColor = MyColor.Yellow;
-                    //if (cnode.User_action[User.NONE].select)
-                    //{
-                    //    args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
-                    //        cnode.Weight / 2, nodeColor);
-                    //}
+                    args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                        cnode.Weight / 2, nodeColor);
                     DrawArc(args, cnode, User.ALEX);
                     DrawArc(args, cnode, User.BEN);
                     DrawArc(args, cnode, User.CHRIS);
