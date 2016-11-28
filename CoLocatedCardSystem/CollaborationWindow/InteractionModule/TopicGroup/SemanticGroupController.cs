@@ -209,6 +209,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 controllers.ConnectionController.UpdateCurrentStatus();
             }
         }
+
+        internal void SetSearchResult(string[] docIDs, User owner, bool searched)
+        {
+            semanticList.SetSearchResult(docIDs, owner, searched);
+        }
+
         /// <summary>
         /// Based on the connection of the cards, create different groups
         /// </summary>

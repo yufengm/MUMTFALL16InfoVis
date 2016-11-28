@@ -67,15 +67,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
                 }
             }
         }
-
-        internal void ShowSearchResultToSecondary(string[] ids, User user) {
-
-            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, true);
-        }
-
-        internal void RemovetSearchResultFromSecondary(string[] ids, User user)
-        {
-            awareCloudController.AnimationController.AwareCloud.SetCloudNodeActive(ids, user, false);
+        internal void UpdateSemanticCloud() {
+            awareCloudController.UpdateSemanticCloud();
         }
     }
 }

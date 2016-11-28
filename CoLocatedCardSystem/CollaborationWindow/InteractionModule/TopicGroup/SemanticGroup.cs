@@ -12,7 +12,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class SemanticGroup
     {
         string id;//same with the topic id
-        ConcurrentBag<string> docList = new ConcurrentBag<string>();//Key is the doc id.
+        ConcurrentDictionary<string, UserActionOnDoc> docList = new ConcurrentDictionary<string, UserActionOnDoc>();//Key is the doc id.
         Topic topic;
         /// <summary>
         /// The id of the semantic group. Always the same with topic id.
@@ -32,9 +32,52 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal void AddDoc(string doc)
         {
-            if (!docList.Contains(doc)) {
-                docList.Add(doc);
+            if (!docList.Keys.Contains(doc)) {
+                docList.TryAdd(doc,new UserActionOnDoc());
             }
+        }
+        internal void SetDocSearched(string docID, User user, bool searched) {
+            if (docList.Keys.Contains(docID)) {
+                docList[docID].Searched[user] = searched;
+            }
+        }
+        internal UserActionOnDoc RemoveDoc(string docID) {
+            UserActionOnDoc action=new UserActionOnDoc();
+            if (docList.Keys.Contains(docID))
+            {
+                docList.TryRemove(docID, out action);
+            }
+            return action;
+        }
+        internal ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> GetAllDocSubGroups() {
+            ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> result = new ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>>();
+            foreach (KeyValuePair<string, UserActionOnDoc> pair in docList)
+            {
+                UserActionOnDoc actionKey = pair.Value;
+                bool existed = false;
+                foreach (UserActionOnDoc action in result.Keys) {
+                    if (action.EqualAction(actionKey)) {
+                        actionKey = action;
+                        existed = true;
+                        break;
+                    }
+                }
+                if (!existed)
+                {
+                    actionKey = actionKey.Copy();
+                    result.TryAdd(actionKey, new ConcurrentBag<string>());
+                    result[actionKey].Add(pair.Key);
+                }
+                else
+                {
+                    result[actionKey].Add(pair.Key);
+                }
+            }
+            return result;
+        }
+        internal IEnumerable<string> GetDocs()
+        {
+            return docList.Keys.ToArray();
         }
 
         internal string GetDescription() {
@@ -43,25 +86,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal IEnumerable<Token> GetToken() {
             return topic.GetToken();
         }
-        internal IEnumerable<string> GetDocs()
-        {
-            return docList.ToArray();
-        }
 
         internal bool ShareWord(SemanticGroup sg2)
         {
             int count = 0;
-            foreach (Token tk1 in this.topic.GetToken()) {
-                foreach (Token tk2 in sg2.topic.GetToken()) {
-                    if (tk1.EqualContent(tk2)) {
+            foreach (Token tk1 in this.topic.GetToken())
+            {
+                foreach (Token tk2 in sg2.topic.GetToken())
+                {
+                    if (tk1.EqualContent(tk2))
+                    {
                         count++;
                     }
                 }
             }
-            return count>3;
+            return count > 3;
         }
 
-        internal void AddToken(Token tk, Topic.SemanticAttribute sa)
+        internal void AddToken(Token tk, UserActionOnWord sa)
         {
             topic.AddToken(tk, sa);
         }

@@ -3,6 +3,7 @@ using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using System.Collections.Concurrent;
 using Windows.UI;
 using System;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 
 namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
 {
@@ -10,9 +11,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
     {
         string guid = "";
         ConcurrentBag<SemanticNode> connections = new ConcurrentBag<SemanticNode>();
-        ConcurrentDictionary<CloudNode.NODETYPE, ConcurrentBag<CloudNode>> cloudNodes = new ConcurrentDictionary<CloudNode.NODETYPE, ConcurrentBag<CloudNode>>();
         string semantic = "";
-        User owner = User.NONE;
         int h = 0, s = 0, v = 0;
         float x = 0;
         float y = 0;
@@ -20,7 +19,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         float vy = 0;
         float weight = 30;
         float optimal = 50;
-
+        bool isRoot = false;
+        UserActionOnDoc userActionOnDoc;
         public string Guid
         {
             get
@@ -46,22 +46,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 connections = value;
             }
         }
-
-        internal ConcurrentBag<CloudNode> GetDocNode()
-        {
-            if (!cloudNodes.Keys.Contains(CloudNode.NODETYPE.DOC)) {
-                return null;
-            }
-            return cloudNodes[CloudNode.NODETYPE.DOC];
-        }
-        internal ConcurrentBag<CloudNode> GetWordNode()
-        {
-            if (!cloudNodes.Keys.Contains(CloudNode.NODETYPE.WORD))
-            {
-                return null;
-            }
-            return cloudNodes[CloudNode.NODETYPE.WORD];
-        }
         public string Semantic
         {
             get
@@ -72,19 +56,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             set
             {
                 semantic = value;
-            }
-        }
-
-        public User Owner
-        {
-            get
-            {
-                return owner;
-            }
-
-            set
-            {
-                owner = value;
             }
         }
 
@@ -210,29 +181,36 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 optimal = value;
             }
         }
-        internal void RemoveWordNode()
+
+        public bool IsRoot
         {
-            ConcurrentBag<CloudNode> delete = new ConcurrentBag<CloudNode>();
-            cloudNodes.TryRemove(CloudNode.NODETYPE.WORD, out delete);
+            get
+            {
+                return isRoot;
+            }
+
+            set
+            {
+                isRoot = value;
+            }
         }
 
-        internal void RemoveCloudNode(CloudNode node)
+        internal UserActionOnDoc UserActionOnDoc
         {
-            this.cloudNodes[node.Type].TryTake(out node);
+            get
+            {
+                return userActionOnDoc;
+            }
+
+            set
+            {
+                userActionOnDoc = value;
+            }
         }
 
         public void Connect(SemanticNode node)
         {
             this.connections.Add(node);
-        }
-
-        public void AddCloudNode(CloudNode node)
-        {
-            if (!cloudNodes.Keys.Contains(node.Type))
-            {
-                cloudNodes.TryAdd(node.Type, new ConcurrentBag<CloudNode>());
-            }
-            this.cloudNodes[node.Type].Add(node);
         }
     }
 }

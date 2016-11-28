@@ -69,7 +69,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             container.Children.Add(controllers.CardLayerController.GetCardLayer());
             container.Children.Add(controllers.SortingBoxLayerController.GetSortingBoxLayer());
             container.Children.Add(controllers.MenuLayerController.GetMenuLayer());
-            app.AwareCloudController.AddInitialSemanticsGroup();
+            app.AwareCloudController.UpdateSemanticCloud();
         }
 
         public void Deinit()

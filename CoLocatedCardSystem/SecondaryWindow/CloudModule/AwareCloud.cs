@@ -8,6 +8,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Windows.Foundation;
+using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 {
@@ -50,7 +52,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             }
             return null;
         }
-        internal CloudNode CreateCloudNode(string id, CloudNode.NODETYPE type, string sid, User user)
+        internal CloudNode CreateCloudNode(string id, CloudNode.NODETYPE type)
         {
             CloudNode node = FindNode(id);
             if (node == null)
@@ -59,17 +61,15 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.Guid = id;
                 node.Type = type;
                 cloudNodes.TryAdd(node.Guid, node);
-                AddCloudNodeToGroup(node.Guid, sid);
-                node.TopicNode = animationController.SemanticCloud.FindNode(sid);
             }
             return node;
         }
-        internal void RemoveWordFromSemantic()
+        internal void RemoveNonDocNodes()
         {
             List<string> tobeRemoved = new List<string>();
             foreach (KeyValuePair<string, CloudNode> pair in cloudNodes)
             {
-                if (pair.Value.Type == CloudNode.NODETYPE.WORD)
+                if (pair.Value.Type == CloudNode.NODETYPE.WORD|| pair.Value.Type == CloudNode.NODETYPE.PICTURE)
                 {
                     tobeRemoved.Add(pair.Key);
                 }
@@ -110,33 +110,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.H = (float)tsize.Height;
             }
         }
-        internal void SetCloudNodeActive(string[] ids, User user, bool active)
-        {
-            if (ids != null)
-            {
-                foreach (string id in ids)
-                {
-                    CloudNode node = FindNode(id);
-                    if (node != null)
-                    {
-                        node.SetSearch(user, active);
-                        string newid = node.GetSemanticNode_Searched();
-                        SemanticNode sn = animationController.SemanticCloud.FindNode(newid);
-                        if (sn != null)
-                        {
-                            AddCloudNodeToGroup(node.Guid, sn.Guid);
-                        }
-                        else
-                        {
-                            AddCloudNodeToGroup(node.Guid, node.TopicNode.Guid);
-                        }
-                    }
-                }
-                animationController.SemanticCloud.UpdateTopicWord();
-                this.moveStep = AnimationController.INITALSTEP;
-                animationController.SemanticCloud.MoveStep = AnimationController.INITALSTEP;
-            }
-        }
         private void RemoveCloudNode(string id)
         {
             if (cloudNodes.ContainsKey(id))
@@ -145,6 +118,44 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 cloudNodes.TryRemove(id, out node);
             }
         }
+
+        internal async void UpdateCloudNode(IEnumerable<SemanticGroup> sgroups)
+        {
+            RemoveNonDocNodes();
+            foreach (SemanticGroup sg in sgroups)
+            {
+                ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
+                foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
+                {
+                    SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id, pair.Key);
+                    foreach (string docID in pair.Value)
+                    {
+                        CloudNode node = FindNode(docID);
+                        if (node != null)
+                        {
+                            node.SemanticNode = sn;
+                        }
+                        else
+                        {
+                            CreateCloudNode(docID, CloudNode.NODETYPE.DOC);
+                            InitCloudNodeToGroup(docID, sn.Guid);
+                            SetCloudNodeDoc(docID, docID);
+                            SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
+                        }
+                    }
+                    Topic topic = await animationController.AwareCloudController.Controllers.MlController.GetTopicToken(pair.Value.ToArray());
+                    foreach (Token tk in topic.GetToken())
+                    {
+                        CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
+                        InitCloudNodeToGroup(sn.Guid + tk.StemmedWord, sn.Guid);
+                        SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
+                        SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 20);
+                        SetCloudNodePosition(sn.Guid + tk.StemmedWord, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
+                    }
+                }
+            }
+        }
+
         internal void SetCloudNodePosition(string id, double xposi, double yposi)
         {
             CloudNode node = FindNode(id);
@@ -154,7 +165,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.Y = (float)yposi;
             }
         }
-        internal void AddCloudNodeToGroup(string id, string snid)
+        internal void InitCloudNodeToGroup(string id, string snid)
         {
             SemanticNode semanticNode = animationController.SemanticCloud.FindNode(snid);
             if (semanticNode != null)
@@ -162,14 +173,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 CloudNode node = FindNode(id);
                 if (node != null)
                 {
-                    var previousSNode = node.SemanticNode;
-                    if (previousSNode != null)
-                    {
-                        previousSNode.RemoveCloudNode(node);
-                    }
                     node.SemanticNode = semanticNode;
-                    node.SetColor(node.SemanticNode.H, node.SemanticNode.S, node.SemanticNode.V);
-                    semanticNode.AddCloudNode(node);
                     node.X = (float)semanticNode.X + Rand.Next(50) - 25;
                     node.Y = (float)semanticNode.Y + Rand.Next(50) - 25;
                 }

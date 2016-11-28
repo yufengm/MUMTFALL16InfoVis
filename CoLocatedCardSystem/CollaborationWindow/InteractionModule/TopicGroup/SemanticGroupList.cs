@@ -28,8 +28,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     Token tk = new Token();
                     tk.OriginalWord = mlController.DefaultTopicList[i][j];
                     tk.Process();
-                    SemanticAttribute sa = new SemanticAttribute();
-                    sa.isHighlighted = false;
+                    UserActionOnWord sa = new UserActionOnWord();
                     tp.AddToken(tk, sa);
                 }
                 SemanticGroup sg = new SemanticGroup();
@@ -51,6 +50,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal void Deinit()
         {
             throw new NotImplementedException();
+        }
+
+        internal void SetSearchResult(string[] docIDs, User owner, bool searched)
+        {
+            foreach (SemanticGroup sg in list.Values) {
+                foreach (string docID in docIDs) {
+                    sg.SetDocSearched(docID, owner, searched);
+                }
+            }
         }
     }
 }

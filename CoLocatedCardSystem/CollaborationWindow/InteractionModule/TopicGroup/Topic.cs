@@ -9,13 +9,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
     class Topic
     {
-        internal class SemanticAttribute
-        {
-            internal bool isHighlighted = false;
-        }
         string id;
         List<Token> list=new List<Token>();
-        Dictionary<Token, SemanticAttribute> tokenAttr = new Dictionary<Token, SemanticAttribute>();
+        Dictionary<Token, UserActionOnWord> tokenAttr = new Dictionary<Token, UserActionOnWord>();
         public string Id
         {
             get
@@ -34,11 +30,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             if (!list.Contains(tk))
             {
                 list.Add(tk);
-                tokenAttr.Add(tk, new SemanticAttribute());
+                tokenAttr.Add(tk, new UserActionOnWord());
             }
         }
 
-        internal void AddToken(Token tk, SemanticAttribute sa)
+        internal void AddToken(Token tk, UserActionOnWord sa)
         {
             if (!list.Contains(tk))
             {

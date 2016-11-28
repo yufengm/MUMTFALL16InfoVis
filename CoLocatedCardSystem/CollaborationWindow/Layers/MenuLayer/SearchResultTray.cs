@@ -109,7 +109,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             }
             if (docIDs.Count > 0)
             {
-                menuLayerController.Controllers.ConnectionController.RemovetSearchResultFromSecondary(docIDs.ToArray(), info.Owner);
+                menuLayerController.Controllers.SemanticGroupController.SetSearchResult(docIDs.ToArray(), info.Owner, false);
             }
         }
 
@@ -155,8 +155,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                     docIDs.Add(card.Document.DocID);
                 }
                 if (docIDs.Count > 0) {
-                    menuLayerController.Controllers.ConnectionController.ShowSearchResultToSecondary(docIDs.ToArray(), info.Owner);
+                    menuLayerController.Controllers.SemanticGroupController.SetSearchResult(docIDs.ToArray(), info.Owner, true);
                 }
+                menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
                 ShowCard(0);
                 resultNum.Text = "Search: "+ content + " Result: " + cards.Length;
                 

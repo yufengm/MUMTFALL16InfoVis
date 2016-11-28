@@ -3,6 +3,7 @@ using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.Tool;
 using CoLocatedCardSystem.SecondaryWindow.CloudModule;
 using CoLocatedCardSystem.SecondaryWindow.Layers;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -46,33 +47,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         {
             return semanticNodes;
         }
-        internal async void UpdateTopicWord()
-        {
-            animationController.AwareCloud.RemoveWordFromSemantic();
-            foreach (KeyValuePair<string, SemanticNode> pair in semanticNodes)
-            {
-                pair.Value.RemoveWordNode();
-            }
-            foreach (SemanticNode sn in semanticNodes.Values)
-            {
-                ConcurrentBag<CloudNode> docNodes = sn.GetDocNode();
-                if (docNodes != null && docNodes.Count > 0)
-                {
-                    List<string> docList = new List<string>();
-                    foreach (CloudNode cn in docNodes)
-                    {
-                        docList.Add(cn.DocID);
-                    }
-                    Topic topic = await animationController.AwareCloudController.GetSubTopicToken(docList.ToArray());
-                    foreach (Token tk in topic.GetToken())
-                    {
-                        animationController.AwareCloud.CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD, sn.Guid, User.NONE);
-                        animationController.AwareCloud.SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                        animationController.AwareCloud.SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 20);
-                    }
-                }
-            }
-        }
 
         internal SemanticNode FindNode(string id)
         {
@@ -98,12 +72,157 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 semanticNodes.TryAdd(semanticNode.Guid, semanticNode);
             }
         }
+        internal void RemoveSemanticNode(string snid)
+        {
+            SemanticNode node = FindNode(snid);
+            if (node != null)
+            {
+                this.semanticNodes.TryRemove(snid, out node);
+                if (node != null)
+                {
+                    foreach (SemanticNode otherNode in semanticNodes.Values)
+                    {
+                        if (otherNode.Connections.Contains(node))
+                        {
+                            otherNode.Connections.TryTake(out node);
+                        }
+                    }
+                }
+            }
+        }
+
+        internal void UpdateSemanticNode(IEnumerable<SemanticGroup> sgroups)
+        {
+            //Check if the root id need to be removed.
+            ConcurrentBag<string> tobeRemoved = new ConcurrentBag<string>();
+            foreach (SemanticNode root in semanticNodes.Values)
+            {
+                if (root.IsRoot)
+                {
+                    bool existed = false;
+                    foreach (SemanticGroup sg in sgroups)
+                    {
+                        if (root.Guid == sg.Id)
+                        {
+                            existed = true;
+                            break;
+                        }
+                    }
+                    if (!existed)
+                    {
+                        tobeRemoved.Add(root.Guid);
+                    }
+                }
+            }
+            foreach (string id in tobeRemoved) {
+                RemoveSemanticNode(id);
+            }
+            //Add new root node
+            foreach (SemanticGroup sg in sgroups)
+            {
+                SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id);
+                if (sn == null)
+                {
+                    int h = ColorPicker.GetColorHue();
+                    AddSemanticNode(sg.Id, sg.GetDescription());
+                    SetSemanticNodeColor(sg.Id, h, 1, 1);
+                    SetSemanticNodeOptimal(sg.Id, 20);
+                    sn = FindNode(sg.Id);
+                    sn.IsRoot = true;
+                }
+            }
+            //Connect the root node
+            foreach (SemanticGroup sg1 in sgroups)
+            {
+                foreach (SemanticGroup sg2 in sgroups)
+                {
+                    if (sg1 != sg2 && sg1.ShareWord(sg2))
+                    {
+                        ConnectSemanticNode(sg1.Id, sg2.Id);
+                    }
+                }
+            }
+            //Update the sub groups
+            foreach (SemanticGroup sg in sgroups)
+            {
+                SemanticNode sn = FindNode(sg.Id);
+                ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
+                tobeRemoved = new ConcurrentBag<string>();
+                foreach (SemanticNode conNode in sn.Connections)
+                {
+                    if (!conNode.IsRoot)
+                    {
+                        bool existed = false;
+                        foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
+                        {
+                            if (pair.Key.EqualAction(conNode.UserActionOnDoc))
+                            {
+                                existed = true;
+                                break;
+                            }
+                        }
+                        if (!existed)
+                        {
+                            tobeRemoved.Add(conNode.Guid);
+                        }
+                    }
+                }
+                foreach (string guid in tobeRemoved)
+                {
+                    RemoveSemanticNode(guid);
+                }
+                foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
+                {
+                    bool existed = false;
+                    foreach (SemanticNode conNode in sn.Connections)
+                    {
+                        if (!conNode.IsRoot)
+                        {
+
+                            if (pair.Key.EqualAction(conNode.UserActionOnDoc))
+                            {
+                                existed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!existed)
+                    {
+                        string newID = sg.Id + Guid.NewGuid().ToString();
+                        AddSemanticNode(newID, sg.GetDescription());
+                        SetSemanticNodeColor(newID, sn.H, 1, 1);
+                        SetSemanticNodeOptimal(newID, 30);
+                        ConnectSemanticNode(sg.Id, newID);
+                        SemanticNode newSubNode = FindNode(newID);
+                        newSubNode.UserActionOnDoc = pair.Key;
+                    }
+                }
+            }
+        }
+
+        internal SemanticNode FindNode(string id, UserActionOnDoc key)
+        {
+            SemanticNode node = FindNode(id);
+            if (node != null)
+            {
+                foreach (SemanticNode subNode in node.Connections)
+                {
+                    if (subNode.UserActionOnDoc.EqualAction(key))
+                    {
+                        return subNode;
+                    }
+                }
+            }
+            return null;
+        }
 
         internal void ConnectSemanticNode(string snid1, string snid2)
         {
             SemanticNode firstNode = FindNode(snid1);
             SemanticNode secondNode = FindNode(snid2);
-            if (firstNode != null && secondNode != null)
+            if (firstNode != null && secondNode != null
+                && !firstNode.Connections.Contains(secondNode)
+                && !secondNode.Connections.Contains(firstNode))
             {
                 firstNode.Connect(secondNode);
                 secondNode.Connect(firstNode);
