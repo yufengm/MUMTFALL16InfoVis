@@ -149,7 +149,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                         CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
                         InitCloudNodeToGroup(sn.Guid + tk.StemmedWord, sn.Guid);
                         SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                        SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 20);
+                        SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 15);
                         SetCloudNodePosition(sn.Guid + tk.StemmedWord, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                     }
                 }
