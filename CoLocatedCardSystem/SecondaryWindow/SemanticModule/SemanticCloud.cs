@@ -126,7 +126,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                     int h = ColorPicker.GetColorHue();
                     AddSemanticNode(sg.Id, sg.GetDescription());
                     SetSemanticNodeColor(sg.Id, h, 1, 1);
-                    SetSemanticNodeOptimal(sg.Id, 15);
+                    SetSemanticNodeOptimal(sg.Id, 20);
                     sn = FindNode(sg.Id);
                     sn.IsRoot = true;
                 }
@@ -191,7 +191,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                         string newID = sg.Id + Guid.NewGuid().ToString();
                         AddSemanticNode(newID, sg.GetDescription());
                         SetSemanticNodeColor(newID, sn.H, 1, 1);
-                        SetSemanticNodeOptimal(newID, 15);
+                        SetSemanticNodeOptimal(newID, 20);
                         ConnectSemanticNode(sg.Id, newID);
                         SemanticNode newSubNode = FindNode(newID);
                         newSubNode.UserActionOnDoc = pair.Key;
