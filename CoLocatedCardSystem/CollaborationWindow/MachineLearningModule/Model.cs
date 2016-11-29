@@ -293,31 +293,33 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
         /**
         * Save theta (topic distribution) for this model
         */
-        public bool saveModelTheta(string filename)
+        public int[] saveModelTheta(string filename)
         {
+            int[] docTopics = new int[M];
             try
             {
-                byte[] byteArray = Encoding.UTF8.GetBytes( filename );
-                //byte[] byteArray = Encoding.ASCII.GetBytes(contents);
-                MemoryStream stream = new MemoryStream(byteArray);
-
-                var writer = new StreamWriter( stream );
                 for (int i = 0; i < M; i++)
                 {
-                    for (int j = 0; j < K; j++)
+                    double max = Double.MinValue;
+                    int index = -1;
+                    //return argmax index
+                    for (int j = 0; j < K; j++ )
                     {
-                        writer.Write(theta[i][j] + " ");
+                        if( theta[i][j] > max )
+                        {
+                            max = theta[i][j];
+                            index = j;
+                        }
                     }
-                    writer.Write("\n");
+                    docTopics[i] = index;
                 }
                 //writer.Close();
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Error while saving topic distribution file for this model: " + e.Message);
-                return false;
             }
-            return true;
+            return docTopics;
         }
 
         /**
@@ -452,10 +454,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             //    return false;
             //}
 
-            //if (!saveModelTheta(dir + "\\" + modelName + thetaSuffix))
-            //{
-            //    return false;
-            //}
+            var docDistribution = saveModelTheta( dir + "\\" + modelName + thetaSuffix );
 
             //if (!saveModelPhi(dir + "\\" + modelName + phiSuffix))
             //{
