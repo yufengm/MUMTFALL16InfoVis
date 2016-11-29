@@ -207,6 +207,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 f.X += attraction.X;
                 f.Y += attraction.Y;
                 this.energy += attraction.X * attraction.X + attraction.Y * attraction.Y;
+                Point boarderRepel = this.CalBorderRepel(firstNode);
+                f.X += boarderRepel.X;
+                f.Y += boarderRepel.Y;
+                this.energy += boarderRepel.X * boarderRepel.X + boarderRepel.Y * boarderRepel.Y;
                 Point acc = new Point();
                 acc.X = f.X / firstNode.Weight;
                 acc.Y = f.Y / firstNode.Weight;
@@ -219,8 +223,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                     firstNode.Vy = (float)(100 * firstNode.Vy / speed);
                     speed = 120;
                 }
-                firstNode.X += (float)((this.timeStep * firstNode.Vx + acc.X * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
-                firstNode.Y += (float)((this.timeStep * firstNode.Vy + acc.Y * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
+                float deltaX = (float)((this.timeStep * firstNode.Vx + acc.X * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
+                float deltaY = (float)((this.timeStep * firstNode.Vy + acc.Y * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
+                firstNode.X += deltaX;
+                firstNode.Y += deltaY;
             }
             this.UpdateStrengthLength(energy0);
         }
@@ -240,6 +246,22 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 this.progress = 0;
                 this.moveStep *= 0.9;
             }
+        }
+        private Point CalBorderRepel(CloudNode node)
+        {
+            double dist = Calculator.Distance(node.X, node.Y, SecondaryScreen.WIDTH / 2, SecondaryScreen.HEIGHT / 2) + 0.001;
+            double atrc = 0;
+            Point result = new Point();
+            if (node.X < SecondaryScreen.WIDTH / 10 ||
+                node.X > SecondaryScreen.WIDTH - SecondaryScreen.WIDTH / 10 ||
+                node.Y < SecondaryScreen.HEIGHT / 10 ||
+                node.Y > SecondaryScreen.HEIGHT - SecondaryScreen.HEIGHT / 10)
+            {
+                atrc = -100;
+            }
+            result.X = atrc * (node.X - SecondaryScreen.WIDTH / 2) / dist;
+            result.Y = atrc * (node.Y - SecondaryScreen.HEIGHT / 2) / dist;
+            return result;
         }
         private Point CalCenterAttraction(CloudNode node)
         {
@@ -282,7 +304,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                     }
                     else
                     {
-                        rpl = -9000 * Math.Max(deltaXY.X, deltaXY.Y);
+                        rpl = -900 * Math.Max(deltaXY.X, deltaXY.Y);
                     }
                 }
                 result.X = rpl * (node2.X + node2.W / 2 - node1.X - node1.W / 2) / dist;
