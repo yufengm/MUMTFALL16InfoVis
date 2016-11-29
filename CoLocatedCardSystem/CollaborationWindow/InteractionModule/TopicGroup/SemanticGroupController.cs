@@ -18,13 +18,13 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.controllers = ctrls;
         }
 
-        internal void Init()
+        internal async Task Init()
         {
             cardList = new CardGroupList();
             cardList.Init();
             semanticList = new SemanticGroupList();
-            Document[] docs = controllers.DocumentController.GetDocument();
-            semanticList.Init(docs, controllers.MlController);
+            string[] docs = controllers.DocumentController.GetDocumentIDs();
+            await semanticList.Init(docs, controllers.MlController);
         }
 
         internal void Deinit()
@@ -156,13 +156,16 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     }
             }
             CardGroup newgg = new CardGroup();
-            foreach (CardGroup gg in tempList) {
-                foreach (string c in gg.GetCardID()) {
+            foreach (CardGroup gg in tempList)
+            {
+                foreach (string c in gg.GetCardID())
+                {
                     RemoveGlowEffect(c);
                     newgg.AddCard(c);
                 }
             }
-            foreach (string c in newgg.GetCardID()) {
+            foreach (string c in newgg.GetCardID())
+            {
                 AddGlowEffect(c, 0);
             }
             cardList.AddCardGroup(newgg);
@@ -178,10 +181,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             CardGroup currentGroup = cardList.GeCardGroup(cardID);
             int colorIndex = 0;
             Glow glow = cardList.GetGlow(cardID);
-            if (glow != null) {
+            if (glow != null)
+            {
                 colorIndex = glow.ColorIndex;
             }
-            
+
             //If a group contains the card, remove the card from the group
             //If the group is empty, remove the group from the list
             if (currentGroup != null)
@@ -255,8 +259,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
             CardStatus status1 = await controllers.CardController.GetLiveCardStatus(card);
             List<string> tempList = new List<string>();
-            foreach (string c in cards) {
-                CardStatus status2= await controllers.CardController.GetLiveCardStatus(c);
+            foreach (string c in cards)
+            {
+                CardStatus status2 = await controllers.CardController.GetLiveCardStatus(c);
                 if (Coordination.IsIntersect(status1.corners, status2.corners))
                 {
                     tempList.Add(c);
@@ -266,8 +271,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 return;
             }
-            else {
-                foreach (string s in tempList) {
+            else
+            {
+                foreach (string s in tempList)
+                {
                     group.AddCard(s);
                     cards.Remove(s);
                 }

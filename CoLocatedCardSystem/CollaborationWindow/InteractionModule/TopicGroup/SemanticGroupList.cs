@@ -14,32 +14,27 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class SemanticGroupList
     {
         ConcurrentDictionary<string, SemanticGroup> list = new ConcurrentDictionary<string, SemanticGroup>();// key is the topic id
-        Dictionary<int, string> defaultMatch = new Dictionary<int, string>();//match the inital topic id with the topic id.
-
-        internal void Init(Document[] docs, MLController mlController)
+        internal async Task Init(string[] docs, MLController mlController)
         {
-            for (int i = 0; i < mlController.DefaultTopicList.Length; i++)
-            {
-                Topic tp = new Topic();
-                tp.Id = Guid.NewGuid().ToString();//gen topic id
-                defaultMatch.Add(i, tp.Id);
-                for (int j = 0; j < mlController.DefaultTopicList[i].Length; j++)
-                {
-                    Token tk = new Token();
-                    tk.OriginalWord = mlController.DefaultTopicList[i][j];
-                    tk.Process();
-                    UserActionOnWord sa = new UserActionOnWord();
-                    tp.AddToken(tk, sa);
-                }
-                SemanticGroup sg = new SemanticGroup();
-                sg.SetTopic(tp);
-                list.TryAdd(tp.Id, sg);
-            }
-            foreach (Document doc in docs)
-            {
-                string topicID =  defaultMatch[doc.GetDefaultTopicIndex()];
-                list[topicID].AddDoc(doc.DocID);
-            }
+            SemanticGroup root = new SemanticGroup();
+            var topics = await mlController.GetTopicToken(docs, 1);
+            KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
+            root.SetTopic(pair.Key);
+            root.AddDoc(pair.Value);
+            list.TryAdd(root.Id, root);
+
+            await root.GenBinaryTree(docs, mlController, list);
+            //var topics = await mlController.GetTopicToken(docs, 2);
+            //foreach (KeyValuePair<Topic,List<string>> pair in topics)
+            //{
+            //    SemanticGroup sg = new SemanticGroup();
+            //    sg.SetTopic(pair.Key);
+            //    list.TryAdd(pair.Key.Id, sg);
+            //    foreach (string doc in pair.Value)
+            //    {
+            //        list[pair.Key.Id].AddDoc(doc);
+            //    }
+            //}
         }
 
         internal IEnumerable<SemanticGroup> GetSemanticGroup()

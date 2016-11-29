@@ -69,7 +69,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             List<string> tobeRemoved = new List<string>();
             foreach (KeyValuePair<string, CloudNode> pair in cloudNodes)
             {
-                if (pair.Value.Type == CloudNode.NODETYPE.WORD|| pair.Value.Type == CloudNode.NODETYPE.PICTURE)
+                if (pair.Value.Type == CloudNode.NODETYPE.WORD || pair.Value.Type == CloudNode.NODETYPE.PICTURE)
                 {
                     tobeRemoved.Add(pair.Key);
                 }
@@ -119,40 +119,43 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             }
         }
 
-        internal async void UpdateCloudNode(IEnumerable<SemanticGroup> sgroups)
+        internal void UpdateCloudNode(IEnumerable<SemanticGroup> sgroups)
         {
             RemoveNonDocNodes();
             foreach (SemanticGroup sg in sgroups)
             {
-                ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
-                foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
+                if (sg.IsLeaf)
                 {
-                    SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id, pair.Key);
-                    foreach (string docID in pair.Value)
+                    ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
+                    foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
                     {
-                        CloudNode node = FindNode(docID);
-                        if (node != null)
+                        SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id, pair.Key);
+                        foreach (string docID in pair.Value)
                         {
-                            node.SemanticNode = sn;
+                            CloudNode node = FindNode(docID);
+                            if (node != null)
+                            {
+                                node.SemanticNode = sn;
+                            }
+                            else
+                            {
+                                CreateCloudNode(docID, CloudNode.NODETYPE.DOC);
+                                InitCloudNodeToGroup(docID, sn.Guid);
+                                SetCloudNodeDoc(docID, docID);
+                                SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
+                            }
                         }
-                        else
+                        foreach (Token tk in sg.Topic.GetToken())
                         {
-                            CreateCloudNode(docID, CloudNode.NODETYPE.DOC);
-                            InitCloudNodeToGroup(docID, sn.Guid);
-                            SetCloudNodeDoc(docID, docID);
-                            SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
+                            CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
+                            InitCloudNodeToGroup(sn.Guid + tk.StemmedWord, sn.Guid);
+                            SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
+                            SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 15);
+                            SetCloudNodePosition(sn.Guid + tk.StemmedWord, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                         }
-                    }
-                    Topic topic = await animationController.AwareCloudController.Controllers.MlController.GetTopicToken(pair.Value.ToArray());
-                    foreach (Token tk in topic.GetToken())
-                    {
-                        CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
-                        InitCloudNodeToGroup(sn.Guid + tk.StemmedWord, sn.Guid);
-                        SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                        SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 15);
-                        SetCloudNodePosition(sn.Guid + tk.StemmedWord, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                     }
                 }
+
             }
         }
 

@@ -14,7 +14,7 @@ namespace DocProcess
         /// </summary>
         /// <param name="token"></param>
         internal static void Mark(Token token) {
-            if (!Regex.IsMatch(token.StemmedWord, @"[a-z]") 
+            if (!Regex.IsMatch(token.StemmedWord, @"^[a-zA-Z]+$") 
                 || token.StemmedWord.Length == 0 
                 || token.StemmedWord.Equals(" "))
             {

@@ -293,7 +293,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
         /**
         * Save theta (topic distribution) for this model
         */
-        public int[] saveModelTheta(string filename)
+        public int[] saveModelTheta()
         {
             int[] docTopics = new int[M];
             try
@@ -454,7 +454,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             //    return false;
             //}
 
-            var docDistribution = saveModelTheta( dir + "\\" + modelName + thetaSuffix );
+            var docDistribution = saveModelTheta();
 
             //if (!saveModelPhi(dir + "\\" + modelName + phiSuffix))
             //{

@@ -62,8 +62,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             controllers = new CentralControllers();
             App app = App.Current as App;
             app.CentralController = controllers;
-            controllers.Init(Screen.WIDTH, Screen.HEIGHT);
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await controllers.Init(Screen.WIDTH, Screen.HEIGHT);
             container.Children.Add(controllers.BaseLayerController.GetBaseLayer());
             container.Children.Add(controllers.GlowLayerController.GetGlowLayer());
             container.Children.Add(controllers.CardLayerController.GetCardLayer());

@@ -14,6 +14,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         string id;//same with the topic id
         ConcurrentDictionary<string, UserActionOnDoc> docList = new ConcurrentDictionary<string, UserActionOnDoc>();//Key is the doc id.
         Topic topic;
+        SemanticGroup leftChild = null;
+        SemanticGroup rightChild = null;
+        SemanticGroup parent;
+        bool isLeaf=false;
+
         /// <summary>
         /// The id of the semantic group. Always the same with topic id.
         /// </summary>
@@ -29,34 +34,136 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 id = value;
             }
         }
-
-        internal void AddDoc(string doc)
+        internal SemanticGroup LeftChild
         {
-            if (!docList.Keys.Contains(doc)) {
-                docList.TryAdd(doc,new UserActionOnDoc());
+            get
+            {
+                return leftChild;
+            }
+
+            set
+            {
+                leftChild = value;
             }
         }
-        internal void SetDocSearched(string docID, User user, bool searched) {
-            if (docList.Keys.Contains(docID)) {
+        internal SemanticGroup RightChild
+        {
+            get
+            {
+                return rightChild;
+            }
+
+            set
+            {
+                rightChild = value;
+            }
+        }
+        internal SemanticGroup Parent
+        {
+            get
+            {
+                return parent;
+            }
+
+            set
+            {
+                parent = value;
+            }
+        }
+
+        public bool IsLeaf
+        {
+            get
+            {
+                return isLeaf;
+            }
+
+            set
+            {
+                isLeaf = value;
+            }
+        }
+
+        internal Topic Topic
+        {
+            get
+            {
+                return topic;
+            }
+
+            set
+            {
+                topic = value;
+            }
+        }
+
+        internal async Task GenBinaryTree(string[] docs, MLController mlController, ConcurrentDictionary<string, SemanticGroup> list)
+        {
+            if (docs.Length <= 30)
+            {
+                this.isLeaf = true;
+                return;
+            }
+            var topics = await mlController.GetTopicToken(docs, 2);
+
+            KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
+            this.leftChild = new SemanticGroup();
+            this.leftChild.SetTopic(pair.Key);
+            this.leftChild.AddDoc(pair.Value);
+            this.leftChild.parent = this;
+            list.TryAdd(this.leftChild.id, this.leftChild);
+
+            pair = topics.ElementAt(1);
+            this.rightChild = new SemanticGroup();
+            this.rightChild.SetTopic(pair.Key);
+            this.rightChild.AddDoc(pair.Value);
+            this.rightChild.parent = this;
+            list.TryAdd(this.rightChild.id, this.rightChild);
+
+            await leftChild.GenBinaryTree(this.leftChild.GetDocs().ToArray(), mlController, list);
+            await rightChild.GenBinaryTree(this.rightChild.GetDocs().ToArray(), mlController, list);
+        }
+        internal void AddDoc(IEnumerable<string> docs)
+        {
+            foreach (string s in docs)
+            {
+                AddDoc(s);
+            }
+        }
+        internal void AddDoc(string doc)
+        {
+            if (!docList.Keys.Contains(doc))
+            {
+                docList.TryAdd(doc, new UserActionOnDoc());
+            }
+        }
+        internal void SetDocSearched(string docID, User user, bool searched)
+        {
+            if (docList.Keys.Contains(docID))
+            {
                 docList[docID].Searched[user] = searched;
             }
         }
-        internal UserActionOnDoc RemoveDoc(string docID) {
-            UserActionOnDoc action=new UserActionOnDoc();
+        internal UserActionOnDoc RemoveDoc(string docID)
+        {
+            UserActionOnDoc action = new UserActionOnDoc();
             if (docList.Keys.Contains(docID))
             {
                 docList.TryRemove(docID, out action);
             }
             return action;
         }
-        internal ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> GetAllDocSubGroups() {
+        internal ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> GetAllDocSubGroups()
+        {
             ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> result = new ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>>();
             foreach (KeyValuePair<string, UserActionOnDoc> pair in docList)
             {
                 UserActionOnDoc actionKey = pair.Value;
                 bool existed = false;
-                foreach (UserActionOnDoc action in result.Keys) {
-                    if (action.EqualAction(actionKey)) {
+                foreach (UserActionOnDoc action in result.Keys)
+                {
+                    if (action.EqualAction(actionKey))
+                    {
                         actionKey = action;
                         existed = true;
                         break;
@@ -79,33 +186,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             return docList.Keys.ToArray();
         }
-
-        internal string GetDescription() {
-            return String.Join("", topic.GetToken().Select(a=>a.OriginalWord));
+        internal string GetDescription()
+        {
+            return String.Join("", topic.GetToken().Select(a => a.OriginalWord));
         }
-        internal IEnumerable<Token> GetToken() {
+        internal IEnumerable<Token> GetToken()
+        {
             return topic.GetToken();
         }
-
         internal bool ShareWord(SemanticGroup sg2)
         {
-            int count = 0;
-            foreach (Token tk1 in this.topic.GetToken())
+            if (this.leftChild == sg2 || this.rightChild == sg2 || this.parent == sg2)
             {
-                foreach (Token tk2 in sg2.topic.GetToken())
-                {
-                    if (tk1.EqualContent(tk2))
-                    {
-                        count++;
-                    }
-                }
+                return true;
             }
-            return count > 3;
-        }
-
-        internal void AddToken(Token tk, UserActionOnWord sa)
-        {
-            topic.AddToken(tk, sa);
+            else
+            {
+                return false;
+            }
         }
 
         internal void SetTopic(Topic tp)

@@ -10,7 +10,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
     public class Estimator 
     {
         // output model
-        protected Model trnModel;
+        private Model trnModel;
         LDACommandLineOptions option;
 
         public bool init(LDACommandLineOptions option)
@@ -75,6 +75,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             computePhi();
             trnModel.liter--;
             return trnModel.saveModel("model-final");
+        }
+
+        internal int[] GetTopicIndex()
+        {
+            return trnModel.saveModelTheta();
         }
 
         /**

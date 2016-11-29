@@ -11,6 +11,7 @@ using CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.ConnectionModule;
 using CoLocatedCardSystem.CollaborationWindow.MachineLearningModule;
+using System.Threading.Tasks;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {
@@ -161,7 +162,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
         /// <summary>
         /// Initialize all documents
         /// </summary>
-        internal async void Init(int width, int height)
+        internal async Task Init(int width, int height)
         {
             //create controllers
             documentController = new DocumentController(this);
@@ -191,7 +192,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             //Load the documents, cards and add them to the card layer
             await documentController.Init(FilePath.NewsArticle);//Load the document
             mlController.Init();
-            semanticGroupController.Init();
+            await semanticGroupController.Init();
             cardController.Init();
             cardController.InitDocCard(documentController.GetDocument());
             //Load the sorting box and add them to the sorting box layer

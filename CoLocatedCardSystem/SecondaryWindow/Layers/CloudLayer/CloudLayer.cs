@@ -57,7 +57,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                 }
                 else if (cnode.Type == CloudNode.NODETYPE.WORD)
                 {
-                    Color nodeColor = Colors.White;                   
+                    Color nodeColor = Colors.White;
                     SemanticNode semantic = cnode.SemanticNode;
                     nodeColor = ColorPicker.HsvToRgb(semantic.H, 0.75, 0.75);
                     CanvasTextFormat format = new CanvasTextFormat();

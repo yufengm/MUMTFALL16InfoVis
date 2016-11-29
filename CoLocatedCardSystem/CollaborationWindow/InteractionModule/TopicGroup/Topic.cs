@@ -34,15 +34,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        internal void AddToken(Token tk, UserActionOnWord sa)
-        {
-            if (!list.Contains(tk))
-            {
-                list.Add(tk);
-                tokenAttr.Add(tk, sa);
-            }
-        }
-
         internal IEnumerable<Token> GetToken()
         {
             return list;

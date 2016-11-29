@@ -7,21 +7,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoLocatedCardSystem.CollaborationWindow.Tool;
 
 namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
 {
     class MLController
     {
         CentralControllers controllers;
-        string[][] defaultTopicList = new string[][] {
-            new string[] { "one" , "get" , "stay" ,"day", "night","desk" , "go", "front","us","park" },
-            new string[] { "place" , "bed" , "stay" , "clean" , "area" , "one" , "great" , "breakfast" , "like" , "nice" },
-            new string[] { "breakfast" , "stay" , "free" , "clean" , "like" , "park" , "good" , "well" , "disney" , "day" },
-            new string[] { "stay" ,"nice","clean" ,"area","night" ,"place","pool" ,"day" ,"one" ,"get"},
-            new string[] { "look" ,"stay" ,"time" , "see", "like" , "around" , "bed" , "us", "clean", "one" }
-        };        
 
-        public CentralControllers Controllers
+        internal CentralControllers Controllers
         {
             get
             {
@@ -34,36 +28,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             }
         }
 
-        public string[][] DefaultTopicList
-        {
-            get
-            {
-                return defaultTopicList;
-            }
-
-            set
-            {
-                defaultTopicList = value;
-            }
-        }
-
-        public MLController(CentralControllers ctrlers)
+        internal MLController(CentralControllers ctrlers)
         {
             this.controllers = ctrlers;
         }
-        public void Init()
+        internal void Init()
         {
         }
-        internal async Task<Topic> GetTopicToken(string[] docID)
+        internal async Task<Dictionary<Topic, List<string>>> GetTopicToken(string[] docID, int topicNum)
         {
             Document[] docs = controllers.DocumentController.GetDocument(docID);
-            return await GetTopicToken(docs);
+            return await GetTopicToken(docs, topicNum);
         }
-        internal async Task<Topic> GetTopicToken(Document[] documents)
+        internal async Task<Dictionary<Topic,List<string>>> GetTopicToken(Document[] documents, int topicNum)
         {
             return await Task.Run(() =>
              {
-                 Topic topic = new Topic();
                  string doctokens = "";
                  foreach (Document doc in documents)
                  {
@@ -82,45 +62,50 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                  }
                  LDACommandLineOptions option = new LDACommandLineOptions();
                  option.beta = 0.1;
-                 option.K = 1;
-                 option.niters = 10;
+                 option.K = topicNum;
+                 option.niters = 3;
                  option.savestep = 100;
-                 option.twords = 5;
+                 option.twords = 10;
                  option.data = doctokens;
                  option.est = true;
                  option.modelName = "model-final";
 
-
-                 string[] resultStr = new string[option.K * option.twords];
-
                  Estimator estimator = new Estimator();
                  estimator.init(option);
                  List<Dictionary<string, double>> topicWordProbpairs = estimator.estimate();
-                 int i = 0;
+                 Dictionary<Topic, List<string>> result = new Dictionary<Topic, List<string>>();
+                 int[] docIndex = estimator.GetTopicIndex();
+                 int topicIndex = 0;
                  foreach (Dictionary<string, double> dic in topicWordProbpairs)
                  {
-                     foreach (String key in dic.Keys)
+                     Topic topic = new Topic();
+                     topic.Id = Guid.NewGuid().ToString();
+                     foreach (string key in dic.Keys)
                      {
-                         resultStr[i] = key;
-                         i++;
+                         Token tk = controllers.DocumentController.FindToken(key, documents);
+                         if (tk != null)
+                         {
+                             topic.AddToken(tk);
+                         }
+                         else
+                         {
+                             tk = new Token();
+                             tk.OriginalWord = key;
+                             tk.Process();
+                             topic.AddToken(tk);
+                         }
                      }
+                     result.Add(topic, new List<string>());
+                     for (int i = 0; i < documents.Length; i++)
+                     {
+                         if (docIndex[i] == topicIndex)
+                         {
+                             result[topic].Add(documents[i].DocID);
+                         }
+                     }
+                     topicIndex++;
                  }
-                 foreach (string r in resultStr)
-                 {
-                     Token tk = controllers.DocumentController.FindToken(r, documents);
-                     if (tk != null)
-                     {
-                         topic.AddToken(tk);
-                     }
-                     else
-                     {
-                         tk = new Token();
-                         tk.OriginalWord = r;
-                         tk.Process();
-                         topic.AddToken(tk);
-                     }
-                 }
-                 return topic;
+                 return result;
              });
         }
     }

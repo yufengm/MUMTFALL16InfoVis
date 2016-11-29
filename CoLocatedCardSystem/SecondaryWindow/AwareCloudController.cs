@@ -88,11 +88,6 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
         }
 
-        internal Task<Topic> GetSubTopicToken(string[] docList)
-        {
-            return controllers.MlController.GetTopicToken(docList);
-        }
-
         internal void Init(int width, int height)
         {
             // this.webView = v;

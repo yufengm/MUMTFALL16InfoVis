@@ -59,5 +59,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
             return result.ToArray();
         }
+
+        internal string[] GetDocIDs()
+        {
+            return list.Keys.ToArray();
+        }
     }
 }

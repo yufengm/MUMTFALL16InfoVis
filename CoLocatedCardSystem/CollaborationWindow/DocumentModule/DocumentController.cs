@@ -42,6 +42,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
+        internal string[] GetDocumentIDs()
+        {
+            return list.GetDocIDs();
+        }
+
         /// <summary>
         /// Deinit the document module
         /// </summary>
