@@ -42,28 +42,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
         {
             foreach (CardGroup gg in controllers.SemanticGroupController.GetGroups().Values)
             {
-                if (gg.Count() > 1) {
+                if (gg.Count() > 1)
+                {
                     var cardIDs = gg.GetCardID();
-                    List<Document> docs = new List<Document>();
-                    double px = 0;
-                    double py = 0;
-                    List<User> ownerList = new List<User>();
+                    List<string> docIDs = new List<string>();
                     foreach (string id in cardIDs)
                     {
                         Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
-                        docs.Add(doc);
-                        CardStatus cs = await controllers.CardController.GetLiveCardStatus(id);
-                        px += cs.position.X;
-                        py += cs.position.Y;
-                        if (!ownerList.Contains(cs.owner))
+                        if (!docIDs.Contains(doc.DocID))
                         {
-                            ownerList.Add(cs.owner);
+                            docIDs.Add(doc.DocID);
                         }
-                    }
-                    px /= gg.Count();
-                    py /= gg.Count();
 
-                    //Token[] tks = controllers.MlController.GetTopicToken(docs.ToArray());
+                    }
+                    if (docIDs.Count > 1)
+                    {
+                        await controllers.SemanticGroupController.MergeGroup(docIDs.ToArray());
+                        UpdateSemanticCloud();
+                    }
                 }
             }
         }

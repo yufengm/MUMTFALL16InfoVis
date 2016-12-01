@@ -99,6 +99,14 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.DocID = docID;
             }
         }
+        private void SetCloudNodeUserAction(string id, UserActionOnDoc action)
+        {
+            var node = FindNode(id);
+            if (node != null)
+            {
+                node.UserActionOnDoc=action;
+            }
+        }
         internal void SetCloudNodeWeight(string id, double weight)
         {
             var node = FindNode(id);
@@ -133,15 +141,17 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                         foreach (string docID in pair.Value)
                         {
                             CloudNode node = FindNode(docID);
-                            if (node != null)
+                            if (node != null && sn != null)//update node group
                             {
                                 node.SemanticNode = sn;
+                                SetCloudNodeUserAction(docID, sg.GetUserActionOnDoc(docID));
                             }
-                            else
+                            else//Add new node to the group
                             {
                                 CreateCloudNode(docID, CloudNode.NODETYPE.DOC);
                                 InitCloudNodeToGroup(docID, sn.Guid);
                                 SetCloudNodeDoc(docID, docID);
+                                SetCloudNodeUserAction(docID, sg.GetUserActionOnDoc(docID));
                                 SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                             }
                         }
@@ -155,7 +165,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                         }
                     }
                 }
-
             }
         }
 
@@ -187,48 +196,51 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             double energy0 = this.energy;
             foreach (CloudNode firstNode in cloudNodes.Values)
             {
-                Point f = new Point();
-                Point replEng = new Point();
-                int replCount = 0;
-                foreach (CloudNode secondNode in cloudNodes.Values)
+                if (firstNode.SemanticNode != null)
                 {
-                    if (firstNode != secondNode && Calculator.Distance(firstNode, secondNode) < SecondaryScreen.WIDTH / 10)
+                    Point f = new Point();
+                    Point replEng = new Point();
+                    int replCount = 0;
+                    foreach (CloudNode secondNode in cloudNodes.Values)
                     {
-                        replCount += 1;
-                        Point repel = this.CalRepel(firstNode, secondNode);
-                        f.X += repel.X;
-                        f.Y += repel.Y;
-                        replEng.X += repel.X;
-                        replEng.Y += repel.Y;
+                        if (firstNode != secondNode && Calculator.Distance(firstNode, secondNode) < SecondaryScreen.WIDTH / 10)
+                        {
+                            replCount += 1;
+                            Point repel = this.CalRepel(firstNode, secondNode);
+                            f.X += repel.X;
+                            f.Y += repel.Y;
+                            replEng.X += repel.X;
+                            replEng.Y += repel.Y;
+                        }
                     }
+                    this.energy += replEng.X * replEng.X + replEng.Y * replEng.Y;
+                    Point attraction = this.CalCenterAttraction(firstNode);
+                    f.X += attraction.X;
+                    f.Y += attraction.Y;
+                    this.energy += attraction.X * attraction.X + attraction.Y * attraction.Y;
+                    Point boarderRepel = this.CalBorderRepel(firstNode);
+                    f.X += boarderRepel.X;
+                    f.Y += boarderRepel.Y;
+                    this.energy += boarderRepel.X * boarderRepel.X + boarderRepel.Y * boarderRepel.Y;
+                    Point acc = new Point();
+                    acc.X = f.X / firstNode.Weight;
+                    acc.Y = f.Y / firstNode.Weight;
+                    firstNode.Vx += (float)acc.X;
+                    firstNode.Vy += (float)acc.Y;
+                    double speed = Calculator.Distance(0, 0, firstNode.Vx, firstNode.Vy);
+                    if (speed > 120)
+                    {
+                        firstNode.Vx = (float)(100 * firstNode.Vx / speed);
+                        firstNode.Vy = (float)(100 * firstNode.Vy / speed);
+                        speed = 120;
+                    }
+                    float deltaX = (float)((this.timeStep * firstNode.Vx + acc.X * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
+                    float deltaY = (float)((this.timeStep * firstNode.Vy + acc.Y * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
+                    firstNode.X += deltaX;
+                    firstNode.Y += deltaY;
                 }
-                this.energy += replEng.X * replEng.X + replEng.Y * replEng.Y;
-                Point attraction = this.CalCenterAttraction(firstNode);
-                f.X += attraction.X;
-                f.Y += attraction.Y;
-                this.energy += attraction.X * attraction.X + attraction.Y * attraction.Y;
-                Point boarderRepel = this.CalBorderRepel(firstNode);
-                f.X += boarderRepel.X;
-                f.Y += boarderRepel.Y;
-                this.energy += boarderRepel.X * boarderRepel.X + boarderRepel.Y * boarderRepel.Y;
-                Point acc = new Point();
-                acc.X = f.X / firstNode.Weight;
-                acc.Y = f.Y / firstNode.Weight;
-                firstNode.Vx += (float)acc.X;
-                firstNode.Vy += (float)acc.Y;
-                double speed = Calculator.Distance(0, 0, firstNode.Vx, firstNode.Vy);
-                if (speed > 120)
-                {
-                    firstNode.Vx = (float)(100 * firstNode.Vx / speed);
-                    firstNode.Vy = (float)(100 * firstNode.Vy / speed);
-                    speed = 120;
-                }
-                float deltaX = (float)((this.timeStep * firstNode.Vx + acc.X * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
-                float deltaY = (float)((this.timeStep * firstNode.Vy + acc.Y * Math.Pow(this.timeStep, 2) / 2.0) * this.moveStep);
-                firstNode.X += deltaX;
-                firstNode.Y += deltaY;
             }
-            this.UpdateStrengthLength(energy0);
+            UpdateStrengthLength(energy0);
         }
         private void UpdateStrengthLength(double energy0)
         {
@@ -249,7 +261,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         }
         private Point CalBorderRepel(CloudNode node)
         {
-            double dist = Calculator.Distance(node.X, node.Y, SecondaryScreen.WIDTH / 2, SecondaryScreen.HEIGHT / 2) + 0.001;
+            double dist = Calculator.Distance(node.X + node.W / 2, 
+                node.Y + node.H / 2, 
+                node.SemanticNode.X,
+                node.SemanticNode.Y) + 0.001;
             double atrc = 0;
             Point result = new Point();
             if (node.X < SecondaryScreen.WIDTH / 10 ||
@@ -257,10 +272,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.Y < SecondaryScreen.HEIGHT / 10 ||
                 node.Y > SecondaryScreen.HEIGHT - SecondaryScreen.HEIGHT / 10)
             {
-                atrc = -100;
+                atrc = -10000;
             }
-            result.X = atrc * (node.X - SecondaryScreen.WIDTH / 2) / dist;
-            result.Y = atrc * (node.Y - SecondaryScreen.HEIGHT / 2) / dist;
+            result.X = atrc * (node.X+node.W/2 - node.SemanticNode.X) / dist;
+            result.Y = atrc * (node.Y+node.H/2 - node.SemanticNode.Y) / dist;
             return result;
         }
         private Point CalCenterAttraction(CloudNode node)
@@ -274,11 +289,11 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             Point result = new Point();
             if (node.Type == CloudNode.NODETYPE.DOC)
             {
-                atrc = -160 * dist;
+                atrc = -1200 * dist;
             }
             else
             {
-                atrc = -100 * dist;
+                atrc = -800 * dist;
             }
             result.X = atrc * (node.X + node.W / 2 - node.SemanticNode.X) / dist;
             result.Y = atrc * (node.Y + node.H / 2 - node.SemanticNode.Y) / dist;
@@ -304,7 +319,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                     }
                     else
                     {
-                        rpl = -900 * Math.Max(deltaXY.X, deltaXY.Y);
+                        rpl = -500 * Math.Max(deltaXY.X, deltaXY.Y);
                     }
                 }
                 result.X = rpl * (node2.X + node2.W / 2 - node1.X - node1.W / 2) / dist;

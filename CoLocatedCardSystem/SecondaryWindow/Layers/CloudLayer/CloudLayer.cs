@@ -46,29 +46,50 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         {
             foreach (CloudNode cnode in cloudNodes.Values)
             {
-                if (cnode.Type == CloudNode.NODETYPE.DOC)
-                {
-                    Color nodeColor = MyColor.Yellow;
-                    args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
-                        cnode.Weight / 2, nodeColor);
-                    DrawArc(args, cnode, User.ALEX);
-                    DrawArc(args, cnode, User.BEN);
-                    DrawArc(args, cnode, User.CHRIS);
-                }
-                else if (cnode.Type == CloudNode.NODETYPE.WORD)
-                {
-                    Color nodeColor = Colors.White;
-                    SemanticNode semantic = cnode.SemanticNode;
-                    nodeColor = ColorPicker.HsvToRgb(semantic.H, 0.75, 0.75);
-                    CanvasTextFormat format = new CanvasTextFormat();
-                    format.FontSize = cnode.Weight;
-                    format.FontStretch = Windows.UI.Text.FontStretch.Expanded;
-                    format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
-                    args.DrawingSession.DrawText(cnode.CloudText,
-                        new Rect(cnode.X, cnode.Y, cnode.W, cnode.H),
-                        nodeColor,
-                        format);
-                }
+                if (cnode.SemanticNode != null) {
+                    if (cnode.Type == CloudNode.NODETYPE.DOC)
+                    {
+                        Color nodeColor = MyColor.Yellow;
+                        Color ringColor = MyColor.Yellow;
+                        foreach (User user in Enum.GetValues(typeof(User)))
+                        {
+                            if (cnode.UserActionOnDoc.Active[user])
+                            {
+                                ringColor = ColorPicker.HsvToRgb(60, 1, 0.6);
+                                args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                                    cnode.Weight / 2, ringColor);
+                                break;
+                            }
+                        }
+                        DrawArc(args, cnode, User.ALEX);
+                        DrawArc(args, cnode, User.BEN);
+                        DrawArc(args, cnode, User.CHRIS);
+                        foreach (User user in Enum.GetValues(typeof(User)))
+                        {
+                            if (cnode.UserActionOnDoc.Touched[user])
+                            {
+                                ringColor = ColorPicker.HsvToRgb(60, 1, 1);
+                                args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),
+                                    cnode.Weight / 2, ringColor);
+                                break;
+                            }
+                        }
+                    }
+                    else if (cnode.Type == CloudNode.NODETYPE.WORD)
+                    {
+                        Color nodeColor = Colors.White;
+                        SemanticNode semantic = cnode.SemanticNode;
+                        nodeColor = ColorPicker.HsvToRgb(semantic.H, 0.75, 0.75);
+                        CanvasTextFormat format = new CanvasTextFormat();
+                        format.FontSize = cnode.Weight;
+                        format.FontStretch = Windows.UI.Text.FontStretch.Expanded;
+                        format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
+                        args.DrawingSession.DrawText(cnode.CloudText,
+                            new Rect(cnode.X, cnode.Y, cnode.W, cnode.H),
+                            nodeColor,
+                            format);
+                    }
+                }              
             }
         }
 

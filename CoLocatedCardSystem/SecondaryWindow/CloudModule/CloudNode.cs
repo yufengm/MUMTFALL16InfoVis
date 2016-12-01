@@ -27,6 +27,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float weight = 22;
         float w = 20;
         float h = 20;
+        UserActionOnDoc userActionOnDoc;
         #region getter
         public string Guid
         {
@@ -200,6 +201,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             set
             {
                 docID = value;
+            }
+        }
+
+        internal UserActionOnDoc UserActionOnDoc
+        {
+            get
+            {
+                return userActionOnDoc;
+            }
+
+            set
+            {
+                userActionOnDoc = value;
             }
         }
         #endregion

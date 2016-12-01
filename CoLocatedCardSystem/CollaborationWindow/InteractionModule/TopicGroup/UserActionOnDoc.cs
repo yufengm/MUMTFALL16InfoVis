@@ -9,7 +9,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class UserActionOnDoc
     {
         Dictionary<User, bool> searched = new Dictionary<User, bool>();
-
+        Dictionary<User, bool> active = new Dictionary<User, bool>();
+        Dictionary<User, bool> touched = new Dictionary<User, bool>();
         public Dictionary<User, bool> Searched
         {
             get
@@ -23,14 +24,43 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        public UserActionOnDoc() {
-            foreach (User user in Enum.GetValues(typeof(User)))
+        public Dictionary<User, bool> Active
+        {
+            get
             {
-                searched.Add(user, false);
+                return active;
+            }
+
+            set
+            {
+                active = value;
             }
         }
 
-        internal bool EqualAction(UserActionOnDoc action)
+        public Dictionary<User, bool> Touched
+        {
+            get
+            {
+                return touched;
+            }
+
+            set
+            {
+                touched = value;
+            }
+        }
+
+        public UserActionOnDoc()
+        {
+            foreach (User user in Enum.GetValues(typeof(User)))
+            {
+                searched.Add(user, false);
+                active.Add(user, false);
+                touched.Add(user, false);
+            }
+        }
+
+        internal bool EqualSearchAction(UserActionOnDoc action)
         {
             foreach (User user in Enum.GetValues(typeof(User)))
             {
@@ -47,6 +77,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             foreach (User user in Enum.GetValues(typeof(User)))
             {
                 action.Searched[user] = searched[user];
+                action.Active[user] = active[user];
+                action.Touched[user] = active[user];
             }
             return action;
         }

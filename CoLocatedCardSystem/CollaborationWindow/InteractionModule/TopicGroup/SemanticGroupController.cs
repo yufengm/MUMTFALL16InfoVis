@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Input;
@@ -13,6 +15,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         CentralControllers controllers;
         CardGroupList cardList;//card clusters
         SemanticGroupList semanticList;//semantic groups
+        internal static int PREFERRED_CLOUD_SIZE = 30;
         internal SemanticGroupController(CentralControllers ctrls)
         {
             this.controllers = ctrls;
@@ -40,6 +43,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             return semanticList.GetSemanticGroup();
         }
+        internal SemanticGroup GetSemanticGroup(string docID)
+        {
+            return semanticList.GetSemanticGroup(docID);
+        }
         /// <summary>
         /// Find all groups that intersect with the card
         /// </summary>
@@ -63,6 +70,93 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
             groups = tempList.ToArray();
             return groups;
+        }
+
+        internal async Task MergeGroup(string[] docIDs)
+        {
+            if (docIDs != null && docIDs.Length > 1)
+            {
+                //Find the node that contains both docIDs
+                SemanticGroup group = semanticList.FindCommonParent(docIDs);
+                List<SemanticGroup> sgs = new List<SemanticGroup>();
+                foreach (string docID in docIDs)
+                {
+                    SemanticGroup sg = semanticList.GetSemanticGroup(docID);
+                    if (!sgs.Contains(sg))
+                    {
+                        sgs.Add(sg);
+                    }
+                }
+
+                //Get all docs in leaf nodes
+                List<string> clusteredDocs = new List<string>();
+                foreach (SemanticGroup sg in sgs)
+                {
+                    if (sg.IsLeaf)
+                    {
+                        foreach (string docID in sg.GetDocs())
+                        {
+                            clusteredDocs.Add(docID);
+                        }
+                    }
+                }
+
+                //Find the rest docs
+                List<string> restDocs = new List<string>();
+                foreach (string docID in group.GetDocs())
+                {
+                    if (!clusteredDocs.Contains(docID))
+                    {
+                        restDocs.Add(docID);
+                    }
+                }
+
+                semanticList.RemoveSemanticGroup(group);
+                //Add the common node back
+                semanticList.List.TryAdd(group.Id, group);
+                if (group.LeftChild != null)
+                {
+                    group.LeftChild.Deinit();
+                }
+                if (group.RightChild != null)
+                {
+                    group.RightChild.Deinit();
+                }
+
+                if (restDocs.Count > 0)
+                {
+                    //Merge the docs into the left node
+                    group.LeftChild = new SemanticGroup();
+                    group.LeftChild.AddDoc(clusteredDocs);
+                    var topics = await controllers.MlController.GetTopicToken(clusteredDocs.ToArray(), 1);
+                    KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
+                    group.LeftChild.SetTopic(pair.Key);
+                    group.LeftChild.IsLeaf = true;
+                    group.LeftChild.Parent = group;
+                    semanticList.List.TryAdd(group.LeftChild.Id, group.LeftChild);
+                    //Merge the rest docs into the right node
+                    group.RightChild = new SemanticGroup();
+                    group.RightChild.AddDoc(restDocs);
+                    topics = await controllers.MlController.GetTopicToken(restDocs.ToArray(), 1);
+                    pair = topics.ElementAt(0);
+                    group.RightChild.SetTopic(pair.Key);
+                    group.RightChild.Parent = group;
+                    semanticList.List.TryAdd(group.RightChild.Id, group.RightChild);
+                    if (restDocs.Count > PREFERRED_CLOUD_SIZE)
+                    {
+                        await group.RightChild.GenBinaryTree(restDocs.ToArray(), controllers.MlController, semanticList.List, PREFERRED_CLOUD_SIZE);
+                        group.RightChild.Parent = group;
+                    }
+                    else
+                    {
+                        group.RightChild.IsLeaf = true;
+                    }
+                }
+                else
+                {
+                    group.IsLeaf = true;
+                }
+            }
         }
 
         private async Task<bool> IsIntersect(CardStatus card, CardGroup gg)
@@ -213,12 +307,35 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 controllers.ConnectionController.UpdateCurrentStatus();
             }
         }
-
+        /// <summary>
+        /// Set the search result. Set the UserActionOnDoc
+        /// </summary>
+        /// <param name="docIDs"></param>
+        /// <param name="owner"></param>
+        /// <param name="searched"></param>
         internal void SetSearchResult(string[] docIDs, User owner, bool searched)
         {
             semanticList.SetSearchResult(docIDs, owner, searched);
         }
-
+        /// <summary>
+        /// Set the active result. Set the UserActionOnDoc
+        /// </summary>
+        /// <param name="docIDs"></param>
+        /// <param name="owner"></param>
+        /// <param name="searched"></param>
+        internal void SetActiveCard(string[] docIDs, User owner, bool searched)
+        {
+            semanticList.SetActiveResult(docIDs, owner, searched);
+        }
+        /// <summary>
+        /// Set the touch result. Set the UserActionOnDoc
+        /// </summary>
+        /// <param name="documentCard"></param>
+        /// <param name="value"></param>
+        internal void SetTouchedCard(DocumentCard documentCard, bool value)
+        {
+            semanticList.SetTouchResult(documentCard.Document.DocID, documentCard.Owner, value);
+        }
         /// <summary>
         /// Based on the connection of the cards, create different groups
         /// </summary>

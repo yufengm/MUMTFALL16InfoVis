@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,6 +71,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             Touch[] touchList = list.GetTouch();
             Touch[] newTouchList = new Touch[] { newTouch };
             controllers.GestureController.RemoveAttachingGesture.Detect(touchList, newTouchList);
+
+            if (newTouch != null && newTouch.Sender != null && newTouch.Sender is DocumentCard)
+            {
+                DocumentCard card = newTouch.Sender as DocumentCard;
+                controllers.SemanticGroupController.SetTouchedCard(card, true);
+            }
         }
 
         /// <summary>
@@ -127,6 +134,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.TouchModule
             Touch[] removedTouchList = new Touch[] { removedTouch };
             controllers.GestureController.AttachingGesture.Detect(touchList, removedTouchList);
             controllers.GestureController.DeleteCardGesture.Detect(touchList, removedTouchList);
+            if (removedTouch != null && removedTouch.Sender != null && removedTouch.Sender is DocumentCard)
+            {
+                controllers.SemanticGroupController.SetTouchedCard(removedTouch.Sender as DocumentCard,false);
+            }
         }
     }
 }

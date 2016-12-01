@@ -65,8 +65,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             if (semanticNode == null)
             {
                 semanticNode = new SemanticNode();
-                semanticNode.X = SecondaryScreen.WIDTH / 2 + Rand.Next(10) - 5;
-                semanticNode.Y = SecondaryScreen.HEIGHT / 2 + Rand.Next(10) - 5;
+                semanticNode.X = SecondaryScreen.WIDTH / 2 + Rand.Next(200) - 100;
+                semanticNode.Y = SecondaryScreen.HEIGHT / 2 + Rand.Next(200) - 100;
                 semanticNode.Semantic = semantic;
                 semanticNode.Guid = snid;
                 semanticNodes.TryAdd(semanticNode.Guid, semanticNode);
@@ -78,65 +78,24 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             if (node != null)
             {
                 this.semanticNodes.TryRemove(snid, out node);
-                if (node != null)
-                {
-                    foreach (SemanticNode otherNode in semanticNodes.Values)
-                    {
-                        if (otherNode.Connections.Contains(node))
-                        {
-                            otherNode.Connections.TryTake(out node);
-                        }
-                    }
-                }
             }
         }
 
         internal void UpdateSemanticNode(IEnumerable<SemanticGroup> sgroups)
         {
-            //Check if the root id need to be removed.
-            ConcurrentBag<string> tobeRemoved = new ConcurrentBag<string>();
-            foreach (SemanticNode root in semanticNodes.Values)
-            {
-                if (root.IsRoot)
-                {
-                    bool existed = false;
-                    foreach (SemanticGroup sg in sgroups)
-                    {
-                        if (root.Guid == sg.Id)
-                        {
-                            existed = true;
-                            break;
-                        }
-                    }
-                    if (!existed)
-                    {
-                        tobeRemoved.Add(root.Guid);
-                    }
-                }
-            }
-            foreach (string id in tobeRemoved) {
-                RemoveSemanticNode(id);
-            }
-            //Add new root node
-            foreach (SemanticGroup sg in sgroups)
-            {
-                SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id);
-                if (sn == null)
-                {
-                    int h = ColorPicker.GetColorHue();
-                    AddSemanticNode(sg.Id, sg.GetDescription());
-                    SetSemanticNodeColor(sg.Id, h, 1, 1);
-                    SetSemanticNodeOptimal(sg.Id, 2);
-                    sn = FindNode(sg.Id);
-                    sn.IsRoot = true;
-                }
-            }
+            semanticNodes.Clear();
+            //Reload semantic nodes
+            foreach (SemanticGroup sg in sgroups) {
+                AddSemanticNode(sg.Id, sg.GetDescription());
+                SetSemanticNodeOptimal(sg.Id, 3);
+                SetSemanticNodeColor(sg.Id, sg.Hue, 1, 1);
+            }          
             //Connect the root node
             foreach (SemanticGroup sg1 in sgroups)
             {
                 foreach (SemanticGroup sg2 in sgroups)
                 {
-                    if (sg1 != sg2 && sg1.ShareWord(sg2))
+                    if (sg1 != sg2 && sg1.CheckConnection(sg2))
                     {
                         ConnectSemanticNode(sg1.Id, sg2.Id);
                     }
@@ -149,54 +108,15 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 {
                     SemanticNode sn = FindNode(sg.Id);
                     ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
-                    tobeRemoved = new ConcurrentBag<string>();
-                    foreach (SemanticNode conNode in sn.Connections)
-                    {
-                        if (!conNode.IsRoot)
-                        {
-                            bool existed = false;
-                            foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
-                            {
-                                if (pair.Key.EqualAction(conNode.UserActionOnDoc))
-                                {
-                                    existed = true;
-                                    break;
-                                }
-                            }
-                            if (!existed)
-                            {
-                                tobeRemoved.Add(conNode.Guid);
-                            }
-                        }
-                    }
-                    foreach (string guid in tobeRemoved)
-                    {
-                        RemoveSemanticNode(guid);
-                    }
                     foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
                     {
-                        bool existed = false;
-                        foreach (SemanticNode conNode in sn.Connections)
-                        {
-                            if (!conNode.IsRoot)
-                            {
-                                if (pair.Key.EqualAction(conNode.UserActionOnDoc))
-                                {
-                                    existed = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (!existed)
-                        {
-                            string newID = sg.Id + Guid.NewGuid().ToString();
-                            AddSemanticNode(newID, sg.GetDescription());
-                            SetSemanticNodeColor(newID, sn.H, 1, 1);
-                            SetSemanticNodeOptimal(newID, 25);
-                            ConnectSemanticNode(sg.Id, newID);
-                            SemanticNode newSubNode = FindNode(newID);
-                            newSubNode.UserActionOnDoc = pair.Key;
-                        }
+                        string newID = sg.Id + Guid.NewGuid().ToString();
+                        AddSemanticNode(newID, sg.GetDescription());
+                        SetSemanticNodeColor(newID, sg.Hue, 1, 1);
+                        SetSemanticNodeOptimal(newID, 20);
+                        ConnectSemanticNode(sg.Id, newID);
+                        SemanticNode newSubNode = FindNode(newID);
+                        newSubNode.UserActionOnDoc = pair.Key;
                     }
                 }
             }
@@ -209,7 +129,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             {
                 foreach (SemanticNode subNode in node.Connections)
                 {
-                    if (subNode.UserActionOnDoc.EqualAction(key))
+                    if (subNode.UserActionOnDoc.EqualSearchAction(key))
                     {
                         return subNode;
                     }

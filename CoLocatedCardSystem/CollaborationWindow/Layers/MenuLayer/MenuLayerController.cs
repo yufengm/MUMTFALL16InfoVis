@@ -105,16 +105,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         /// <param name="content"></param>
         internal async void SearchDocumentCard(User owner, string content)
         {
-
             ProcessedDocument tempPD = new ProcessedDocument();
             await tempPD.InitTokens(content.Trim());
             list[owner].RemoveUnusedHighlight();
             DocumentCard[] cards =
                 controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, tempPD);
-            foreach (DocumentCard card in cards)
-            {
-                card.InitialHighlight(tempPD);
-            }
+            //foreach (DocumentCard card in cards)
+            //{
+            //    card.InitialHighlight(tempPD);
+            //}
             list[owner].ShowCardsInSearchResultTray(content, cards);
         }
         /// <summary>
@@ -135,7 +134,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             MenuBarInfo info = MenuBarInfo.GetMenuBarInfo(card.Owner);
             card.MoveTo(info.CardInitPosition);
             card.Rotate(info.Rotate);
-            controllers.CardController.MoveCardToTable(card, typeof(DocumentCard));     
+            controllers.CardController.MoveCardToTable(card, typeof(DocumentCard));
+
+            string cardID = controllers.CardController.DocumentCardController.GetDocumentCardById(card.CardID).Document.DocID;
+            controllers.SemanticGroupController.SetActiveCard(new string[] { cardID }, resultCard.Owner, true);
         }
 
         /// <summary>

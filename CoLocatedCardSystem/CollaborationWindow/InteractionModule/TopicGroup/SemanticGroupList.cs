@@ -14,27 +14,31 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
     class SemanticGroupList
     {
         ConcurrentDictionary<string, SemanticGroup> list = new ConcurrentDictionary<string, SemanticGroup>();// key is the topic id
+        SemanticGroup root;
+
+        internal ConcurrentDictionary<string, SemanticGroup> List
+        {
+            get
+            {
+                return list;
+            }
+
+            set
+            {
+                list = value;
+            }
+        }
+
         internal async Task Init(string[] docs, MLController mlController)
         {
-            SemanticGroup root = new SemanticGroup();
+            root = new SemanticGroup();
             var topics = await mlController.GetTopicToken(docs, 1);
             KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
             root.SetTopic(pair.Key);
-            root.AddDoc(pair.Value);
+            System.Diagnostics.Debug.WriteLine(root.Id);
+            root.AddDoc(docs);
             list.TryAdd(root.Id, root);
-
-            await root.GenBinaryTree(docs, mlController, list);
-            //var topics = await mlController.GetTopicToken(docs, 2);
-            //foreach (KeyValuePair<Topic,List<string>> pair in topics)
-            //{
-            //    SemanticGroup sg = new SemanticGroup();
-            //    sg.SetTopic(pair.Key);
-            //    list.TryAdd(pair.Key.Id, sg);
-            //    foreach (string doc in pair.Value)
-            //    {
-            //        list[pair.Key.Id].AddDoc(doc);
-            //    }
-            //}
+            await root.GenBinaryTree(docs, mlController, list, SemanticGroupController.PREFERRED_CLOUD_SIZE);
         }
 
         internal IEnumerable<SemanticGroup> GetSemanticGroup()
@@ -42,6 +46,17 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             return list.Values;
         }
 
+        internal SemanticGroup GetSemanticGroup(string docID)
+        {
+            foreach (SemanticGroup sg in list.Values)
+            {
+                if (sg.IsLeaf && sg.HasDoc(docID))
+                {
+                    return sg;
+                }
+            }
+            return null;
+        }
         internal void Deinit()
         {
             throw new NotImplementedException();
@@ -50,8 +65,57 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal void SetSearchResult(string[] docIDs, User owner, bool searched)
         {
             foreach (SemanticGroup sg in list.Values) {
-                foreach (string docID in docIDs) {
-                    sg.SetDocSearched(docID, owner, searched);
+                if (sg.IsLeaf)
+                {
+                    foreach (string docID in docIDs)
+                    {
+                        sg.SetDocSearched(docID, owner, searched);
+                    }
+                }
+            }
+        }
+
+        internal void SetActiveResult(string[] docIDs, User owner, bool searched)
+        {
+            foreach (SemanticGroup sg in list.Values)
+            {
+                if (sg.IsLeaf)
+                {
+                    foreach (string docID in docIDs)
+                    {
+                        sg.SetDocActive(docID, owner, searched);
+                    }
+                }
+            }
+        }
+
+        internal SemanticGroup FindCommonParent(string[] docIDs)
+        {
+            return root.FindCommonParent(docIDs);
+        }
+
+        internal void RemoveSemanticGroup(SemanticGroup group)
+        {
+            SemanticGroup sg;
+            if (group.IsLeaf)
+            {
+                list.TryRemove(group.Id, out sg);
+            }
+            else
+            {
+                RemoveSemanticGroup(group.LeftChild);
+                RemoveSemanticGroup(group.RightChild);
+                list.TryRemove(group.Id, out sg);
+            }
+        }
+
+        internal void SetTouchResult(string docID, User owner, bool value)
+        {
+            foreach (SemanticGroup sg in list.Values)
+            {
+                if (sg.IsLeaf)
+                {
+                    sg.SetDocTouched(docID, owner, value);
                 }
             }
         }

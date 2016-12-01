@@ -42,7 +42,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                 if (card.isConnectAllowed() && attachedGroups != null)
                 {
                     gestureController.Controllers.SemanticGroupController.ConnectOneCardWithGroups(card.CardID, attachedGroups);
-
                 }
             }
         }

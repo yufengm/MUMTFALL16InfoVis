@@ -197,10 +197,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         tile.Init(controller, card, token, textSize, boxSize);
                         list.Add(tile);
                         horiPanel.Children.Add(tile);
-                        if (card.HighlightedTokens.Contains(token))
-                        {
-                            tile.HighLight();
-                        }
+                        //if (card.HighlightedTokens.Contains(token))
+                        //{
+                        //    tile.HighLight();
+                        //}
                     }
                     horiPanel = new StackPanel();
                     horiPanel.Width = this.Width;
