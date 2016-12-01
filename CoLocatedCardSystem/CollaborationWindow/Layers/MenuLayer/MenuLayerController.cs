@@ -116,6 +116,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             //}
             list[owner].ShowCardsInSearchResultTray(content, cards);
         }
+        internal void SearchDocumentCard(User owner, SemanticGroup sg) {
+            DocumentCard[] cards = controllers.CardController.DocumentCardController.GetDocumentCardByDoc(sg.GetDocs(),owner);
+            list[owner].ShowCardsInSearchResultTray("Cluster", cards);
+        }
         /// <summary>
         /// Get all menu bars
         /// </summary>

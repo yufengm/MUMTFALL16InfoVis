@@ -45,7 +45,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         internal SemanticGroup GetSemanticGroup(string docID)
         {
-            return semanticList.GetSemanticGroup(docID);
+            return semanticList.GetSemanticGroupByDoc(docID);
         }
         /// <summary>
         /// Find all groups that intersect with the card
@@ -72,6 +72,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             return groups;
         }
 
+        internal SemanticGroup GetSemanticGroupById(string id)
+        {
+            return semanticList.GetSemanticGroupById(id);
+        }
+
         internal async Task MergeGroup(string[] docIDs)
         {
             if (docIDs != null && docIDs.Length > 1)
@@ -81,7 +86,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 List<SemanticGroup> sgs = new List<SemanticGroup>();
                 foreach (string docID in docIDs)
                 {
-                    SemanticGroup sg = semanticList.GetSemanticGroup(docID);
+                    SemanticGroup sg = semanticList.GetSemanticGroupByDoc(docID);
                     if (!sgs.Contains(sg))
                     {
                         sgs.Add(sg);

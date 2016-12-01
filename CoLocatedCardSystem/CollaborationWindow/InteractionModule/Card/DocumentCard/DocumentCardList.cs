@@ -62,5 +62,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
             return tempList.ToArray();
         }
+
+        internal DocumentCard GetCardByDoc(string docID, User owner)
+        {
+            var docs=list.Values.Where(c => c.Document.DocID == docID && c.Owner == owner);
+            return docs.ElementAt(0) == null ? null : docs.ElementAt(0);
+        }
     }
 }

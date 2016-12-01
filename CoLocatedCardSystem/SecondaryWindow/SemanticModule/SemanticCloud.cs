@@ -87,7 +87,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             //Reload semantic nodes
             foreach (SemanticGroup sg in sgroups) {
                 AddSemanticNode(sg.Id, sg.GetDescription());
-                SetSemanticNodeOptimal(sg.Id, 3);
+                SetSemanticNodeOptimal(sg.Id, 6);
                 SetSemanticNodeColor(sg.Id, sg.Hue, 1, 1);
             }          
             //Connect the root node

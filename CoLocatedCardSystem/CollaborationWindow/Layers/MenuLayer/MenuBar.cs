@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Media.Imaging;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using Windows.UI;
+using System.Collections.Concurrent;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
@@ -22,11 +24,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         OnScreenKeyBoard virtualKeyboard;
         TextBox textbox;
         User owner;
-        DeleteButton deleteButton;
+        TextInputButton currentInputView = null;//Which input target the view is targeting
         TextInputButton searchButton;
         TextInputButton createSortingBoxButton;
-        TextInputButton currentInputView = null;//Which input target the view is targeting
         SearchResultTray searchResultTray;
+        SemanticGroupBoard semanticGroupBoard;
         public MenuBar(MenuLayerController controller)
         {
             this.menuLayerController = controller;
@@ -39,7 +41,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         {
             MenuBarInfo info = MenuBarInfo.GetMenuBarInfo(user);
             this.owner = user;
-            Calculator.InitializeUI(info.Position, info.Rotate, info.Scale, info.Size, this);
+            UIHelper.InitializeUI(info.Position, info.Rotate, info.Scale, info.Size, this);
             LoadUI(info);
         }
         /// <summary>
@@ -49,18 +51,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         private void LoadUI(MenuBarInfo info)
         {
             LoadVirtualKeyboard(info);
-            LoadDeleteButton(info);
             LoadSearchButton(info);
             LoadCreatingSortingBoxButton(info);
             LoadSearchResultTray(info);
+            LoadSemanticButton(info);
             this.Background = new SolidColorBrush(Color.FromArgb(255,145,170,157));
             //this.Children.Add(createSortingBoxButton);
-            this.Children.Add(deleteButton);
             this.Children.Add(searchButton);
             this.Children.Add(searchResultTray);
             this.Children.Add(virtualKeyboard);
             this.Children.Add(textbox);
+            this.Children.Add(semanticGroupBoard);
         }
+
         /// <summary>
         /// Destroy the menubar.
         /// </summary>
@@ -71,7 +74,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             UnregisterPointerEvent(virtualKeyboard);
             virtualKeyboard.Disable();
             virtualKeyboard = null;
-            UnregisterPointerEvent(deleteButton);
             searchButton.Click -= KeyboardButton_Click;
             UnregisterPointerEvent(searchButton);
             UnregisterPointerEvent(searchResultTray);
@@ -105,21 +107,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             createSortingBoxButton.Click += KeyboardButton_Click;
             RegisterPointerEvent(createSortingBoxButton);
             createSortingBoxButton.IsTextScaleFactorEnabled = false;
-            Calculator.InitializeUI(info.SortingBoxButtonInfo.Position, 0, 1, info.SortingBoxButtonInfo.Size, createSortingBoxButton);
+            UIHelper.InitializeUI(info.SortingBoxButtonInfo.Position, 0, 1, info.SortingBoxButtonInfo.Size, createSortingBoxButton);
         }
-        private void LoadDeleteButton(MenuBarInfo info)
-        {
-            deleteButton = new DeleteButton();
-            deleteButton.Init(info);
-            RegisterPointerEvent(deleteButton);
-            Calculator.InitializeUI(info.DeleteButtonInfo.Position, 0, 1, info.DeleteButtonInfo.Size, deleteButton);
-        }
+
         private void LoadVirtualKeyboard(MenuBarInfo info)
         {
             //Initialize the text block
             textbox = new TextBox();
             textbox.AcceptsReturn = true;
-            Calculator.InitializeUI(info.InputTextBoxInfo.Position, 0, 1, info.InputTextBoxInfo.Size, textbox);
+            UIHelper.InitializeUI(info.InputTextBoxInfo.Position, 0, 1, info.InputTextBoxInfo.Size, textbox);
             textbox.Visibility = Visibility.Collapsed;
             textbox.TextChanged += Textbox_TextChanged;
             textbox.IsEnabled = false;
@@ -128,8 +124,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             virtualKeyboard.InitialLayout = KeyboardLayouts.English;
             virtualKeyboard.Visibility = Visibility.Collapsed;
             RegisterPointerEvent(virtualKeyboard);
-            Calculator.InitializeUI(info.KeyboardInfo.Position, 0, 1, info.KeyboardInfo.Size, virtualKeyboard);
+            UIHelper.InitializeUI(info.KeyboardInfo.Position, 0, 1, info.KeyboardInfo.Size, virtualKeyboard);
         }
+
         private void LoadSearchButton(MenuBarInfo info)
         {
             //Initialize search button
@@ -138,16 +135,39 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             searchButton.Click += KeyboardButton_Click;
             RegisterPointerEvent(searchButton);
             searchButton.IsTextScaleFactorEnabled = false;
-            Calculator.InitializeUI(info.SearchButtonInfo.Position, 0, 1, info.SearchButtonInfo.Size, searchButton);
+            UIHelper.InitializeUI(info.SearchButtonInfo.Position, 0, 1, info.SearchButtonInfo.Size, searchButton);
         }
+
         private void LoadSearchResultTray(MenuBarInfo info)
         {
             //Initialize search button
             searchResultTray = new SearchResultTray(menuLayerController);
             searchResultTray.Init(info);
             RegisterPointerEvent(searchResultTray);
-            Calculator.InitializeUI(info.SearchResultInfo.Position, 0, 1, info.SearchResultInfo.Size, searchResultTray);
+            UIHelper.InitializeUI(info.SearchResultInfo.Position, 0, 1, info.SearchResultInfo.Size, searchResultTray);
         }
+
+        private void LoadSemanticButton(MenuBarInfo info)
+        {
+            //Initialize semantic button
+
+            semanticGroupBoard = new SemanticGroupBoard(menuLayerController, info.Owner);
+            semanticGroupBoard.Init();
+            UIHelper.InitializeUI(
+                info.SemanticGroupInfo.Position, 
+                0, 1,
+                info.SemanticGroupInfo.Size, 
+                semanticGroupBoard);
+            semanticGroupBoard.DropDownOpened += SemanticGroupBoard_DropDownOpened;
+        }
+
+        private void SemanticGroupBoard_DropDownOpened(object sender, object e)
+        {
+            var sgroups = menuLayerController.Controllers.SemanticGroupController.GetSemanticGroup();
+            var leafNode = sgroups.Where(a => a.IsLeaf);
+            semanticGroupBoard.AddSemanticGroup(leafNode);
+        }
+
         private void RegisterPointerEvent(FrameworkElement element)
         {
             element.PointerPressed += PointerDown;
@@ -282,10 +302,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             else if (sender == virtualKeyboard)
             {
                 type = typeof(OnScreenKeyBoard);
-            }
-            else if (sender == deleteButton)
-            {
-                type = typeof(DeleteButton);
             }
             else if (sender == searchButton)
             {

@@ -20,6 +20,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         DeleteButtonAttr deleteButtonInfo = new DeleteButtonAttr();
         SearchButtonAttr searchButtonInfo = new SearchButtonAttr();
         SearchResultTrayAttr searchResultInfo = new SearchResultTrayAttr();
+        SemanticGroupAttr semanticGroupInfo = new SemanticGroupAttr();
         User owner = User.NONE;
         protected static Dictionary<User, MenuBarInfo> menubarInfoList = new Dictionary<User, MenuBarInfo>();
         internal Size Size
@@ -116,6 +117,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             set
             {
                 owner = value;
+            }
+        }
+
+        internal SemanticGroupAttr SemanticGroupInfo
+        {
+            get
+            {
+                return semanticGroupInfo;
+            }
+
+            set
+            {
+                semanticGroupInfo = value;
             }
         }
 
@@ -291,6 +305,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         {
             Point position = new Point(0 * Screen.SCALE_FACTOR, -130 * Screen.SCALE_FACTOR);
             Size size = new Size(800 * Screen.SCALE_FACTOR, 130 * Screen.SCALE_FACTOR);
+            public Point Position
+            {
+                get
+                {
+                    return position;
+                }
+            }
+            public Size Size
+            {
+                get
+                {
+                    return size;
+                }
+            }
+        }
+        internal class SemanticGroupAttr {
+            Point position = new Point(0 * Screen.SCALE_FACTOR, 0);
+            Size size = new Size(350 * Screen.SCALE_FACTOR, 60 * Screen.SCALE_FACTOR);
             public Point Position
             {
                 get

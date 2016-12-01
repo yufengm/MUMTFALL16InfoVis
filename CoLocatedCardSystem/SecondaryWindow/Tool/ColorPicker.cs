@@ -10,8 +10,17 @@ namespace CoLocatedCardSystem.SecondaryWindow.Tool
     class ColorPicker
     {
         static int index = 0;
-        static int[] H = new int[] { 345, 131, 59, 302, 174, 18, 309, 150, 44, 330, 204, 52 };
+        static int[] H;
 
+        static ColorPicker()
+        {
+            List<int> index = new List<int>();
+            for (int i = 300; i < 560; i += 20)
+            {
+                index.Add(i%360);
+            }
+            H = index.ToArray();
+        }
         internal static int GetColorHue()
         {
             int h = H[index];

@@ -123,7 +123,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 UpdateTransform();
                 backgroundRect = new Rectangle();
                 //Move the backgroud rectangle -1/2 width and -1/2 height to the center.
-                Calculator.InitializeUI(
+                UIHelper.InitializeUI(
                     new Point(-0.5 * (this.Width + marginWidth * 2), -0.5 * (this.Height + marginWidth * 2)), 0, 1,
                     new Size(this.Width + marginWidth * 2, this.Height + marginWidth * 2),
                     backgroundRect);

@@ -46,7 +46,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             return list.Values;
         }
 
-        internal SemanticGroup GetSemanticGroup(string docID)
+        internal SemanticGroup GetSemanticGroupByDoc(string docID)
         {
             foreach (SemanticGroup sg in list.Values)
             {
@@ -56,6 +56,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 }
             }
             return null;
+        }
+
+        internal SemanticGroup GetSemanticGroupById(string id)
+        {
+            if (list.Keys.Contains(id))
+            {
+                return list[id];
+            }
+            else
+            {
+                return null;
+            }
         }
         internal void Deinit()
         {

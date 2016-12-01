@@ -91,11 +91,26 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             return list.GetCard(cardID);
         }
+        /// <summary>
+        /// Get the document card by doc id
+        /// </summary>
+        /// <param name="docIDs"></param>
+        /// <param name="owner"></param>
+        /// <returns></returns>
+        internal DocumentCard[] GetDocumentCardByDoc(IEnumerable<string> docIDs, User owner)
+        {
+            List<DocumentCard> cards = new List<DocumentCard>();
+            foreach (string docID in docIDs) {
+                cards.Add(list.GetCardByDoc(docID, owner));
+            }
+            return cards.ToArray();
+        }
 
         internal void PointerDown_Tile(PointerPoint localPoint, PointerPoint globalPoint, Tile tile, Type type)
         {
             cardController.Controllers.TouchController.TouchDown(localPoint, globalPoint, tile, type);
         }
+
 
     }
 }

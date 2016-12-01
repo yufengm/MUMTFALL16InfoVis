@@ -69,7 +69,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.Height = glowInfo.GlowSize.Height;
             rectangle = new Rectangle();      
             rectangle.Fill = new SolidColorBrush(glowInfo.GlowColors[colorIndex]);          
-            Calculator.InitializeUI(
+            UIHelper.InitializeUI(
                     new Point(-0.5 * this.Width, -0.5 * this.Height), 0, 1,
                     new Size(this.Width, this.Height),
                     rectangle);

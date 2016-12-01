@@ -155,13 +155,21 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                                 SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
                             }
                         }
-                        foreach (Token tk in sg.Topic.GetToken())
+                    }
+                    SemanticNode rootNode = animationController.SemanticCloud.FindNode(sg.Id);
+                    foreach (Token tk in sg.Topic.GetToken())
+                    {
+                        CreateCloudNode(rootNode.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
+                        InitCloudNodeToGroup(rootNode.Guid + tk.StemmedWord, rootNode.Guid);
+                        SetCloudNodeText(rootNode.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
+                        SetCloudNodeWeight(rootNode.Guid + tk.StemmedWord, 15);
+                        if (rootNode.X < SecondaryScreen.WIDTH / 2)
                         {
-                            CreateCloudNode(sn.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
-                            InitCloudNodeToGroup(sn.Guid + tk.StemmedWord, sn.Guid);
-                            SetCloudNodeText(sn.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                            SetCloudNodeWeight(sn.Guid + tk.StemmedWord, 15);
-                            SetCloudNodePosition(sn.Guid + tk.StemmedWord, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
+                            SetCloudNodePosition(rootNode.Guid + tk.StemmedWord, rootNode.X - Rand.Next(200), rootNode.Y + Rand.Next(20) - 10);
+                        }
+                        else
+                        {
+                            SetCloudNodePosition(rootNode.Guid + tk.StemmedWord, rootNode.X + Rand.Next(200), rootNode.Y + Rand.Next(20) - 10);
                         }
                     }
                 }
@@ -261,22 +269,26 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         }
         private Point CalBorderRepel(CloudNode node)
         {
-            double dist = Calculator.Distance(node.X + node.W / 2, 
-                node.Y + node.H / 2, 
-                node.SemanticNode.X,
-                node.SemanticNode.Y) + 0.001;
-            double atrc = 0;
-            Point result = new Point();
-            if (node.X < SecondaryScreen.WIDTH / 10 ||
-                node.X > SecondaryScreen.WIDTH - SecondaryScreen.WIDTH / 10 ||
-                node.Y < SecondaryScreen.HEIGHT / 10 ||
-                node.Y > SecondaryScreen.HEIGHT - SecondaryScreen.HEIGHT / 10)
+            if (node.Type == CloudNode.NODETYPE.DOC)
             {
-                atrc = -10000;
+                double dist = Calculator.Distance(node.X + node.W / 2,
+                    node.Y + node.H / 2,
+                    node.SemanticNode.X,
+                    node.SemanticNode.Y) + 0.001;
+                double atrc = 0;
+                Point result = new Point();
+                if (node.X < SecondaryScreen.WIDTH / 10 ||
+                    node.X > SecondaryScreen.WIDTH - SecondaryScreen.WIDTH / 10 ||
+                    node.Y < SecondaryScreen.HEIGHT / 10 ||
+                    node.Y > SecondaryScreen.HEIGHT - SecondaryScreen.HEIGHT / 10)
+                {
+                    atrc = -10000;
+                }
+                result.X = atrc * (node.X + node.W / 2 - node.SemanticNode.X) / dist;
+                result.Y = atrc * (node.Y + node.H / 2 - node.SemanticNode.Y) / dist;
+                return result;
             }
-            result.X = atrc * (node.X+node.W/2 - node.SemanticNode.X) / dist;
-            result.Y = atrc * (node.Y+node.H/2 - node.SemanticNode.Y) / dist;
-            return result;
+            return new Point();
         }
         private Point CalCenterAttraction(CloudNode node)
         {
@@ -311,15 +323,15 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 {
                     rpl = -60000 * Math.Min(deltaXY.X, deltaXY.Y);
                 }
-                else if (!(node1.Type == CloudNode.NODETYPE.DOC && node2.Type != CloudNode.NODETYPE.DOC))
+                else if (!(node1.Type == CloudNode.NODETYPE.DOC && node2.Type != CloudNode.NODETYPE.DOC))//Text don't repel doc
                 {
                     if (node1.SemanticNode == node2.SemanticNode)
                     {
-                        rpl = -9000 * Math.Max(deltaXY.X, deltaXY.Y);
+                        rpl = -20000 * Math.Max(deltaXY.X, deltaXY.Y);
                     }
                     else
                     {
-                        rpl = -500 * Math.Max(deltaXY.X, deltaXY.Y);
+                        rpl = -20000 * Math.Max(deltaXY.X, deltaXY.Y);
                     }
                 }
                 result.X = rpl * (node2.X + node2.W / 2 - node1.X - node1.W / 2) / dist;

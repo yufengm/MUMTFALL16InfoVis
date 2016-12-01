@@ -151,6 +151,7 @@
     <Compile Include="CollaborationWindow\Layers\GlowLayer\GlowLayerController.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\RecycleBin.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\SemanticGroupBoard.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\ArrayInitializers.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\Constants.cs" />
@@ -197,7 +198,6 @@
     <Compile Include="CollaborationWindow\Layers\CardLayer\CardLayerController.cs" />
     <Compile Include="CollaborationWindow\Layers\LinkingLayer\LinkingLayer.cs" />
     <Compile Include="CollaborationWindow\Layers\LinkingLayer\LinkingLayerController.cs" />
-    <Compile Include="CollaborationWindow\Layers\MenuLayer\DeleteButton.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuBar.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuBarInfo.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\MenuLayer.cs" />
@@ -1400,6 +1400,9 @@
     <Content Include="Assets\review\ffbda115-9b35-3f86-b9f6-6dba543cabfb.jpg" />
     <Content Include="Assets\review\ffcb82d4-3264-3fac-a393-f25dd07ec0b8.jpg" />
     <Content Include="Assets\search.png" />
+    <Content Include="Assets\semanticButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\trashIcon-1.png" />
     <Content Include="Assets\trashIcon-2.png" />
     <Content Include="GenericParsing.dll" />

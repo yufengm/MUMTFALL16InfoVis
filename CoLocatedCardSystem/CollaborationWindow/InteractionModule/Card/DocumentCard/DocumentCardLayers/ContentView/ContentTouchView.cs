@@ -130,7 +130,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                                     addjustedSize.Width = this.Width / 3;
                                     addjustedSize.Height = tempHeight;
                                 }
-                                Calculator.InitializeUI(new Point(0, 0),
+                                UIHelper.InitializeUI(new Point(0, 0),
                                     0,
                                     1,
                                     addjustedSize,
@@ -143,7 +143,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         currentHight += horiPanel.Height;
                         this.Children.Add(horiPanel);
                     }
-                    Size emptyBox = Calculator.GetBoundingSize(" ", textSize);
+                    Size emptyBox = UIHelper.GetBoundingSize(" ", textSize);
                     if (mode == LoadMode.ALL || mode == LoadMode.KeyWord)
                     {
                         horiPanel = new StackPanel();
@@ -166,7 +166,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                                 continue;
                             }
                         }
-                        Size boxSize = Calculator.GetBoundingSize(token.OriginalWord, textSize);
+                        Size boxSize = UIHelper.GetBoundingSize(token.OriginalWord, textSize);
                         if (token.WordType == WordType.LINEBREAK)
                         {
                             horiPanel = new StackPanel();

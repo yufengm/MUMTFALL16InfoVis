@@ -79,11 +79,8 @@ namespace CoLocatedCardSystem.SecondaryWindow
                         }
                         semanticCloud.Update();
                         awareCloud.Update();
-                        if (awareCloud.MoveStep < 5)
-                        {
-                            awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
-                            awareCloudController.UpdateCloudNode(awareCloud.GetCloudNodes());
-                        }
+                        awareCloudController.UpdateSemanticNode(semanticCloud.GetSemanticNodes());
+                        awareCloudController.UpdateCloudNode(awareCloud.GetCloudNodes());
                         timerExeBound = -4.5 * awareCloud.MoveStep + 50;
                         timerExeBound = timerExeBound < 10 ? 10 : timerExeBound;
                         timerExeBound = timerExeBound > 50 ? 50 : timerExeBound;

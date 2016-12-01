@@ -260,7 +260,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         }
         internal string GetDescription()
         {
-            return String.Join("", topic.GetToken().Select(a => a.OriginalWord));
+            return String.Join(", ", topic.GetToken().Select(a => a.OriginalWord));
         }
         internal bool CheckConnection(SemanticGroup sg2)
         {

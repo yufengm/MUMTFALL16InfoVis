@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Media;
 
 namespace CoLocatedCardSystem.CollaborationWindow
 {
-    class Calculator
+    class UIHelper
     {
         /// <summary>
         /// Update the render transform
