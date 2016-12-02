@@ -37,7 +37,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         public void Init(MenuBarInfo info)
         {
             this.info = info;
-            this.Background = new SolidColorBrush(Color.FromArgb(255,209,219,189));
+            this.Background = new SolidColorBrush(Color.FromArgb(255, 209, 219, 189));
             this.Width = this.info.SearchResultInfo.Size.Width;
             this.Height = this.info.SearchResultInfo.Size.Height;
             scrollViewer = new ScrollViewer();
@@ -102,8 +102,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         internal void RecycleCurrentCards()
         {
             List<string> docIDs = new List<string>();
-            if (this.currentSearchResult != null&&currentSearchResult.Length>0) {
-                foreach (DocumentCard card in currentSearchResult) {
+            if (this.currentSearchResult != null && currentSearchResult.Length > 0)
+            {
+                foreach (DocumentCard card in currentSearchResult)
+                {
                     docIDs.Add(card.Document.DocID);
                 }
             }
@@ -154,23 +156,28 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                     stackCanvas.Add(canvas);
                     docIDs.Add(card.Document.DocID);
                 }
-                if (docIDs.Count > 0) {
+                if (docIDs.Count > 0)
+                {
                     menuLayerController.Controllers.SemanticGroupController.SetSearchResult(docIDs.ToArray(), info.Owner, true);
                 }
                 menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
                 ShowCard(0);
-                resultNum.Text = "Search: "+ content + " Result: " + cards.Length;
-                
+                resultNum.Text = "Search: " + content + " Result: " + cards.Length;
+
             }
         }
         /// <summary>
         /// Re-enable the card in the search result tray
         /// </summary>
-        internal void EnableResultCard(string cardID) {
-            foreach (Canvas block in stackCanvas) {
-                if (block.Children.Count != 0) {
+        internal void EnableResultCard(string cardID)
+        {
+            foreach (Canvas block in stackCanvas)
+            {
+                if (block.Children.Count != 0)
+                {
                     ResultCard resultCard = block.Children[0] as ResultCard;
-                    if (resultCard != null && resultCard.CardID == cardID) {
+                    if (resultCard != null && resultCard.CardID == cardID)
+                    {
                         resultCard.EnableCard();
                     }
                 }
@@ -193,11 +200,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         private async void ShowCard(double position)
         {
             int startCardID = (int)(position / blockSize.Width);
-            if (startCardID + cardToShow >= stackCanvas.Count)
+            int endID = startCardID + cardToShow - 1;
+            if (startCardID + cardToShow > stackCanvas.Count-1)
             {
                 startCardID = stackCanvas.Count - cardToShow;
+                endID = stackCanvas.Count - 1;
             }
-            if (startCardID < 0) { 
+            if (startCardID < 0)
+            {
                 startCardID = 0;
             }
             if (stackCanvas.Count > 0)
@@ -207,7 +217,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                     if (stackCanvas[i].Children.Count != 0)
                         stackCanvas[i].Children.Clear();
                 }
-                for (int i = startCardID, endID = startCardID + cardToShow; i < endID; i++)
+                for (int i = startCardID; i <= endID; i++)
                 {
                     if (stackCanvas[i].Children.Count == 0)
                     {
@@ -222,16 +232,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                         {
                             resultCard.DisableCard();
                         }
-                        else {
+                        else
+                        {
                             resultCard.EnableCard();
                         }
                         stackCanvas[i].Children.Add(resultCard);
                     }
                 }
-                for (int i = startCardID + cardToShow+1; i < stackCanvas.Count; i++)
+                if (endID < stackCanvas.Count - 1)
                 {
-                    if (stackCanvas[i].Children.Count != 0)
-                        stackCanvas[i].Children.Clear();
+                    for (int i = endID + 1; i < stackCanvas.Count; i++)
+                    {
+                        if (stackCanvas[i].Children.Count != 0)
+                            stackCanvas[i].Children.Clear();
+                    }
                 }
             }
         }
