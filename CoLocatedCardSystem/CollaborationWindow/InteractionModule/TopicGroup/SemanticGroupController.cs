@@ -76,6 +76,35 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             return semanticList.GetSemanticGroupById(id);
         }
+
+        /// <summary>
+        /// Save the status of the current connected cards
+        /// </summary>
+        internal async void UpdateCurrentStatus()
+        {
+            foreach (CardGroup gg in GetGroups().Values)
+            {
+                if (gg.Count() > 1)
+                {
+                    var cardIDs = gg.GetCardID();
+                    List<string> docIDs = new List<string>();
+                    foreach (string id in cardIDs)
+                    {
+                        Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
+                        if (!docIDs.Contains(doc.DocID))
+                        {
+                            docIDs.Add(doc.DocID);
+                        }
+
+                    }
+                    if (docIDs.Count > 1)
+                    {
+                        await controllers.SemanticGroupController.MergeGroup(docIDs.ToArray());
+                        controllers.ConnectionController.UpdateSemanticCloud();
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Merge the semantic group
         /// </summary>
@@ -209,7 +238,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 CardGroup newgg = new CardGroup();
                 newgg.AddCard(cardID);
                 cardList.AddCardGroup(newgg);
-                controllers.ConnectionController.UpdateCurrentStatus();
                 return;
             }
             else
@@ -236,7 +264,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     AddGlowEffect(id, 0);
                 }
                 cardList.AddCardGroup(newgg);
-                controllers.ConnectionController.UpdateCurrentStatus();
+                UpdateCurrentStatus();
                 return;
             }
         }
@@ -274,7 +302,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 AddGlowEffect(c, 0);
             }
             cardList.AddCardGroup(newgg);
-            controllers.ConnectionController.UpdateCurrentStatus();
+            UpdateCurrentStatus();
         }
         /// <summary>
         /// Update one card when point down
@@ -315,7 +343,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         }
                     }
                 }
-                controllers.ConnectionController.UpdateCurrentStatus();
             }
         }
         /// <summary>

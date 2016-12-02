@@ -130,19 +130,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             documentAttributes.ReviewTime = tempDoc.Time;
             documentAttributes.Jpg = tempDoc.jpg;
             documentAttributes.Rating = tempDoc.rating;
-            documentAttributes.Topics = new double[tempDoc.Topics.Length][];
+            documentAttributes.Vectors = new double[tempDoc.Topics.Length][];
             for (int i = 0; i < tempDoc.Topics.Length; i++) {
                 string[] strs = tempDoc.Topics[i].Split(',');
                 List<double> vs = new List<double>();
                 foreach (string s in strs) {
                     vs.Add(Double.Parse(s));
                 }
-                documentAttributes.Topics[i] = vs.ToArray();
+                documentAttributes.Vectors[i] = vs.ToArray();
             }
-            defaultTopicIndex = new int[documentAttributes.Topics.Length];
-            for (int i = 0; i < documentAttributes.Topics.Length; i++) {
-                double max = documentAttributes.Topics[i].Max();
-                defaultTopicIndex[i] = Array.IndexOf(documentAttributes.Topics[i], max);
+            defaultTopicIndex = new int[documentAttributes.Vectors.Length];
+            for (int i = 0; i < documentAttributes.Vectors.Length; i++) {
+                double max = documentAttributes.Vectors[i].Max();
+                defaultTopicIndex[i] = Array.IndexOf(documentAttributes.Vectors[i], max);
             }
             processedDocuments = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
             for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)

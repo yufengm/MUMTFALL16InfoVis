@@ -11,7 +11,7 @@ namespace DocProcess
     {
         static void Main(string[] args)
         {
-            String dir = @"Orlando_200_topics.csv";
+            String dir = @"OrlandoReviews200_10dimfeatures.csv";
             DocumentList mdir = new DocumentList();
             mdir.Load(dir);
             string fileName = "review.preload";

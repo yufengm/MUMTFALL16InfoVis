@@ -14,7 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         string[] reviewTime;
         string[] rating;
         string[] jpg;
-        double[][] topics;
+        double[][] vectors;
 
         public string Id
         {
@@ -81,16 +81,16 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
-        public double[][] Topics
+        public double[][] Vectors
         {
             get
             {
-                return topics;
+                return vectors;
             }
 
             set
             {
-                topics = value;
+                vectors = value;
             }
         }
     }
