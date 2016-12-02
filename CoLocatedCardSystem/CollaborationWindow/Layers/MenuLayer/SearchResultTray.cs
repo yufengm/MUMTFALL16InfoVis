@@ -200,7 +200,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         private async void ShowCard(double position)
         {
             int startCardID = (int)(position / blockSize.Width);
-            int endID = startCardID + cardToShow - 1;
+            int endID = startCardID + cardToShow;
+            
             if (startCardID + cardToShow > stackCanvas.Count-1)
             {
                 startCardID = stackCanvas.Count - cardToShow;
@@ -210,6 +211,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             {
                 startCardID = 0;
             }
+            System.Diagnostics.Debug.WriteLine(startCardID + " " + endID+ " " +stackCanvas.Count+" "+ cardToShow);
             if (stackCanvas.Count > 0)
             {
                 for (int i = 0; i < startCardID; i++)
