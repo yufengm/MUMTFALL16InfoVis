@@ -14,7 +14,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         string docID;
         DocumentAttributes documentAttributes;
         ProcessedDocument[] processedDocuments;
-        int[] defaultTopicIndex;//the index of the topic
+        double[] vector;//the index of the topic
         private class JDocument
         {
             public string DocID = "";
@@ -139,10 +139,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 }
                 documentAttributes.Vectors[i] = vs.ToArray();
             }
-            defaultTopicIndex = new int[documentAttributes.Vectors.Length];
+            vector = documentAttributes.Vectors[0];
             for (int i = 0; i < documentAttributes.Vectors.Length; i++) {
                 double max = documentAttributes.Vectors[i].Max();
-                defaultTopicIndex[i] = Array.IndexOf(documentAttributes.Vectors[i], max);
+                vector[i] = Array.IndexOf(documentAttributes.Vectors[i], max);
             }
             processedDocuments = new ProcessedDocument[tempDoc.SerializedProcessedDocument.Length];
             for (int i = 0; i < tempDoc.SerializedProcessedDocument.Length; i++)
@@ -219,8 +219,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// Get the index of the topic
         /// </summary>
         /// <returns></returns>
-        internal int GetDefaultTopicIndex() {
-            return defaultTopicIndex[0];
+        internal double[] GetVector() {
+            return vector;
         }
 
         internal Token FindToken(string word) {

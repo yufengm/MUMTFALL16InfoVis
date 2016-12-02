@@ -160,10 +160,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 {
                     menuLayerController.Controllers.SemanticGroupController.SetSearchResult(docIDs.ToArray(), info.Owner, true);
                 }
-                menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
                 ShowCard(0);
                 resultNum.Text = "Search: " + content + " Result: " + cards.Length;
-
+                menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
             }
         }
         /// <summary>
