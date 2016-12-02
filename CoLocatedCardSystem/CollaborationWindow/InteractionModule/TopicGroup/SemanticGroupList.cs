@@ -35,10 +35,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             var topics = await mlController.GetTopicToken(docs, 1);
             KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
             root.SetTopic(pair.Key);
-            System.Diagnostics.Debug.WriteLine(root.Id);
             root.AddDoc(docs);
             list.TryAdd(root.Id, root);
-            await root.GenBinaryTree(docs, mlController, list, SemanticGroupController.PREFERRED_CLOUD_SIZE);
+            await root.GenBinaryTree(root.DocList, mlController, list, SemanticGroupController.PREFERRED_CLOUD_SIZE);
         }
 
         internal IEnumerable<SemanticGroup> GetSemanticGroup()
@@ -76,14 +75,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal void SetSearchResult(string[] docIDs, User owner, bool searched)
         {
-            foreach (SemanticGroup sg in list.Values) {
-                if (sg.IsLeaf)
-                {
-                    foreach (string docID in docIDs)
-                    {
-                        sg.SetDocSearched(docID, owner, searched);
-                    }
-                }
+            //foreach (SemanticGroup sg in list.Values) {
+            //    if (sg.IsLeaf)
+            //    {
+            //        foreach (string docID in docIDs)
+            //        {
+            //            sg.SetDocSearched(docID, owner, searched);
+            //        }
+            //    }
+            //}
+            foreach (string docID in docIDs)
+            {
+                root.SetDocSearched(docID, owner, searched);
             }
         }
 

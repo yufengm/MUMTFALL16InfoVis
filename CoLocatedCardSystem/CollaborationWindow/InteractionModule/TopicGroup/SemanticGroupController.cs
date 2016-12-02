@@ -76,7 +76,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             return semanticList.GetSemanticGroupById(id);
         }
-
+        /// <summary>
+        /// Merge the semantic group
+        /// </summary>
+        /// <param name="docIDs"></param>
+        /// <returns></returns>
         internal async Task MergeGroup(string[] docIDs)
         {
             if (docIDs != null && docIDs.Length > 1)
@@ -115,8 +119,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         restDocs.Add(docID);
                     }
                 }
-
                 semanticList.RemoveSemanticGroup(group);
+
                 //Add the common node back
                 semanticList.List.TryAdd(group.Id, group);
                 if (group.LeftChild != null)
@@ -132,16 +136,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 {
                     //Merge the docs into the left node
                     group.LeftChild = new SemanticGroup();
-                    group.LeftChild.AddDoc(clusteredDocs);
+                    ConcurrentDictionary<string, UserActionOnDoc> subGroup = group.GetSubDocList(clusteredDocs);
+                    group.LeftChild.AddDoc(subGroup);
                     var topics = await controllers.MlController.GetTopicToken(clusteredDocs.ToArray(), 1);
                     KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
                     group.LeftChild.SetTopic(pair.Key);
-                    group.LeftChild.IsLeaf = true;
                     group.LeftChild.Parent = group;
                     semanticList.List.TryAdd(group.LeftChild.Id, group.LeftChild);
+                    group.LeftChild.IsLeaf = true;
+
                     //Merge the rest docs into the right node
                     group.RightChild = new SemanticGroup();
-                    group.RightChild.AddDoc(restDocs);
+                    subGroup = group.GetSubDocList(restDocs);
+                    group.RightChild.AddDoc(subGroup);
                     topics = await controllers.MlController.GetTopicToken(restDocs.ToArray(), 1);
                     pair = topics.ElementAt(0);
                     group.RightChild.SetTopic(pair.Key);
@@ -149,8 +156,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     semanticList.List.TryAdd(group.RightChild.Id, group.RightChild);
                     if (restDocs.Count > PREFERRED_CLOUD_SIZE)
                     {
-                        await group.RightChild.GenBinaryTree(restDocs.ToArray(), controllers.MlController, semanticList.List, PREFERRED_CLOUD_SIZE);
-                        group.RightChild.Parent = group;
+                        await group.RightChild.GenBinaryTree(group.DocList, controllers.MlController, semanticList.List, PREFERRED_CLOUD_SIZE);
                     }
                     else
                     {

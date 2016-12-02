@@ -211,7 +211,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             {
                 startCardID = 0;
             }
-            System.Diagnostics.Debug.WriteLine(startCardID + " " + endID+ " " +stackCanvas.Count+" "+ cardToShow);
             if (stackCanvas.Count > 0)
             {
                 for (int i = 0; i < startCardID; i++)

@@ -109,12 +109,24 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
+        internal ConcurrentDictionary<string, UserActionOnDoc> DocList
+        {
+            get
+            {
+                return docList;
+            }
+
+            set
+            {
+                docList = value;
+            }
+        }
+
         internal void Deinit()
         {
             this.leftChild = null;
             this.rightChild = null;
             this.parent = null;
-            this.docList.Clear();
         }
         /// <summary>
         /// Recursive method to generate the topic tree
@@ -124,31 +136,51 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="list"></param>
         /// <param name="maxSize"></param>
         /// <returns></returns>
-        internal async Task GenBinaryTree(string[] docs, MLController mlController, ConcurrentDictionary<string, SemanticGroup> list, int maxSize)
+        internal async Task GenBinaryTree(ConcurrentDictionary<string, UserActionOnDoc> docs, MLController mlController, ConcurrentDictionary<string, SemanticGroup> list, int maxSize)
         {
-            if (docs.Length <= maxSize)
+            if (docs.Count <= maxSize)
             {
                 this.isLeaf = true;
                 return;
             }
-            var topics = await mlController.GetTopicToken(docs, 2);
+            var topics = await mlController.GetTopicToken(docs.Keys.ToArray(), 2);
 
             KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
             this.leftChild = new SemanticGroup();
             this.leftChild.SetTopic(pair.Key);
-            this.leftChild.AddDoc(pair.Value);
+            ConcurrentDictionary<string, UserActionOnDoc> leftList = this.GetSubDocList(pair.Value);
+            this.leftChild.AddDoc(leftList);
             this.leftChild.parent = this;
             list.TryAdd(this.leftChild.id, this.leftChild);
 
             pair = topics.ElementAt(1);
             this.rightChild = new SemanticGroup();
             this.rightChild.SetTopic(pair.Key);
-            this.rightChild.AddDoc(pair.Value);
+            ConcurrentDictionary<string, UserActionOnDoc> rightList = this.GetSubDocList(pair.Value);
+            this.rightChild.AddDoc(rightList);
             this.rightChild.parent = this;
             list.TryAdd(this.rightChild.id, this.rightChild);
 
-            await leftChild.GenBinaryTree(this.leftChild.GetDocs().ToArray(), mlController, list, maxSize);
-            await rightChild.GenBinaryTree(this.rightChild.GetDocs().ToArray(), mlController, list, maxSize);
+            await leftChild.GenBinaryTree(this.leftChild.GetDocList(), mlController, list, maxSize);
+            await rightChild.GenBinaryTree(this.rightChild.GetDocList(), mlController, list, maxSize);
+        }
+
+        internal ConcurrentDictionary<string, UserActionOnDoc> GetSubDocList(List<string> docs)
+        {
+            ConcurrentDictionary<string, UserActionOnDoc> result = new ConcurrentDictionary<string, UserActionOnDoc>();
+            foreach (KeyValuePair<string, UserActionOnDoc> docPair in docList)
+            {
+                if (docs.Contains(docPair.Key))
+                {
+                    result.TryAdd(docPair.Key, docPair.Value);
+                }
+            }
+            return result;
+        }
+
+        private ConcurrentDictionary<string, UserActionOnDoc> GetDocList()
+        {
+            return docList;
         }
 
         internal SemanticGroup FindCommonParent(string[] docs)
@@ -166,6 +198,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 }
             }
             return result;
+        }
+        internal void AddDoc(ConcurrentDictionary<string, UserActionOnDoc> docIDs)
+        {
+            this.docList = docIDs;
         }
 
         internal void AddDoc(IEnumerable<string> docs)
@@ -219,6 +255,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
             return true;
         }
+        /// <summary>
+        /// Get the user action nodes on each semantic group
+        /// The keys are the unique user search actions on the docs
+        /// </summary>
+        /// <returns></returns>
         internal ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> GetAllDocSubGroups()
         {
             ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> result = new ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>>();
