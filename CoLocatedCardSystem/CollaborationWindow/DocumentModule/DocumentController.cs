@@ -73,6 +73,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
+        internal IEnumerable<string> GetAllImage()
+        {
+            return imageList.GetImage();
+        }
+
         /// <summary>
         /// Deinit the document module
         /// </summary>
@@ -109,83 +114,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         {
             return list.GetDocument();
         }
-        internal string[] GetKeyImage(SemanticGroup semanticGroup)
-        {
-            string[] result;
-            //List<string> result = new List<string>();
-            Dictionary<string, double> imagesShown = new Dictionary<string, double>();
-
-            var tklist = semanticGroup.Topic.GetToken();
-            foreach (Token tk in tklist)
-            {
-                foreach (string docID in semanticGroup.DocList.Keys)
-                {
-                    Document doc = GetDocument( docID );
-                    List<ImageVector> vectors = doc.GetImageVector( this );
-                    foreach (ImageVector iv in vectors)
-                    {
-                        //iv.Id;//jpg name
-                        foreach (KeyValuePair<string, double> pair in iv.List)
-                        {
-                            if( pair.Key.Contains( tk.StemmedWord ) )
-                            {
-                                imagesShown.Add( iv.Id, pair.Value );
-                            }
-                            //pair.Key;
-                            //pair.Value;
-                        }
-                    }
-                }
-
-            }
-            var imageListOrdered = imagesShown.OrderByDescending( e => e.Value ).ToList();
-            if ( imageListOrdered.Count > 0 )
-            {
-                int thr = semanticGroup.DocList.Keys.Count / 10;
-                int imagenum;
-                // Determine number of images to be shown
-                if ( thr > 3 )
-                {
-                    if( imageListOrdered.Count >= 3 )
-                    {
-                        imagenum = 3;
-                    }
-                    else
-                    {
-                        imagenum = imageListOrdered.Count;
-                    }                   
-                }
-                else
-                {
-                    if ( imageListOrdered.Count >= 3 )
-                    {
-                        imagenum = thr;
-                    }
-                    else
-                    {
-                        if( thr < imageListOrdered.Count )
-                        {
-                            imagenum = thr;
-                        }
-                        else
-                        {
-                            imagenum = imageListOrdered.Count;
-                        }                      
-                    }
-                }
-
-                result = new string[ imagenum ];
-                for (int i = 0; i < imagenum ; i++)
-                {
-                    result[i] = imageListOrdered[i].Key;
-                }
-            }
-            else
-            {
-                result = null;
-            }
-            return result;
-        }
+       
         /// <summary>
         /// Find the existed word in documents. 
         /// </summary>

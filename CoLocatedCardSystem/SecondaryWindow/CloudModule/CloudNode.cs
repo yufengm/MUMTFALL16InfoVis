@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Windows.UI;
 using System;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using Microsoft.Graphics.Canvas;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 {
@@ -17,7 +19,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         string docID = "";
         NODETYPE type = NODETYPE.DOC;
         string cloudText = "test";
-        string image = null;
         string stemmedText = "test";
         float x = 0;
         float y = 0;
@@ -28,6 +29,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float w = 20;
         float h = 20;
         UserActionOnDoc userActionOnDoc;
+        string image = null;
         #region getter
         public string Guid
         {
@@ -65,19 +67,6 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             set
             {
                 cloudText = value;
-            }
-        }
-
-        public string Image
-        {
-            get
-            {
-                return image;
-            }
-
-            set
-            {
-                image = value;
             }
         }
 
@@ -214,6 +203,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             set
             {
                 userActionOnDoc = value;
+            }
+        }
+
+        public string Image
+        {
+            get
+            {
+                return image;
+            }
+
+            set
+            {
+                image = value;
             }
         }
         #endregion

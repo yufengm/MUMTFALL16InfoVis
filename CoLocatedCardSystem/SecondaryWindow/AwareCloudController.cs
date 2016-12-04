@@ -88,7 +88,7 @@ namespace CoLocatedCardSystem.SecondaryWindow
             }
         }
 
-        internal void Init(int width, int height)
+        internal async void Init(int width, int height)
         {
             // this.webView = v;
             App app = App.Current as App;

@@ -23,5 +23,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
             else return null;
         }
+
+        internal IEnumerable<string> GetImage()
+        {
+            return list.Keys;
+        }
     }
 }

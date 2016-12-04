@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using Windows.Foundation;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using Microsoft.Graphics.Canvas;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
 {
@@ -79,6 +81,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 RemoveCloudNode(key);
             }
         }
+
         internal void SetCloudNodeText(string id, string cloudText, string stemmedText)
         {
             var node = FindNode(id);
@@ -97,6 +100,16 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             if (node != null && node.Type == CloudNode.NODETYPE.DOC)
             {
                 node.DocID = docID;
+            }
+        }
+
+        private void SetCloudNodePicture(string id, string img)
+        {
+            var node = FindNode(id);
+            if (node != null && node.Type == CloudNode.NODETYPE.PICTURE)
+            {
+
+                node.Image = img;
             }
         }
         private void SetCloudNodeUserAction(string id, UserActionOnDoc action)
@@ -181,11 +194,25 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                     }
                     foreach (Token tk in sg.Topic.GetToken())
                     {
-                        CreateCloudNode(rootNode.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
-                        InitCloudNodeToGroup(rootNode.Guid + tk.StemmedWord, rootNode.Guid);
-                        SetCloudNodeText(rootNode.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                        SetCloudNodeWeight(rootNode.Guid + tk.StemmedWord, sg.Topic.GetTopicTokenWeight(tk));
-                        SetCloudNodePosition(rootNode.Guid + tk.StemmedWord, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
+                        string newID = rootNode.Guid + tk.StemmedWord;
+                        CreateCloudNode(newID, CloudNode.NODETYPE.WORD);
+                        InitCloudNodeToGroup(newID, rootNode.Guid);
+                        SetCloudNodeText(newID, tk.OriginalWord, tk.StemmedWord);
+                        SetCloudNodeWeight(newID, sg.Topic.GetTopicTokenWeight(tk));
+                        SetCloudNodePosition(newID, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
+                    }
+                    var imgs = sg.GetKeyImage();
+                    if (imgs != null)
+                    {
+                        foreach (string img in imgs)
+                        {
+                            string newID = rootNode.Guid + img;
+                            CreateCloudNode(newID, CloudNode.NODETYPE.PICTURE);
+                            InitCloudNodeToGroup(newID, rootNode.Guid);
+                            SetCloudNodePicture(newID, img);
+                            SetCloudNodeWeight(newID, 20);
+                            SetCloudNodePosition(newID, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
+                        }
                     }
                 }
             }

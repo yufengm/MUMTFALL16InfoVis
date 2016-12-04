@@ -463,5 +463,83 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 return false;
             }
         }
+
+        internal string[] GetKeyImage()
+        {
+            string[] result;
+            //List<string> result = new List<string>();
+            ConcurrentDictionary<string, double> imagesShown = new ConcurrentDictionary<string, double>();
+
+            var tklist = this.topic.GetToken();
+            foreach (Token tk in tklist)
+            {
+                foreach (string docID in docList.Keys)
+                {
+                    Document doc = semanticGroupController.Controllers.DocumentController.GetDocument(docID);
+                    List<ImageVector> vectors = doc.GetImageVector(semanticGroupController.Controllers.DocumentController);
+                    foreach (ImageVector iv in vectors)
+                    {
+                        //iv.Id;//jpg name
+                        foreach (KeyValuePair<string, double> pair in iv.List)
+                        {
+                            if (pair.Key.Contains(tk.StemmedWord))
+                            {
+                                imagesShown.TryAdd(iv.Id, pair.Value);
+                            }
+                            //pair.Key;
+                            //pair.Value;
+                        }
+                    }
+                }
+
+            }
+            var imageListOrdered = imagesShown.OrderByDescending(e => e.Value).ToList();
+            if (imageListOrdered.Count > 0)
+            {
+                int thr = docList.Keys.Count / 10;
+                int imagenum;
+                // Determine number of images to be shown
+                if (thr > 3)
+                {
+                    if (imageListOrdered.Count >= 3)
+                    {
+                        imagenum = 3;
+                    }
+                    else
+                    {
+                        imagenum = imageListOrdered.Count;
+                    }
+                }
+                else
+                {
+                    if (imageListOrdered.Count >= 3)
+                    {
+                        imagenum = thr;
+                    }
+                    else
+                    {
+                        if (thr < imageListOrdered.Count)
+                        {
+                            imagenum = thr;
+                        }
+                        else
+                        {
+                            imagenum = imageListOrdered.Count;
+                        }
+                    }
+                }
+
+                result = new string[imagenum];
+                for (int i = 0; i < imagenum; i++)
+                {
+                    result[i] = imageListOrdered[i].Key;
+                }
+            }
+            else
+            {
+                result = null;
+            }
+            return result;
+        }
     }
 }
