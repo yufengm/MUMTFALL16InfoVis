@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
 {
     class DocumentController
     {
-        DocumentList list=new DocumentList();
+        DocumentList list = new DocumentList();
         CentralControllers controllers;
         ImageList imageList = new ImageList();
 
@@ -31,7 +32,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             }
         }
 
-        public DocumentController(CentralControllers ctrls) {
+        public DocumentController(CentralControllers ctrls)
+        {
             this.controllers = ctrls;
         }
         /// <summary>
@@ -89,7 +91,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// </summary>
         /// <param name="docID"></param>
         /// <returns></returns>
-        internal Document GetDocument(string docID) {
+        internal Document GetDocument(string docID)
+        {
             return list.GetDocument(docID);
         }
 
@@ -102,10 +105,34 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// Get all documents
         /// </summary>
         /// <returns></returns>
-        internal Document[] GetDocument() {
+        internal Document[] GetDocument()
+        {
             return list.GetDocument();
         }
+        internal string[] GetKeyImage(SemanticGroup semanticGroup)
+        {
+            List<string> result = new List<string>();
+            var tklist = semanticGroup.Topic.GetToken();
+            foreach (Token tk in tklist)
+            {
 
+            }
+            foreach (string docID in semanticGroup.DocList.Keys)
+            {
+                Document doc = GetDocument(docID);
+                List<ImageVector> vectors = doc.GetImageVector(this);
+                foreach (ImageVector iv in vectors)
+                {
+                    //iv.Id;//jpg name
+                    //foreach (KeyValuePair<string, double> pair in iv.List)
+                    //{
+                    //    pair.Key;
+                    //    pair.Value;
+                    //}
+                }
+            }
+            return result.ToArray();
+        }
         /// <summary>
         /// Find the existed word in documents. 
         /// </summary>
@@ -114,9 +141,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// <returns></returns>
         internal Token FindToken(string word, Document[] documents)
         {
-            foreach (Document doc in documents) {
-                Token result= doc.FindToken(word);
-                if (result != null) {
+            foreach (Document doc in documents)
+            {
+                Token result = doc.FindToken(word);
+                if (result != null)
+                {
                     return result;
                 }
             }
