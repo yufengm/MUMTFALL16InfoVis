@@ -16,6 +16,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
     {
         DocumentList list=new DocumentList();
         CentralControllers controllers;
+        ImageList imageList = new ImageList();
+
+        internal ImageList ImageList
+        {
+            get
+            {
+                return imageList;
+            }
+
+            set
+            {
+                imageList = value;
+            }
+        }
 
         public DocumentController(CentralControllers ctrls) {
             this.controllers = ctrls;
@@ -24,7 +38,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// Initialize documents from jsonFile
         /// </summary>
         /// <param name="jsonFilePath"></param>
-        public async Task Init(String jsonFilePath)
+        public async Task Init(string jsonFilePath, string imageFilePath)
         {
             StorageFolder assetsFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
             StorageFile file = await assetsFolder.GetFileAsync(jsonFilePath);
@@ -40,6 +54,29 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                     list.AddDocument(doc);
                 }
             }
+
+            assetsFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            file = await assetsFolder.GetFileAsync(imageFilePath);
+            using (var inputStream = await file.OpenReadAsync())
+            using (var classicStream = inputStream.AsStreamForRead())
+            using (var streamReader = new StreamReader(classicStream))
+            {
+                while (streamReader.Peek() >= 0)
+                {
+                    string line = streamReader.ReadLine();
+                    ImageVector vector = new ImageVector();
+                    vector.SetImage(line);
+                    imageList.AddImage(vector);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deinit the document module
+        /// </summary>
+        internal void Deinit()
+        {
+            list.Clear();
         }
 
         internal string[] GetDocumentIDs()
@@ -47,12 +84,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             return list.GetDocIDs();
         }
 
-        /// <summary>
-        /// Deinit the document module
-        /// </summary>
-        internal void Deinit() {
-            list.Clear();
-        }
         /// <summary>
         /// Get the document by ID
         /// </summary>
@@ -74,6 +105,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         internal Document[] GetDocument() {
             return list.GetDocument();
         }
+
         /// <summary>
         /// Find the existed word in documents. 
         /// </summary>
@@ -89,6 +121,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 }
             }
             return null;
+        }
+
+        internal Task Init(string newsArticle, object imageCSV)
+        {
+            throw new NotImplementedException();
         }
     }
 }

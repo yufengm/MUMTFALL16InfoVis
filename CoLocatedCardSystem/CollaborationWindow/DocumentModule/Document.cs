@@ -77,6 +77,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
                 }
             }
         }
+
+        internal List<ImageVector> GetImageVector(DocumentController docController)
+        {
+            string[] jpgFiles = documentAttributes.Jpg;
+            List<ImageVector> result = new List<ImageVector>();
+            foreach (string j in jpgFiles)
+            {
+                ImageVector vector = docController.ImageList.GetImageVector(j);
+                if (vector != null)
+                {
+                    result.Add(vector);
+                }
+            }
+            return result;
+        }
+
         internal string DocID
         {
             get
@@ -128,7 +144,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
             documentAttributes.Id = tempDoc.DocID;
             documentAttributes.Name = tempDoc.Name;
             documentAttributes.ReviewTime = tempDoc.Time;
-            documentAttributes.Jpg = tempDoc.jpg;
+            documentAttributes.Jpg = tempDoc.jpg[0].Split(',');
             documentAttributes.Rating = tempDoc.rating;
             documentAttributes.Vectors = new double[tempDoc.Topics.Length][];
             for (int i = 0; i < tempDoc.Topics.Length; i++) {

@@ -179,8 +179,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             if (changed)
             {
                 menuLayerController.Controllers.SemanticGroupController.SemanticList.ResetIndex();
+                menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
+                menuLayerController.Controllers.CardController.ResetCardColor();
             }
-            menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
         }
 
         private void SemanticGroupBoard_DropDownOpened(object sender, object e)

@@ -104,6 +104,7 @@
     <Content Include="Assets\data\review.preload">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\data\imageTopicWords.csv" />
     <None Include="Assets\data\Voter Registry.csv" />
     <None Include="project.json" />
   </ItemGroup>
@@ -119,6 +120,8 @@
     <Compile Include="CollaborationWindow\DocumentModule\DocumentController.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\DocumentList.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\ENTITY_TYPE.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\ImageList.cs" />
+    <Compile Include="CollaborationWindow\DocumentModule\ImageVector.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\NLP\IrregularMarker.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\NLP\PorterStemmer.cs" />
     <Compile Include="CollaborationWindow\DocumentModule\ProcessedDocument.cs" />
@@ -207,6 +210,7 @@
     <Compile Include="CollaborationWindow\Layers\SortingBoxLayer\SortingBoxLayerController.cs" />
     <Compile Include="CollaborationWindow\CollaborationWindowLifeEventControl.cs" />
     <Compile Include="CollaborationWindow\Tool\Coordination.cs" />
+    <Compile Include="CollaborationWindow\Tool\CSVParser.cs" />
     <Compile Include="CollaborationWindow\Tool\FilePath.cs" />
     <Compile Include="CollaborationWindow\Tool\Rand.cs" />
     <Compile Include="CollaborationWindow\Tool\Screen.cs" />

@@ -144,5 +144,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             controllers.TouchController.TouchUp(localPoint, globalPoint);
         }
+
+        internal void ResetCardColor()
+        {
+           
+        }
     }
 }

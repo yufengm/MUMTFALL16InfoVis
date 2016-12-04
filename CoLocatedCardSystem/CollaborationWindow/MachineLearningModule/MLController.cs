@@ -47,6 +47,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                  string doctokens = "";
                  foreach (Document doc in documents)
                  {
+                     List<ImageVector> vectors = doc.GetImageVector(controllers.DocumentController);
                      for (int index = 0; index < doc.ProcessedDocument.Length; index++)
                      {
                          Token[] tokens = doc.ProcessedDocument[index].List;

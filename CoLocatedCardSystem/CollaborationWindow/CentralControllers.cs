@@ -190,7 +190,7 @@ namespace CoLocatedCardSystem.CollaborationWindow
             menuLayerController.Init(width, height);
             glowLayerController.Init(width, height);
             //Load the documents, cards and add them to the card layer
-            await documentController.Init(FilePath.NewsArticle);//Load the document
+            await documentController.Init(FilePath.NewsArticle, FilePath.ImageCSV);//Load the document
             mlController.Init();
             await semanticGroupController.Init();
             cardController.Init();
