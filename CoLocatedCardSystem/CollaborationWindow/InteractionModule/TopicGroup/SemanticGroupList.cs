@@ -16,28 +16,15 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         ConcurrentDictionary<string, SemanticGroup> list = new ConcurrentDictionary<string, SemanticGroup>();// key is the topic id
         SemanticGroup root;
 
-        internal ConcurrentDictionary<string, SemanticGroup> List
+        internal async Task Init(string[] docs, SemanticGroupController semanticGroupController)
         {
-            get
-            {
-                return list;
-            }
-
-            set
-            {
-                list = value;
-            }
-        }
-
-        internal async Task Init(string[] docs, MLController mlController)
-        {
-            root = new SemanticGroup();
-            var topics = await mlController.GetTopicToken(docs, 1);
+            root = new SemanticGroup(semanticGroupController);
+            var topics = await semanticGroupController.Controllers.MlController.GetTopicToken(docs, 1);
             KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
             root.SetTopic(pair.Key);
             root.AddDoc(docs);
             list.TryAdd(root.Id, root);
-            await root.GenBinaryTree(root.DocList, mlController, list, SemanticGroupController.PREFERRED_CLOUD_SIZE);
+            await root.GenBinaryTree(root.DocList, SemanticGroupController.PREFERRED_CLOUD_SIZE);
         }
 
         internal IEnumerable<SemanticGroup> GetSemanticGroup()
@@ -107,6 +94,106 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal SemanticGroup FindCommonParent(string[] docIDs)
         {
             return root.FindCommonParent(docIDs);
+        }
+        /// <summary>
+        /// Merge the semantic group
+        /// </summary>
+        /// <param name="docIDs"></param>
+        /// <returns></returns>
+        internal async Task MergeGroup(string[] docIDs, SemanticGroupController semanticGroupController)
+        {
+            if (docIDs != null && docIDs.Length > 1)
+            {
+                //Find the node that contains both docIDs
+                SemanticGroup group = FindCommonParent(docIDs);
+                List<SemanticGroup> sgs = new List<SemanticGroup>();
+                foreach (string docID in docIDs)
+                {
+                    SemanticGroup sg = GetSemanticGroupByDoc(docID);
+                    if (!sgs.Contains(sg))
+                    {
+                        sgs.Add(sg);
+                    }
+                }
+
+                //Get all docs in leaf nodes
+                List<string> clusteredDocs = new List<string>();
+                foreach (SemanticGroup sg in sgs)
+                {
+                    if (sg.IsLeaf)
+                    {
+                        foreach (string docID in sg.GetDocs())
+                        {
+                            clusteredDocs.Add(docID);
+                        }
+                    }
+                }
+
+                //Find the rest docs
+                List<string> restDocs = new List<string>();
+                foreach (string docID in group.GetDocs())
+                {
+                    if (!clusteredDocs.Contains(docID))
+                    {
+                        restDocs.Add(docID);
+                    }
+                }
+                RemoveSemanticGroup(group);
+
+                //Add the common node back
+                AddSemanticGroup(group.Id, group);
+                if (group.LeftChild != null)
+                {
+                    group.LeftChild.Deinit();
+                }
+                if (group.RightChild != null)
+                {
+                    group.RightChild.Deinit();
+                }
+
+                if (restDocs.Count > 0)
+                {
+                    //Merge the docs into the left node
+                    group.LeftChild = new SemanticGroup(semanticGroupController);
+                    ConcurrentDictionary<string, UserActionOnDoc> subGroup = group.GetSubDocList(clusteredDocs);
+                    group.LeftChild.AddDoc(subGroup);
+                    var topics = await semanticGroupController.Controllers.MlController.GetTopicToken(clusteredDocs.ToArray(), 1);
+                    KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
+                    group.LeftChild.SetTopic(pair.Key);
+                    group.LeftChild.Parent = group;
+                    AddSemanticGroup(group.LeftChild.Id, group.LeftChild);
+                    group.LeftChild.IsLeaf = true;
+
+                    //Merge the rest docs into the right node
+                    group.RightChild = new SemanticGroup(semanticGroupController);
+                    subGroup = group.GetSubDocList(restDocs);
+                    group.RightChild.AddDoc(subGroup);
+                    topics = await semanticGroupController.Controllers.MlController.GetTopicToken(restDocs.ToArray(), 1);
+                    pair = topics.ElementAt(0);
+                    group.RightChild.SetTopic(pair.Key);
+                    group.RightChild.Parent = group;
+                    AddSemanticGroup(group.RightChild.Id, group.RightChild);
+                    if (restDocs.Count > SemanticGroupController.PREFERRED_CLOUD_SIZE)
+                    {
+                        await group.RightChild.GenBinaryTree(group.DocList, SemanticGroupController.PREFERRED_CLOUD_SIZE);
+                    }
+                    else
+                    {
+                        group.RightChild.IsLeaf = true;
+                    }
+                }
+                else
+                {
+                    group.IsLeaf = true;
+                }
+            }
+        }
+
+        internal void AddSemanticGroup(string id, SemanticGroup group)
+        {
+            if (!list.Keys.Contains(id)) {
+                list.TryAdd(id, group);
+            }
         }
 
         internal void RemoveSemanticGroup(SemanticGroup group)

@@ -87,7 +87,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             //Reload semantic nodes
             foreach (SemanticGroup sg in sgroups) {
                 AddSemanticNode(sg.Id, sg.GetDescription());
-                SetSemanticNodeOptimal(sg.Id, 6);
+                SetSemanticNodeOptimal(sg.Id, 3);
                 SetSemanticNodeColor(sg.Id, sg.Hue, 1, 1);
             }          
             //Connect the root node
@@ -98,6 +98,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                     if (sg1 != sg2 && sg1.CheckConnection(sg2))
                     {
                         ConnectSemanticNode(sg1.Id, sg2.Id);
+                        SemanticNode sn1 = FindNode(sg1.Id);
+                        SemanticNode sn2 = FindNode(sg2.Id);
                     }
                 }
             }
@@ -113,7 +115,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                         string newID = sg.Id + Guid.NewGuid().ToString();
                         AddSemanticNode(newID, sg.GetDescription());
                         SetSemanticNodeColor(newID, sg.Hue, 1, 1);
-                        SetSemanticNodeOptimal(newID, 20);
+                        SetSemanticNodeOptimal(newID, 40);
                         ConnectSemanticNode(sg.Id, newID);
                         SemanticNode newSubNode = FindNode(newID);
                         newSubNode.UserActionOnDoc = pair.Key;
@@ -148,6 +150,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             {
                 firstNode.Connect(secondNode);
                 secondNode.Connect(firstNode);
+
             }
         }
 
@@ -243,13 +246,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 if (this.progress >= 5)
                 {
                     this.progress = 0;
-                    this.moveStep /= 0.9;
+                    this.moveStep /= 0.95;
                 }
             }
             else
             {
                 this.progress = 0;
-                this.moveStep *= 0.9;
+                this.moveStep *= 0.95;
             }
         }
 
@@ -285,7 +288,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         {
             double dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y) + 0.001;
             double opt = firstNode.Optimal + secondNode.Optimal;
-            double rpl = -2 * opt * opt / dist;
+            double rpl = -1 * opt * opt / dist;
             Point result = new Point();
             result.X = rpl * (secondNode.X - firstNode.X) / dist;
             result.Y = rpl * (secondNode.Y - firstNode.Y) / dist;

@@ -45,10 +45,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         private void Canvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            Color semColor = Color.FromArgb(150, MyColor.Wheat.R, MyColor.Wheat.G, MyColor.Wheat.B);
+            Color semColor = Color.FromArgb(50, MyColor.DarkGrassGreen.R, MyColor.DarkGrassGreen.G, MyColor.DarkGrassGreen.B);
             foreach (SemanticNode snode in semanticNodes.Values)
             {
-                args.DrawingSession.FillCircle(snode.X, snode.Y, 5, semColor);
                 foreach (SemanticNode csnode in snode.Connections)
                 {
                     args.DrawingSession.DrawLine(snode.X, snode.Y, csnode.X, csnode.Y, semColor);

@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Core;
-using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
-using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
@@ -49,7 +47,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="colorIndex"></param>
         /// <param name="controller"></param>
         /// <returns></returns>
-        internal async Task<Glow> AddGlow(CardStatus cardStatus, int colorIndex, SemanticGroupController controller)
+        internal async Task<Glow> AddGlow(CardStatus cardStatus, int colorIndex, GlowLayerController controller)
         {
             Glow glow = null;
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>

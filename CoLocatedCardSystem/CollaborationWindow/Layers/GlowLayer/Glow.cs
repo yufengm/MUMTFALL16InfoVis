@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
-namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
+namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {
     class Glow : Canvas
     {
@@ -20,7 +21,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         double scale = 1;
         Point position = new Point(0, 0);
         double rotation = 0;
-        SemanticGroupController semanticGroupController;
+        GlowLayerController glowLayerController;
         int colorIndex = 0;
         GlowInfo glowInfo;
         string cardID;
@@ -51,9 +52,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
         }
 
-        internal Glow(SemanticGroupController controller)
+        internal Glow(GlowLayerController controller)
         {
-            this.semanticGroupController = controller;
+            this.glowLayerController = controller;
         }
         /// <summary>
         /// Initialize the glow
@@ -81,7 +82,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.PointerReleased += PointerUp;
             this.PointerCaptureLost += PointerUp;
             this.PointerCanceled += PointerUp;
-            this.DoubleTapped += Glow_DoubleTapped;
             //Manipulation
             this.ManipulationMode = ManipulationModes.All;
             this.ManipulationDelta += Glow_ManipulationDelta;
@@ -163,7 +163,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            semanticGroupController.PointerDown(localPoint, globalPoint, this, typeof(Glow));
+            glowLayerController.PointerDown(localPoint, globalPoint, this, typeof(Glow));
         }
         /// <summary>
         /// Call back method for Pointer move
@@ -174,7 +174,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            semanticGroupController.PointerMove(localPoint, globalPoint);
+            glowLayerController.PointerMove(localPoint, globalPoint);
         }
         /// <summary>
         /// Call back method for pointer up
@@ -185,7 +185,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             PointerPoint localPoint = e.GetCurrentPoint(this);
             PointerPoint globalPoint = e.GetCurrentPoint(Coordination.Baselayer);
-            semanticGroupController.PointerUp(localPoint, globalPoint);
+            glowLayerController.PointerUp(localPoint, globalPoint);
         }
         /// <summary>
         /// Manipulate the card. Move if the manipulation is valid.
@@ -195,21 +195,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         protected virtual void Glow_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
             Point vector = e.Delta.Translation;
-            semanticGroupController.UpdateConnectedPosition(cardID, vector);
+            glowLayerController.Controllers.SemanticGroupController.UpdateConnectedPosition(cardID, vector);
         }
         private void Glow_ManipulationComplete(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            semanticGroupController.ConnectGroupWithGroups(cardID);
-        }
-        /// <summary>
-        /// When double tapped the glow, change the color
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Glow_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
-        {
-            colorIndex = (colorIndex + 1) % glowInfo.GlowColors.Length;
-            semanticGroupController.UpdateConnectedColor(cardID, colorIndex);
+            glowLayerController.Controllers.SemanticGroupController.ConnectGroupWithGroups(cardID);
         }
     }
 }

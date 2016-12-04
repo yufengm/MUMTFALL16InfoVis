@@ -129,10 +129,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     backgroundRect);
                 backgroundRect.Fill = new SolidColorBrush(info.CardColor);
                 this.Children.Add(backgroundRect);
-                //Register the touch events
+                //Register the touch events                
                 this.PointerPressed += PointerDown;
                 this.PointerMoved += PointerMove;
-                this.PointerExited += PointerUp;
                 this.PointerReleased += PointerUp;
                 this.PointerCaptureLost += PointerUp;
                 this.PointerCanceled += PointerUp;
@@ -156,7 +155,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.PointerMoved -= PointerMove;
             this.PointerCanceled -= PointerUp;
             this.PointerReleased -= PointerUp;
-            this.PointerExited -= PointerUp;
             this.PointerCaptureLost -= PointerUp;
             this.ManipulationStarting -= Card_ManipulationStarting;
             this.ManipulationDelta -= Card_ManipulationDelta;

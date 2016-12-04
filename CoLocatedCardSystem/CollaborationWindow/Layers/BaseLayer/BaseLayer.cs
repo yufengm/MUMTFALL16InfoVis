@@ -48,7 +48,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Base_Layer
             baseRect = new Rectangle();
             baseRect.Width = this.Width;
             baseRect.Height = this.Height;
-            baseRect.Fill = new SolidColorBrush(MyColor.DarkBlue);
+            baseRect.Fill = new SolidColorBrush(MyColor.Black);
             this.Children.Add(baseRect);
             this.PointerPressed += PointerDown;
             this.PointerMoved += PointerMove;

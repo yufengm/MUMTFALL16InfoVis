@@ -40,7 +40,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
             Document[] docs = controllers.DocumentController.GetDocument(docID);
             return await GetTopicToken(docs, topicNum);
         }
-        internal async Task<Dictionary<Topic,List<string>>> GetTopicToken(Document[] documents, int topicNum)
+        internal async Task<Dictionary<Topic, List<string>>> GetTopicToken(Document[] documents, int topicNum)
         {
             return await Task.Run(() =>
              {
@@ -80,9 +80,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                  {
                      Topic topic = new Topic();
                      topic.Id = Guid.NewGuid().ToString();
-                     foreach (string key in dic.Keys)
+                     foreach (KeyValuePair<string, double> pair in dic)
                      {
-                         Token tk = controllers.DocumentController.FindToken(key, documents);
+                         Token tk = controllers.DocumentController.FindToken(pair.Key, documents);
                          if (tk != null)
                          {
                              topic.AddToken(tk);
@@ -90,10 +90,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                          else
                          {
                              tk = new Token();
-                             tk.OriginalWord = key;
+                             tk.OriginalWord = pair.Key;
                              tk.Process();
                              topic.AddToken(tk);
                          }
+                         topic.SetTopicWeight(User.NONE, tk, pair.Value);
                      }
                      result.Add(topic, new List<string>());
                      for (int i = 0; i < documents.Length; i++)

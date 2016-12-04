@@ -1,5 +1,6 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
 using CoLocatedCardSystem.CollaborationWindow.MachineLearningModule;
+using CoLocatedCardSystem.SecondaryWindow;
 using CoLocatedCardSystem.SecondaryWindow.Tool;
 using System;
 using System.Collections.Concurrent;
@@ -20,6 +21,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         SemanticGroup parent;
         bool isLeaf = false;
         int hue = ColorPicker.GetColorHue();
+        SemanticGroupController semanticGroupController;
 
         /// <summary>
         /// The id of the semantic group. Always the same with topic id.
@@ -108,7 +110,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 hue = value;
             }
         }
-
+        internal SemanticGroup(SemanticGroupController ctrls) {
+            this.semanticGroupController = ctrls;
+        }
         internal ConcurrentDictionary<string, UserActionOnDoc> DocList
         {
             get
@@ -128,42 +132,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.rightChild = null;
             this.parent = null;
         }
-        /// <summary>
-        /// Recursive method to generate the topic tree
-        /// </summary>
-        /// <param name="docs"></param>
-        /// <param name="mlController"></param>
-        /// <param name="list"></param>
-        /// <param name="maxSize"></param>
-        /// <returns></returns>
-        internal async Task GenBinaryTree(ConcurrentDictionary<string, UserActionOnDoc> docs, MLController mlController, ConcurrentDictionary<string, SemanticGroup> list, int maxSize)
-        {
-            if (docs.Count <= maxSize)
-            {
-                this.isLeaf = true;
-                return;
-            }
-            var topics = await mlController.GetTopicToken(docs.Keys.ToArray(), 2);
-
-            KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
-            this.leftChild = new SemanticGroup();
-            this.leftChild.SetTopic(pair.Key);
-            ConcurrentDictionary<string, UserActionOnDoc> leftList = this.GetSubDocList(pair.Value);
-            this.leftChild.AddDoc(leftList);
-            this.leftChild.parent = this;
-            list.TryAdd(this.leftChild.id, this.leftChild);
-
-            pair = topics.ElementAt(1);
-            this.rightChild = new SemanticGroup();
-            this.rightChild.SetTopic(pair.Key);
-            ConcurrentDictionary<string, UserActionOnDoc> rightList = this.GetSubDocList(pair.Value);
-            this.rightChild.AddDoc(rightList);
-            this.rightChild.parent = this;
-            list.TryAdd(this.rightChild.id, this.rightChild);
-
-            await leftChild.GenBinaryTree(this.leftChild.GetDocList(), mlController, list, maxSize);
-            await rightChild.GenBinaryTree(this.rightChild.GetDocList(), mlController, list, maxSize);
-        }
 
         internal ConcurrentDictionary<string, UserActionOnDoc> GetSubDocList(List<string> docs)
         {
@@ -182,28 +150,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         {
             return docList;
         }
-
-        internal SemanticGroup FindCommonParent(string[] docs)
+        internal UserActionOnDoc GetUserActionOnDoc(string docID)
         {
-            SemanticGroup result = this;
-            if (!this.isLeaf)
-            {
-                if (leftChild.HasDoc(docs) && leftChild.HasDoc(docs))
-                {
-                    result = leftChild.FindCommonParent(docs);
-                }
-                else if (rightChild.HasDoc(docs) && rightChild.HasDoc(docs))
-                {
-                    result = rightChild.FindCommonParent(docs);
-                }
-            }
-            return result;
-        }
-        internal void AddDoc(ConcurrentDictionary<string, UserActionOnDoc> docIDs)
-        {
-            this.docList = docIDs;
+            return docList.Keys.Contains(docID) ? docList[docID] : null;
         }
 
+        internal IEnumerable<string> GetDocs()
+        {
+            return docList.Keys.ToArray();
+        }
+        internal string GetDescription()
+        {
+            return String.Join(", ", topic.GetToken().Select(a => a.OriginalWord));
+        }
         internal void AddDoc(IEnumerable<string> docs)
         {
             foreach (string s in docs)
@@ -217,6 +176,26 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 docList.TryAdd(doc, new UserActionOnDoc());
             }
+        }
+        internal void AddDoc(ConcurrentDictionary<string, UserActionOnDoc> docIDs)
+        {
+            this.docList = docIDs;
+        }
+
+        internal bool HasDoc(string docID)
+        {
+            return docList.Keys.Contains(docID);
+        }
+        private bool HasDoc(string[] docs)
+        {
+            foreach (string doc in docs)
+            {
+                if (!HasDoc(doc))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         internal void SetDocSearched(string docID, User user, bool value)
         {
@@ -240,21 +219,191 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 docList[docID].Touched[user] = value;
             }
         }
-        internal bool HasDoc(string docID)
+        internal void SetTopic(Topic tp)
         {
-            return docList.Keys.Contains(docID);
+            this.id = tp.Id;
+            this.topic = tp;
         }
-        private bool HasDoc(string[] docs)
+        /// <summary>
+        /// Recursive method to generate the topic tree
+        /// </summary>
+        /// <param name="docs"></param>
+        /// <param name="mlController"></param>
+        /// <param name="list"></param>
+        /// <param name="maxSize"></param>
+        /// <returns></returns>
+        internal async Task GenBinaryTree(ConcurrentDictionary<string, UserActionOnDoc> docs, int maxSize)
         {
-            foreach (string doc in docs)
+            if (docs.Count <= maxSize)
             {
-                if (!HasDoc(doc))
+                this.isLeaf = true;
+                return;
+            }
+            var topics = await semanticGroupController.Controllers.MlController.GetTopicToken(docs.Keys.ToArray(), 2);
+            KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
+            this.leftChild = new SemanticGroup(semanticGroupController);
+            this.leftChild.SetTopic(pair.Key);
+            ConcurrentDictionary<string, UserActionOnDoc> leftList = this.GetSubDocList(pair.Value);
+            this.leftChild.AddDoc(leftList);
+            this.leftChild.parent = this;
+            semanticGroupController.SemanticList.AddSemanticGroup(this.leftChild.id, this.leftChild);
+
+            pair = topics.ElementAt(1);
+            this.rightChild = new SemanticGroup(semanticGroupController);
+            this.rightChild.SetTopic(pair.Key);
+            ConcurrentDictionary<string, UserActionOnDoc> rightList = this.GetSubDocList(pair.Value);
+            this.rightChild.AddDoc(rightList);
+            this.rightChild.parent = this;
+            semanticGroupController.SemanticList.AddSemanticGroup(this.rightChild.id, this.rightChild);
+
+            await leftChild.GenBinaryTree(this.leftChild.GetDocList(), maxSize);
+            await rightChild.GenBinaryTree(this.rightChild.GetDocList(), maxSize);
+        }
+        /// <summary>
+        /// Based on the card group, split the semantic group. Use the mean vector as the center.
+        /// </summary>
+        /// <param name="values"></param>
+        internal async Task<bool> TrySplit(IEnumerable<CardGroup> cardGroup)
+        {
+            bool changed = false;
+            //Find how many sub groups to split
+            ConcurrentDictionary<CardGroup, List<string>> splitList = new ConcurrentDictionary<CardGroup, List<string>>();
+            foreach (CardGroup cg in cardGroup)
+            {
+                foreach (string cardID in cg.GetCardID())
                 {
-                    return false;
+                    Document doc = semanticGroupController.Controllers.CardController.DocumentCardController.GetDocumentCardById(cardID).Document;
+                    if (docList.Keys.Contains(doc.DocID))
+                    {
+                        if (!splitList.Keys.Contains(cg))
+                        {
+                            splitList.TryAdd(cg, new List<string>());
+                        }
+                        if (!splitList[cg].Contains(doc.DocID))
+                        {
+                            splitList[cg].Add(doc.DocID);
+                        }
+                    }
                 }
             }
-            return true;
+            //Split the group
+            if (splitList.Count > 1)
+            {
+                this.isLeaf = false;
+                changed = await SplitSemanticGroup(splitList);
+            }
+            return changed;
         }
+        /// <summary>
+        /// Recurive method to split the group
+        /// </summary>
+        /// <param name="semanticGroup">the semantic group</param>
+        /// <param name="splitList">the group to split into</param>
+        /// <param name="centers">the centers of all the subgroups</param>
+        /// <param name="docVector">the mapping of the doc and vector</param>
+        private async Task<bool> SplitSemanticGroup(
+            ConcurrentDictionary<CardGroup, List<string>> splitList)
+        {
+            if (splitList.Count <= 1)
+            {
+                return false;
+            }
+            CardGroup sigGroup = splitList.First().Key;
+
+            double[] leftCenter;
+            double[] rightCenter;
+
+            Document[] leftDocs = semanticGroupController.Controllers.DocumentController.GetDocument(splitList[sigGroup].ToArray());
+            leftCenter = Calculator.CalAvgVector(leftDocs.Select(d => d.GetVector()));
+            List<string> restDocs = new List<string>();
+            foreach (KeyValuePair<CardGroup, List<string>> pair in splitList) {
+                if (pair.Key != sigGroup) {
+                    foreach(string id in pair.Value)
+                    {
+                        if (!restDocs.Contains(id)) {
+                            restDocs.Add(id);
+                        }
+                    }
+                }
+            }
+            Document[] rightDocs = semanticGroupController.Controllers.DocumentController.GetDocument(restDocs.ToArray());
+            rightCenter = Calculator.CalAvgVector(rightDocs.Select(d => d.GetVector()));
+            List<string> leftChildDocs = new List<string>();
+            List<string> rightChildDocs = new List<string>();
+            foreach (string docID in docList.Keys)
+            {
+                Document doc = semanticGroupController.Controllers.DocumentController.GetDocument(docID);
+                if (leftDocs.Contains(doc))
+                {
+                    leftChildDocs.Add(docID);
+                }
+                else if (rightDocs.Contains(doc))
+                {
+                    rightChildDocs.Add(docID);
+                }
+                else
+                {
+                    double leftDist = Calculator.CalDistance(doc.GetVector(), leftCenter);
+                    double rightDist = Calculator.CalDistance(doc.GetVector(), rightCenter);
+                    if (leftDist < rightDist)
+                    {
+                        leftChildDocs.Add(docID);
+                    }
+                    else
+                    {
+                        rightChildDocs.Add(docID);
+                    }
+                }
+            }
+
+            this.leftChild = new SemanticGroup(semanticGroupController);
+
+            ConcurrentDictionary<string, UserActionOnDoc> subGroup = this.GetSubDocList(leftChildDocs);
+            this.leftChild.AddDoc(subGroup);
+            var topics = await semanticGroupController.Controllers.MlController.GetTopicToken(leftChildDocs.ToArray(), 1);
+            KeyValuePair<Topic, List<string>> topic = topics.ElementAt(0);
+            this.leftChild.SetTopic(topic.Key);
+            this.leftChild.Parent = this;
+            semanticGroupController.SemanticList.AddSemanticGroup(this.leftChild.Id, this.leftChild);
+            this.leftChild.IsLeaf = true;
+            List<string> trash;
+            splitList.TryRemove(sigGroup, out trash);
+            subGroup = this.GetSubDocList(rightChildDocs);
+            this.rightChild = new SemanticGroup(semanticGroupController);
+            this.rightChild.AddDoc(subGroup);
+            topics = await semanticGroupController.Controllers.MlController.GetTopicToken(rightChildDocs.ToArray(), 1);
+            topic = topics.ElementAt(0);
+            this.rightChild.SetTopic(topic.Key);
+            this.rightChild.Parent = this;
+            semanticGroupController.SemanticList.AddSemanticGroup(this.rightChild.Id, this.rightChild);
+            if (splitList.Count == 1)
+            {
+                this.rightChild.IsLeaf = true;
+                return true;
+            }
+            else {
+                return await this.rightChild.SplitSemanticGroup(splitList);
+            }
+        }
+
+
+        internal SemanticGroup FindCommonParent(string[] docs)
+        {
+            SemanticGroup result = this;
+            if (!this.isLeaf)
+            {
+                if (leftChild.HasDoc(docs) && leftChild.HasDoc(docs))
+                {
+                    result = leftChild.FindCommonParent(docs);
+                }
+                else if (rightChild.HasDoc(docs) && rightChild.HasDoc(docs))
+                {
+                    result = rightChild.FindCommonParent(docs);
+                }
+            }
+            return result;
+        }
+        
         /// <summary>
         /// Get the user action nodes on each semantic group
         /// The keys are the unique user search actions on the docs
@@ -289,20 +438,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
             return result;
         }
-
-        internal UserActionOnDoc GetUserActionOnDoc(string docID)
-        {
-            return docList.Keys.Contains(docID) ? docList[docID] : null;
-        }
-
-        internal IEnumerable<string> GetDocs()
-        {
-            return docList.Keys.ToArray();
-        }
-        internal string GetDescription()
-        {
-            return String.Join(", ", topic.GetToken().Select(a => a.OriginalWord));
-        }
         internal bool CheckConnection(SemanticGroup sg2)
         {
             if (this.leftChild == sg2 || this.rightChild == sg2 || this.parent == sg2)
@@ -313,11 +448,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             {
                 return false;
             }
-        }
-        internal void SetTopic(Topic tp)
-        {
-            this.id = tp.Id;
-            this.topic = tp;
         }
     }
 }

@@ -10,7 +10,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.ConnectionModule
     {
         private CentralControllers controllers;
         AwareCloudController awareCloudController;
-        App app;
 
         internal AwareCloudController AwareCloudController
         {

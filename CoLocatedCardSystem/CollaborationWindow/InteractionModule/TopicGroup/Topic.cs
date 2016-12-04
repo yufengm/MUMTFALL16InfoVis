@@ -1,4 +1,5 @@
 ﻿using CoLocatedCardSystem.CollaborationWindow.DocumentModule;
+using CoLocatedCardSystem.SecondaryWindow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal IEnumerable<Token> GetToken()
         {
             return list;
+        }
+        internal void SetTopicWeight(User user, Token token, double weight)
+        {
+            float result = 15;
+            float max = tokenAttr.Values.Max(t => t.GetWeight());
+            float min = tokenAttr.Values.Min(t => t.GetWeight());
+            if (weight > 0)
+            {
+                result = (float)Calculator.Map(weight, min, max, 15, 35);
+            }
+            tokenAttr[token].SetUserWeight(user, (float)weight + 20);
+        }
+
+        internal float GetTopicTokenWeight(Token tk)
+        {
+            return tokenAttr[tk].GetWeight();
         }
     }
 }

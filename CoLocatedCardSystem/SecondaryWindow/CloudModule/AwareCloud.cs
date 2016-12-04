@@ -107,15 +107,23 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 node.UserActionOnDoc=action;
             }
         }
-        internal void SetCloudNodeWeight(string id, double weight)
+        internal void SetCloudNodeWeight(string id, float weight)
         {
             var node = FindNode(id);
             if (node != null)
             {
                 node.Weight = (float)weight;
-                Size tsize = Calculator.GetBoundingSize(node.CloudText, node.Weight);
-                node.W = (float)tsize.Width;
-                node.H = (float)tsize.Height;
+                if (node.Type == CloudNode.NODETYPE.DOC)
+                {
+                    node.W = node.Weight;
+                    node.H = node.Weight;
+                }
+                else if (node.Type == CloudNode.NODETYPE.WORD)
+                {
+                    Size tsize = Calculator.GetBoundingSize(node.CloudText, node.Weight);
+                    node.W = (float)tsize.Width;
+                    node.H = (float)tsize.Height;
+                }
             }
         }
         private void RemoveCloudNode(string id)
@@ -135,6 +143,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                 if (sg.IsLeaf)
                 {
                     ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
+                    SemanticNode rootNode=null;
+                    int nodeNum = 0;
                     foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
                     {
                         SemanticNode sn = animationController.SemanticCloud.FindNode(sg.Id, pair.Key);
@@ -153,24 +163,29 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                                 SetCloudNodeDoc(docID, docID);
                                 SetCloudNodeUserAction(docID, sg.GetUserActionOnDoc(docID));
                                 SetCloudNodePosition(docID, sn.X + Rand.Next(20) - 10, sn.Y + Rand.Next(20) - 10);
+                                SetCloudNodeWeight(docID, 20);
+                            }
+                        }
+                        if (rootNode == null)
+                        {
+                            rootNode = sn;
+                            nodeNum = pair.Value.Count;
+                        }
+                        else
+                        {
+                            if (nodeNum < pair.Value.Count) {
+                                rootNode = sn;
+                                nodeNum = pair.Value.Count;
                             }
                         }
                     }
-                    SemanticNode rootNode = animationController.SemanticCloud.FindNode(sg.Id);
                     foreach (Token tk in sg.Topic.GetToken())
                     {
                         CreateCloudNode(rootNode.Guid + tk.StemmedWord, CloudNode.NODETYPE.WORD);
                         InitCloudNodeToGroup(rootNode.Guid + tk.StemmedWord, rootNode.Guid);
                         SetCloudNodeText(rootNode.Guid + tk.StemmedWord, tk.OriginalWord, tk.StemmedWord);
-                        SetCloudNodeWeight(rootNode.Guid + tk.StemmedWord, 15);
-                        if (rootNode.X < SecondaryScreen.WIDTH / 2)
-                        {
-                            SetCloudNodePosition(rootNode.Guid + tk.StemmedWord, rootNode.X - Rand.Next(200), rootNode.Y + Rand.Next(20) - 10);
-                        }
-                        else
-                        {
-                            SetCloudNodePosition(rootNode.Guid + tk.StemmedWord, rootNode.X + Rand.Next(200), rootNode.Y + Rand.Next(20) - 10);
-                        }
+                        SetCloudNodeWeight(rootNode.Guid + tk.StemmedWord, sg.Topic.GetTopicTokenWeight(tk));
+                        SetCloudNodePosition(rootNode.Guid + tk.StemmedWord, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
                     }
                 }
             }
@@ -305,12 +320,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
             }
             else
             {
-                atrc = -800 * dist;
+                atrc = -1200 * dist;
             }
             result.X = atrc * (node.X + node.W / 2 - node.SemanticNode.X) / dist;
             result.Y = atrc * (node.Y + node.H / 2 - node.SemanticNode.Y) / dist;
             return result;
         }
+
         private Point CalRepel(CloudNode node1, CloudNode node2)
         {
             double dist = Calculator.Distance(node1, node2) + 0.0001;

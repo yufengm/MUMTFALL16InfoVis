@@ -24,7 +24,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
         float vx = 0;
         float vy = 0;
         SemanticNode semanticNode = null;
-        float weight = 22;
+        float weight = 10;
         float w = 20;
         float h = 20;
         UserActionOnDoc userActionOnDoc;

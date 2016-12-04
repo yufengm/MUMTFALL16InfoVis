@@ -109,7 +109,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             await tempPD.InitTokens(content.Trim());
             list[owner].RemoveUnusedHighlight();
             DocumentCard[] cards =
-                controllers.CardController.DocumentCardController.GetCardDocumentCardWByContent(owner, tempPD);
+                controllers.CardController.DocumentCardController.GetCardDocumentCardByContent(owner, tempPD);
             foreach (DocumentCard card in cards)
             {
                 card.InitialHighlight(tempPD);

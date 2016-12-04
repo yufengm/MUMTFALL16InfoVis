@@ -9,13 +9,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.Tool
 {
     class ColorPicker
     {
-        static int index = 0;
         static int[] H;
-
+        static int index = 0;
+        static Random rand = new Random();
         static ColorPicker()
         {
             List<int> index = new List<int>();
-            for (int i = 300; i < 560; i += 20)
+            for (int i = 0; i < 360; i += 20)
             {
                 index.Add(i%360);
             }
@@ -23,9 +23,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.Tool
         }
         internal static int GetColorHue()
         {
-            int h = H[index];
             index = (index + 1) % H.Length;
-            return h;
+            return H[index];
         }
 
         internal static Color HsvToRgb(double h, double S, double V)

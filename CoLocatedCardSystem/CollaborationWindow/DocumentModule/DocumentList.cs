@@ -38,8 +38,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.DocumentModule
         /// <param name="docID"></param>
         /// <returns></returns>
         internal Document GetDocument(string docID) {
-            //To do
-            return null;
+            return list[docID];
         }
         /// <summary>
         /// Get all documents

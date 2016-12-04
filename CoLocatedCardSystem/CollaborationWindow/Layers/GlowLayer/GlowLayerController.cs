@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using System.Collections.Generic;
-using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
+using Windows.UI.Input;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
 {
@@ -11,6 +10,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
     {
         GlowLayer glowLayer;
         CentralControllers controllers;
+
+        public CentralControllers Controllers
+        {
+            get
+            {
+                return controllers;
+            }
+
+            set
+            {
+                controllers = value;
+            }
+        }
 
         public GlowLayerController(CentralControllers ctrls)
         {
@@ -68,10 +80,38 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
         /// <param name="status">card status</param>
         /// <param name="controller"></param>
         /// <returns></returns>
-        internal async Task<Glow> AddGlow(CardStatus status, int colorIndex,  SemanticGroupController controller)
+        internal async Task<Glow> AddGlow(CardStatus status, int colorIndex,  GlowLayerController controller)
         {
             Glow glow = await glowLayer.AddGlow(status, colorIndex,  controller);
             return glow;
         }
+
+        #region Pointer methods
+        /// <summary>
+        /// Create a touch and pass it to the interaction controller.
+        /// </summary>
+        /// <param name="p"></param>
+        internal void PointerDown(PointerPoint localPoint, PointerPoint globalPoint, Glow glow, Type type)
+        {
+            controllers.TouchController.TouchDown(localPoint, globalPoint, glow, type);
+        }
+
+        /// <summary>
+        /// Update the touch point
+        /// </summary>
+        /// <param name="p"></param>
+        internal void PointerMove(PointerPoint localPoint, PointerPoint globalPoint)
+        {
+            controllers.TouchController.TouchMove(localPoint, globalPoint);
+        }
+        /// <summary>
+        /// Lift the touch layer
+        /// </summary>
+        /// <param name="p"></param>
+        internal void PointerUp(PointerPoint localPoint, PointerPoint globalPoint)
+        {
+            controllers.TouchController.TouchUp(localPoint, globalPoint);
+        }
+        #endregion
     }
 }

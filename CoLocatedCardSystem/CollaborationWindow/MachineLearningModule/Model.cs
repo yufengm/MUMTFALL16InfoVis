@@ -411,8 +411,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                         wordsProbsList.Add(w, phi[k][w]);
                     }//end foreach word
 
-                    //print topic				
-                    var wordsProbsListOrdered = wordsProbsList.OrderBy(e => e.Value).ToList();
+                    //print topic Shuo changed that				
+                    var wordsProbsListOrdered = wordsProbsList.OrderByDescending(e => e.Value).ToList();
 
                     for (int i = 0; i < twords; i++)
                     {

@@ -3,6 +3,7 @@ using System;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.SecondaryWindow
 {
@@ -104,6 +105,11 @@ namespace CoLocatedCardSystem.SecondaryWindow
             return new Point(deltax, deltay);
         }
 
+        internal static double Map(double value, double x1, double x2, double y1, double y2)
+        {
+            return (value - x1) * (y2 - y1) / (x2 - x1) + y1;
+        }
+
         internal static Size GetBoundingSize(string cloudText, float weight)
         {
             TextBlock tb = new TextBlock { Text = cloudText, FontSize = weight };
@@ -111,6 +117,47 @@ namespace CoLocatedCardSystem.SecondaryWindow
             tb.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
             Size boundSize = new Size(tb.DesiredSize.Width * 1.2, tb.DesiredSize.Height);
             return boundSize;
+        }
+
+        internal static double[] CalAvgVector(IEnumerable<double[]> vectors)
+        {
+            double[] result = null;
+            double count = 0;
+            foreach (double[] vector in vectors) {
+                count++;
+                if (result == null)
+                {
+                    result = vector;
+                }
+                else {
+                    for (int i = 0; i < result.Length; i++) {
+                        result[i] += vector[i];
+                    }
+                }
+            }
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] /=count;
+            }
+            return result;
+        }
+
+        internal static double CalDistance(double[] v1, double[] v2)
+        {
+            double sim = 0.0d;
+            int N = 0;
+            N = ((v2.Length < v1.Length) ? v2.Length : v1.Length);
+            double dot = 0.0d;
+            double mag1 = 0.0d;
+            double mag2 = 0.0d;
+            for (int n = 0; n < N; n++)
+            {
+                dot += v1[n] * v2[n];
+                mag1 += Math.Pow(v1[n], 2);
+                mag2 += Math.Pow(v2[n], 2);
+            }
+
+            return dot / (Math.Sqrt(mag1) * Math.Sqrt(mag2));
         }
     }
 }

@@ -15,5 +15,6 @@ namespace CoLocatedCardSystem
         public static Color SeaBlue = Color.FromArgb(255, 62, 96, 111);
         public static Color DarkBlue = Color.FromArgb(255, 25, 52, 65);
         public static Color Yellow = Color.FromArgb(255, 237, 219, 104);
+        public static Color Black = Color.FromArgb(255, 2, 3, 10);
     }
 }

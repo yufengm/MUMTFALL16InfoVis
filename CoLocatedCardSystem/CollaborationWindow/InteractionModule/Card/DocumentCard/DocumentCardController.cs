@@ -68,7 +68,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        internal DocumentCard[] GetCardDocumentCardWByContent(User owner, ProcessedDocument tempPD)
+        internal DocumentCard[] GetCardDocumentCardByContent(User owner, ProcessedDocument tempPD)
         {
             DocumentCard[] cards = list.GetCardByContent(owner, tempPD);
             return cards;

@@ -138,7 +138,7 @@
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\ContentTouchView.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\DocumentCard\DocumentCardLayers\ContentView\Tile.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\Card\ResultCard\ResultCard.cs" />
-    <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\Glow.cs" />
+    <Compile Include="CollaborationWindow\Layers\GlowLayer\Glow.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroup.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\SemanticGroupController.cs" />
     <Compile Include="CollaborationWindow\InteractionModule\TopicGroup\CardGroup.cs" />
