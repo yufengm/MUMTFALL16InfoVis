@@ -47,18 +47,18 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         private void Canvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            Color semColor = Color.FromArgb(10, MyColor.DarkGrassGreen.R, MyColor.DarkGrassGreen.G, MyColor.DarkGrassGreen.B);
+            Color semColor = Color.FromArgb(100, MyColor.DarkGrassGreen.R, MyColor.DarkGrassGreen.G, MyColor.DarkGrassGreen.B);
             foreach (SemanticNode snode in semanticNodes.Values)
             {
-                if (snode.IsRoot)
+                if (snode.Index > 0)
                 {
-                    Color nodeColor = ColorPicker.HsvToRgb(snode.H, 1, 1);
+                    Color nodeColor = Colors.White;
                     CanvasTextFormat format = new CanvasTextFormat();
                     format.FontSize = 20;
                     format.FontStretch = Windows.UI.Text.FontStretch.Normal;
                     format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
-                    args.DrawingSession.DrawText(""+snode.Index,
-                        new Rect(snode.X, snode.Y, 30,20),
+                    args.DrawingSession.DrawText("" + snode.Index,
+                        new Rect(snode.X-20, snode.Y-15, 40, 30),
                         nodeColor,
                         format);
                 }

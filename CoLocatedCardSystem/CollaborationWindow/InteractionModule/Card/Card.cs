@@ -29,6 +29,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         protected double marginWidth = 10 * Screen.SCALE_FACTOR;
         protected Size maxSize = new Size(600 * Screen.SCALE_FACTOR, 450 * Screen.SCALE_FACTOR);//Max size a card can be zoomed. 3.75 cardscale
         protected Size minSize = new Size(80 * Screen.SCALE_FACTOR, 60 * Screen.SCALE_FACTOR);//Mim size a card can be zoomed. 0.5 cardscale
+        protected Color backgroundColor = MyColor.DarkBlue;
         internal Card(CardController cardController)
         {
             this.cardController = cardController;
@@ -217,16 +218,14 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.cardScale = scale;
             UpdateTransform();
         }
-        internal async void SetBackground(Color color) {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                backgroundRect.Fill = new SolidColorBrush(color);
-            });
+        internal void SetBackground(Color color)
+        {
+            this.backgroundColor = color;
         }
         /// <summary>
         /// Update the transform group
         /// </summary>
-        protected async void UpdateTransform()
+        internal async void UpdateTransform()
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
@@ -246,7 +245,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                  UpdateSize();
                  if (backgroundRect != null)
                  {
-                    corners = new Point[] {
+                     backgroundRect.Fill = new SolidColorBrush(this.backgroundColor);
+                     corners = new Point[] {
                     new Point(-backgroundRect.Width/2, -backgroundRect.Height/2),
                     new Point(backgroundRect.Width/2, -backgroundRect.Height/2),
                     new Point(backgroundRect.Width/2, backgroundRect.Height/2),

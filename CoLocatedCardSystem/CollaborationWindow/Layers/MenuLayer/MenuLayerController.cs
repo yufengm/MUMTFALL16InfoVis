@@ -7,6 +7,7 @@ using System.Linq;
 using Windows.Foundation;
 using Windows.UI.Input;
 using System.Threading.Tasks;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
@@ -142,6 +143,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             
             string docID = controllers.CardController.DocumentCardController.GetDocumentCardById(card.CardID).Document.DocID;
             controllers.SemanticGroupController.SetActiveCard(new string[] { docID }, resultCard.Owner, true);
+            SemanticGroup sg = controllers.SemanticGroupController.GetSemanticGroupByDoc(docID);
+            card.SetBackground(ColorPicker.HsvToRgb(sg.Hue, 0.5, 0.5));
+            card.UpdateTransform();
         }
 
         /// <summary>

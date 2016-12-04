@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Input;
 using Windows.Foundation;
 using System.Collections.Generic;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 {
@@ -147,7 +148,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
 
         internal void ResetCardColor()
         {
-           
+            foreach (DocumentCard docCard in documentCardController.GetDocumentCardByDoc())
+            {
+                if (docCard != null)
+                {
+                    SemanticGroup sg = controllers.SemanticGroupController.GetSemanticGroupByDoc(docCard.Document.DocID);
+                    if (sg != null)
+                    {
+                        docCard.SetBackground(ColorPicker.HsvToRgb(sg.Hue, 0.5, 0.5));
+                        if (IsCardOnTable(docCard.CardID)) {
+                            docCard.UpdateTransform();
+                        }
+                    }
+                }
+            }
         }
     }
 }

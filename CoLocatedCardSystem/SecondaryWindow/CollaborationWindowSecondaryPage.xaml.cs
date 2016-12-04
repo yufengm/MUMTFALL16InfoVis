@@ -51,14 +51,9 @@ namespace CoLocatedCardSystem.SecondaryWindow
             controller.Init((int)this.Width, (int)this.Height);
             await Task.Delay(TimeSpan.FromSeconds(3));
             container.Children.Add(controller.BaseLayerController.BaseLayer);
-            container.Children.Add(controller.SemanticLayerController.Semanticlayer);
             container.Children.Add(controller.CloudLayerController.CloudLayer);
+            container.Children.Add(controller.SemanticLayerController.Semanticlayer);
             this.Content = container;
-            //this.WordCloud.Width = this.Width;
-            //this.WordCloud.Height = this.Height;
-            //string src = "ms-appx-web:///Assets/p5/awarecloud.js/index.html";
-            //this.WordCloud.Navigate(new Uri(src));
-            //this.WordCloud.NavigationCompleted += WordCloud_NavigationCompleted;
         }
 
         private void WordCloud_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)

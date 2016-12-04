@@ -71,5 +71,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             var docs=list.Values.Where(c => c.Document.DocID == docID && c.Owner == owner);
             return docs.ElementAt(0) == null ? null : docs.ElementAt(0);
         }
+
+        internal IEnumerable<DocumentCard> GetCard()
+        {
+            return list.Values;
+        }
     }
 }

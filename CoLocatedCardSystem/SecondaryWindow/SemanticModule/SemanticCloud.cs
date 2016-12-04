@@ -109,12 +109,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 if (sg.IsLeaf)
                 {
                     SemanticNode sn = FindNode(sg.Id);
-                    SetSemanticNodeRoot(sg.Id, true, sg.Index);
+                    SetSemanticNodeRoot(sg.Id, true);
                     ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
                     foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
                     {
                         string newID = sg.Id + Guid.NewGuid().ToString();
                         AddSemanticNode(newID, sg.GetDescription());
+                        SetSemanticNodeIndex(newID, sg.Index);
                         SetSemanticNodeColor(newID, sg.Hue, 1, 1);
                         SetSemanticNodeOptimal(newID, (int)Calculator.Map(pair.Value.Count, 1, 50, 10, 30));
                         ConnectSemanticNode(sg.Id, newID);
@@ -125,15 +126,20 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             }
         }
 
-        private void SetSemanticNodeRoot(string id, bool v, int index)
+        private void SetSemanticNodeRoot(string id, bool v)
         {
             SemanticNode node = FindNode(id);
             if (node != null) {
                 node.IsRoot = true;
+            }
+        }
+        private void SetSemanticNodeIndex(string id, int index) {
+            SemanticNode node = FindNode(id);
+            if (node != null)
+            {
                 node.Index = index;
             }
         }
-
         internal SemanticNode FindNode(string id, UserActionOnDoc key)
         {
             SemanticNode node = FindNode(id);

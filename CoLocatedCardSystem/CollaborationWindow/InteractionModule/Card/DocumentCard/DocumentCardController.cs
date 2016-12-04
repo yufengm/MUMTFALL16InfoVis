@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Input;
 
 namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
@@ -111,6 +112,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             cardController.Controllers.TouchController.TouchDown(localPoint, globalPoint, tile, type);
         }
 
-
+        internal IEnumerable<DocumentCard> GetDocumentCardByDoc()
+        {
+            return list.GetCard();
+        }
     }
 }
