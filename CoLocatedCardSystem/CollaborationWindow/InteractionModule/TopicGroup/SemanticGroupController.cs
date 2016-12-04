@@ -116,41 +116,40 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         internal async Task<bool> UpdateCurrentStatus()
         {
             bool needUpdate = false;
-            //try
-            //{
-            foreach (CardGroup gg in GetGroups().Values)
+            try
             {
-                if (gg.Count() > 1)
+                foreach (CardGroup gg in GetGroups().Values)
                 {
-                    var cardIDs = gg.GetCardID();
-                    List<string> docIDs = new List<string>();
-                    foreach (string id in cardIDs)
+                    if (gg.Count() > 1)
                     {
-                        Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
-                        if (!docIDs.Contains(doc.DocID))
+                        var cardIDs = gg.GetCardID();
+                        List<string> docIDs = new List<string>();
+                        foreach (string id in cardIDs)
                         {
-                            docIDs.Add(doc.DocID);
+                            Document doc = controllers.CardController.DocumentCardController.GetDocumentCardById(id).Document;
+                            if (!docIDs.Contains(doc.DocID))
+                            {
+                                docIDs.Add(doc.DocID);
+                            }
+                        }
+                        if (docIDs.Count > 1)
+                        {
+                            needUpdate = await semanticList.MergeGroup(docIDs.ToArray(), this);
                         }
                     }
-                    if (docIDs.Count > 1)
+                }
+                foreach (SemanticGroup sg in semanticList.GetSemanticGroup())
+                {
+                    if (sg.IsLeaf)
                     {
-                        await semanticList.MergeGroup(docIDs.ToArray(), this);
-                        needUpdate = true;
+                        bool splited = await sg.TrySplit(GetGroups().Values);
+                        needUpdate = needUpdate ? true : splited;
                     }
                 }
             }
-            foreach (SemanticGroup sg in semanticList.GetSemanticGroup())
+            catch (Exception ex)
             {
-                if (sg.IsLeaf)
-                {
-                    bool splited = await sg.TrySplit(GetGroups().Values);
-                    needUpdate = needUpdate ? true : splited;
-                }
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //}
             return needUpdate;
         }
 
@@ -194,12 +193,12 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="cardID"> The card id that trigger the event</param>
         internal async void ConnectGroupWithGroups(string cardID)
         {
-            cardList.ConnectGroupWithGroups(cardID);
-            bool changed = await UpdateCurrentStatus();
-            if (changed)
-            {
-                controllers.ConnectionController.UpdateSemanticCloud();
-            }
+            //cardList.ConnectGroupWithGroups(cardID);
+            //bool changed = await UpdateCurrentStatus();
+            //if (changed)
+            //{
+            //    controllers.ConnectionController.UpdateSemanticCloud();
+            //}
         }
         /// <summary>
         /// When one card connect to at least 1 group, 
@@ -209,12 +208,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="groups"></param>
         internal async void ConnectOneCardWithGroups(string cardID, CardGroup[] attachedGroups)
         {
-            System.Diagnostics.Debug.WriteLine("connect one with groups");
             cardList.ConnectOneCardWithGroups(cardID, attachedGroups);
             bool changed = await UpdateCurrentStatus();
             if (changed)
             {
-                System.Diagnostics.Debug.WriteLine("changed");
                 controllers.ConnectionController.UpdateSemanticCloud();
             }
         }

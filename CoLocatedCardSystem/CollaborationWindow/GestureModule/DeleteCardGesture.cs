@@ -42,6 +42,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.GestureModule
                 }
                 foreach (string cardID in tobeRemoved) {
                     gestureController.Controllers.CardController.RemoveActiveCard(cardID);
+                    DocumentCard docCard = gestureController.Controllers.CardController.DocumentCardController.GetDocumentCardById(cardID);
+                    if (docCard != null) {
+                        gestureController.Controllers.SemanticGroupController.SetActiveCard(new string[] { docCard.Document.DocID }, docCard.Owner, false);
+                    }
                 }
             }
         }

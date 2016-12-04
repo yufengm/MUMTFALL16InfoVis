@@ -42,8 +42,11 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <param name="cardID"></param>
         /// <returns></returns>
         internal DocumentCard GetCard(string cardID) {
-            DocumentCard card = list[cardID];
-            return list[cardID];
+            DocumentCard card = null;
+            if (list.Keys.Contains(cardID)) {
+                card = list[cardID];
+            }
+            return card;
         }
         /// <summary>
         /// Assemble a list of cards which contains a keyword

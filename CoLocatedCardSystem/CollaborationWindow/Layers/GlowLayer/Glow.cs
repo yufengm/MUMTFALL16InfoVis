@@ -85,7 +85,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             //Manipulation
             this.ManipulationMode = ManipulationModes.All;
             this.ManipulationDelta += Glow_ManipulationDelta;
-            this.ManipulationCompleted += Glow_ManipulationComplete;
         }
 
         internal void Deinit()
@@ -97,7 +96,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             this.PointerExited -= PointerUp;
             this.PointerCaptureLost -= PointerUp;
             this.ManipulationDelta -= Glow_ManipulationDelta;
-            this.ManipulationCompleted -= Glow_ManipulationComplete;
         }
         //Update the color index
         private async void UpdateColor()
@@ -197,9 +195,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Glow_Layer
             Point vector = e.Delta.Translation;
             glowLayerController.Controllers.SemanticGroupController.UpdateConnectedPosition(cardID, vector);
         }
-        private void Glow_ManipulationComplete(object sender, ManipulationCompletedRoutedEventArgs e)
-        {
-            glowLayerController.Controllers.SemanticGroupController.ConnectGroupWithGroups(cardID);
-        }
+        //private void Glow_ManipulationComplete(object sender, ManipulationCompletedRoutedEventArgs e)
+        //{
+        //    glowLayerController.Controllers.SemanticGroupController.ConnectGroupWithGroups(cardID);
+        //}
     }
 }

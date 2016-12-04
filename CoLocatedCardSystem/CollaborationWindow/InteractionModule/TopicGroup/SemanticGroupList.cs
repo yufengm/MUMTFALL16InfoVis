@@ -100,7 +100,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="docIDs"></param>
         /// <returns></returns>
-        internal async Task MergeGroup(string[] docIDs, SemanticGroupController semanticGroupController)
+        internal async Task<bool> MergeGroup(string[] docIDs, SemanticGroupController semanticGroupController)
         {
             if (docIDs != null && docIDs.Length > 1)
             {
@@ -115,7 +115,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         sgs.Add(sg);
                     }
                 }
-
+                if (sgs.Count < 2) {
+                    return false;
+                }
                 //Get all docs in leaf nodes
                 List<string> clusteredDocs = new List<string>();
                 foreach (SemanticGroup sg in sgs)
@@ -186,7 +188,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 {
                     group.IsLeaf = true;
                 }
+                return false;
             }
+            return false;
         }
 
         internal void AddSemanticGroup(string id, SemanticGroup group)
