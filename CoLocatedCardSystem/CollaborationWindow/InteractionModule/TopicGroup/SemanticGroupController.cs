@@ -113,7 +113,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// <summary>
         /// Save the status of the current connected cards
         /// </summary>
-        internal async Task<bool> UpdateCurrentStatus()
+        internal async Task<bool> UpdateSemanticGroups()
         {
             bool needUpdate = false;
             try
@@ -149,6 +149,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             }
             catch (Exception ex)
             {
+                int x = 0;
             }
             return needUpdate;
         }
@@ -191,14 +192,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// Connect multiple groups
         /// </summary>
         /// <param name="cardID"> The card id that trigger the event</param>
-        internal async void ConnectGroupWithGroups(string cardID)
+        internal void ConnectGroupWithGroups(string cardID)
         {
-            //cardList.ConnectGroupWithGroups(cardID);
-            //bool changed = await UpdateCurrentStatus();
-            //if (changed)
-            //{
-            //    controllers.ConnectionController.UpdateSemanticCloud();
-            //}
+            cardList.ConnectGroupWithGroups(cardID);
         }
         /// <summary>
         /// When one card connect to at least 1 group, 
@@ -206,14 +202,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         /// </summary>
         /// <param name="cardID"></param>
         /// <param name="groups"></param>
-        internal async void ConnectOneCardWithGroups(string cardID, CardGroup[] attachedGroups)
+        internal void ConnectOneCardWithGroups(string cardID, CardGroup[] attachedGroups)
         {
             cardList.ConnectOneCardWithGroups(cardID, attachedGroups);
-            bool changed = await UpdateCurrentStatus();
-            if (changed)
-            {
-                controllers.ConnectionController.UpdateSemanticCloud();
-            }
         }
     }
 }

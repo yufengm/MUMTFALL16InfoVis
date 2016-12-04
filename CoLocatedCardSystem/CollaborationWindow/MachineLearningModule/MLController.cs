@@ -63,7 +63,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                  LDACommandLineOptions option = new LDACommandLineOptions();
                  option.beta = 0.1;
                  option.K = topicNum;
-                 option.niters = 5;
+                 option.niters = 3;
                  option.savestep = 100;
                  option.twords = 8;
                  option.data = doctokens;

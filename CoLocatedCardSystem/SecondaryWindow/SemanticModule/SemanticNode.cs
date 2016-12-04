@@ -21,6 +21,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
         float optimal = 50;
         bool isRoot = false;
         UserActionOnDoc userActionOnDoc;
+        private int index;
         public string Guid
         {
             get
@@ -205,6 +206,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             set
             {
                 userActionOnDoc = value;
+            }
+        }
+
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+
+            set
+            {
+                index = value;
             }
         }
 

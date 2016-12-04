@@ -29,6 +29,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         TextInputButton createSortingBoxButton;
         SearchResultTray searchResultTray;
         SemanticGroupBoard semanticGroupBoard;
+        UpdateCloudButton updateCloudButton;
         public MenuBar(MenuLayerController controller)
         {
             this.menuLayerController = controller;
@@ -55,6 +56,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             LoadCreatingSortingBoxButton(info);
             LoadSearchResultTray(info);
             LoadSemanticButton(info);
+            LoadUpdateCloudButton(info);
             this.Background = new SolidColorBrush(Color.FromArgb(255,145,170,157));
             //this.Children.Add(createSortingBoxButton);
             this.Children.Add(searchButton);
@@ -62,7 +64,10 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             this.Children.Add(virtualKeyboard);
             this.Children.Add(textbox);
             this.Children.Add(semanticGroupBoard);
+            this.Children.Add(updateCloudButton);
         }
+
+
 
         /// <summary>
         /// Destroy the menubar.
@@ -159,6 +164,23 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 info.SemanticGroupInfo.Size, 
                 semanticGroupBoard);
             semanticGroupBoard.DropDownOpened += SemanticGroupBoard_DropDownOpened;
+        }
+        private void LoadUpdateCloudButton(MenuBarInfo info)
+        {
+            updateCloudButton = new UpdateCloudButton();
+            updateCloudButton.Init(new Uri(@"ms-appx:///Assets/semanticButton.png"));
+            updateCloudButton.Click += UpdateCloudButton_Click;
+            UIHelper.InitializeUI(info.UpdateSemanticButtonInfo.Position, 0, 1, info.UpdateSemanticButtonInfo.Size, updateCloudButton);
+        }
+
+        private async void UpdateCloudButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool changed = await menuLayerController.Controllers.SemanticGroupController.UpdateSemanticGroups();
+            if (changed)
+            {
+                menuLayerController.Controllers.SemanticGroupController.SemanticList.ResetIndex();
+            }
+            menuLayerController.Controllers.ConnectionController.UpdateSemanticCloud();
         }
 
         private void SemanticGroupBoard_DropDownOpened(object sender, object e)

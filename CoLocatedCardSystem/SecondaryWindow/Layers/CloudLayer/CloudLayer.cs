@@ -53,7 +53,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                         Color ringColor = MyColor.Yellow;
                         foreach (User user in Enum.GetValues(typeof(User)))
                         {
-                            if (cnode.UserActionOnDoc.Active[user])
+                            if (cnode.UserActionOnDoc!=null && cnode.UserActionOnDoc.Active[user])
                             {
                                 ringColor = ColorPicker.HsvToRgb(60, 1, 0.6);
                                 args.DrawingSession.FillCircle(new Vector2(cnode.X + cnode.Weight / 2, cnode.Y + cnode.Weight / 2),

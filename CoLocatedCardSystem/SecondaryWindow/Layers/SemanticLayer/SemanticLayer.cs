@@ -12,6 +12,8 @@ using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Windows.UI;
+using Microsoft.Graphics.Canvas.Text;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 
 namespace CoLocatedCardSystem.SecondaryWindow.Layers
 {
@@ -45,9 +47,21 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         private void Canvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            Color semColor = Color.FromArgb(50, MyColor.DarkGrassGreen.R, MyColor.DarkGrassGreen.G, MyColor.DarkGrassGreen.B);
+            Color semColor = Color.FromArgb(10, MyColor.DarkGrassGreen.R, MyColor.DarkGrassGreen.G, MyColor.DarkGrassGreen.B);
             foreach (SemanticNode snode in semanticNodes.Values)
             {
+                if (snode.IsRoot)
+                {
+                    Color nodeColor = ColorPicker.HsvToRgb(snode.H, 1, 1);
+                    CanvasTextFormat format = new CanvasTextFormat();
+                    format.FontSize = 20;
+                    format.FontStretch = Windows.UI.Text.FontStretch.Normal;
+                    format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
+                    args.DrawingSession.DrawText(""+snode.Index,
+                        new Rect(snode.X, snode.Y, 30,20),
+                        nodeColor,
+                        format);
+                }
                 foreach (SemanticNode csnode in snode.Connections)
                 {
                     args.DrawingSession.DrawLine(snode.X, snode.Y, csnode.X, csnode.Y, semColor);

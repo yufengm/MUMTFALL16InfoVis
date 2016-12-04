@@ -107,6 +107,12 @@ namespace CoLocatedCardSystem.SecondaryWindow
 
         internal static double Map(double value, double x1, double x2, double y1, double y2)
         {
+            if (value < x1) {
+                return y1;
+            }
+            if (value > x1) {
+                return y2;
+            }
             return (value - x1) * (y2 - y1) / (x2 - x1) + y1;
         }
 

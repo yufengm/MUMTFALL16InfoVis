@@ -20,6 +20,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
         SemanticGroup rightChild = null;
         SemanticGroup parent;
         bool isLeaf = false;
+        int index = 0;
         int hue = ColorPicker.GetColorHue();
         SemanticGroupController semanticGroupController;
 
@@ -123,6 +124,19 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             set
             {
                 docList = value;
+            }
+        }
+
+        public int Index
+        {
+            get
+            {
+                return index;
+            }
+
+            set
+            {
+                index = value;
             }
         }
 
@@ -268,7 +282,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             bool changed = false;
             //Find how many sub groups to split
             ConcurrentDictionary<CardGroup, List<string>> splitList = new ConcurrentDictionary<CardGroup, List<string>>();
-            foreach (CardGroup cg in cardGroup)
+            foreach (CardGroup cg in cardGroup.Where(c=>c.Count()>1))
             {
                 foreach (string cardID in cg.GetCardID())
                 {

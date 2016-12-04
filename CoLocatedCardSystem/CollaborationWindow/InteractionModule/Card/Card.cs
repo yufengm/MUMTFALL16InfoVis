@@ -217,7 +217,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             this.cardScale = scale;
             UpdateTransform();
         }
-        protected async void SetBackground(Color color) {
+        internal async void SetBackground(Color color) {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 backgroundRect.Fill = new SolidColorBrush(color);

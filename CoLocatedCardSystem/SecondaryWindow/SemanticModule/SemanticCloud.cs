@@ -87,9 +87,9 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             //Reload semantic nodes
             foreach (SemanticGroup sg in sgroups) {
                 AddSemanticNode(sg.Id, sg.GetDescription());
-                SetSemanticNodeOptimal(sg.Id, 3);
+                SetSemanticNodeOptimal(sg.Id, 10);
                 SetSemanticNodeColor(sg.Id, sg.Hue, 1, 1);
-            }          
+            }
             //Connect the root node
             foreach (SemanticGroup sg1 in sgroups)
             {
@@ -109,18 +109,28 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 if (sg.IsLeaf)
                 {
                     SemanticNode sn = FindNode(sg.Id);
+                    SetSemanticNodeRoot(sg.Id, true, sg.Index);
                     ConcurrentDictionary<UserActionOnDoc, ConcurrentBag<string>> subgroups = sg.GetAllDocSubGroups();
                     foreach (KeyValuePair<UserActionOnDoc, ConcurrentBag<string>> pair in subgroups)
                     {
                         string newID = sg.Id + Guid.NewGuid().ToString();
                         AddSemanticNode(newID, sg.GetDescription());
                         SetSemanticNodeColor(newID, sg.Hue, 1, 1);
-                        SetSemanticNodeOptimal(newID, 40);
+                        SetSemanticNodeOptimal(newID, (int)Calculator.Map(pair.Value.Count, 1, 50, 10, 30));
                         ConnectSemanticNode(sg.Id, newID);
                         SemanticNode newSubNode = FindNode(newID);
                         newSubNode.UserActionOnDoc = pair.Key;
                     }
                 }
+            }
+        }
+
+        private void SetSemanticNodeRoot(string id, bool v, int index)
+        {
+            SemanticNode node = FindNode(id);
+            if (node != null) {
+                node.IsRoot = true;
+                node.Index = index;
             }
         }
 
@@ -189,6 +199,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             double energy0 = this.energy;
             this.energy = 0;
             Point center = new Point();
+            
             foreach (SemanticNode firstNode in this.semanticNodes.Values)
             {
                 Point f = new Point();
@@ -211,6 +222,16 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 f.X += borderRepel.X;
                 f.Y += borderRepel.Y;
                 this.energy += f.X * f.X + f.Y * f.Y;
+                foreach (User user in Enum.GetValues(typeof(User)))
+                {
+                    if (firstNode.UserActionOnDoc!=null&& firstNode.UserActionOnDoc.Searched[user])
+                    {
+                        Point userAttr = this.CalUserAtrraction(firstNode, user);
+                        f.X += userAttr.X;
+                        f.Y += userAttr.Y;
+                        this.energy += f.X * f.X + f.Y * f.Y;
+                    }
+                }
                 Point acc = new Point();
                 acc.X = f.X / firstNode.Weight;
                 acc.Y = f.Y / firstNode.Weight;
@@ -246,13 +267,13 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 if (this.progress >= 5)
                 {
                     this.progress = 0;
-                    this.moveStep /= 0.95;
+                    this.moveStep /= 0.9;
                 }
             }
             else
             {
                 this.progress = 0;
-                this.moveStep *= 0.95;
+                this.moveStep *= 0.9;
             }
         }
 
@@ -266,13 +287,34 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                 node.Y < SecondaryScreen.HEIGHT / 10 ||
                 node.Y > SecondaryScreen.HEIGHT - SecondaryScreen.HEIGHT / 10)
             {
-                atrc = -100;
+                atrc = -500;
             }
             result.X = atrc * (node.X - SecondaryScreen.WIDTH / 2) / dist;
             result.Y = atrc * (node.Y - SecondaryScreen.HEIGHT / 2) / dist;
             return result;
         }
-
+        private Point CalUserAtrraction(SemanticNode firstNode,User user) {
+            Point refPoint = new Point(SecondaryScreen.WIDTH/2, SecondaryScreen.HEIGHT/2);
+            switch (user) {
+                case User.ALEX:
+                    refPoint.X = SecondaryScreen.WIDTH / 10;
+                    break;
+                case User.BEN:
+                    refPoint.Y = SecondaryScreen.HEIGHT * 9 / 10;
+                    break;
+                case User.CHRIS:
+                    refPoint.X = SecondaryScreen.WIDTH * 9 / 10;
+                    break;
+                default:
+                    return new Point();
+            }
+            double dist = Calculator.Distance(firstNode.X, firstNode.Y, refPoint.X, refPoint.Y) + 0.001;
+            double atrc = 200;
+            Point result = new Point();
+            result.X = atrc * (refPoint.X - firstNode.X) / dist;
+            result.Y = atrc * (refPoint.Y - firstNode.Y) / dist;
+            return result;
+        }
         private Point CalAttraction(SemanticNode firstNode, SemanticNode secondNode)
         {
             double dist = Calculator.Distance(firstNode.X, firstNode.Y, secondNode.X, secondNode.Y) + 0.001;

@@ -45,7 +45,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
             ClearGroups();
             foreach (SemanticGroup group in sgroups)
             {
-                AddSemanticGroup(group.Id, group.GetDescription(), ColorPicker.HsvToRgb(group.Hue, 1, 0.5));
+                AddSemanticGroup(group.Id, ""+group.Index+" : "+group.GetDescription(), ColorPicker.HsvToRgb(group.Hue, 1, 0.5));
             }
         }
         internal void AddSemanticGroup(string id, string text, Color color)

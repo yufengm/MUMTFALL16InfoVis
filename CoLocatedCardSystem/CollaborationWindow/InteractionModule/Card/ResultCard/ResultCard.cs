@@ -127,6 +127,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     fsize = 16;
                 }
                 titleTextBlock.FontSize = fsize;
+
             });
         }
 

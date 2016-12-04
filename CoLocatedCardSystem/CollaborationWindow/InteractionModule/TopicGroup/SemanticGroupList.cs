@@ -23,8 +23,9 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             KeyValuePair<Topic, List<string>> pair = topics.ElementAt(0);
             root.SetTopic(pair.Key);
             root.AddDoc(docs);
-            list.TryAdd(root.Id, root);
+            AddSemanticGroup(root.Id, root);
             await root.GenBinaryTree(root.DocList, SemanticGroupController.PREFERRED_CLOUD_SIZE);
+            ResetIndex();
         }
 
         internal IEnumerable<SemanticGroup> GetSemanticGroup()
@@ -115,7 +116,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                         sgs.Add(sg);
                     }
                 }
-                if (sgs.Count < 2) {
+                if (sgs.Count < 2)
+                {
                     return false;
                 }
                 //Get all docs in leaf nodes
@@ -152,7 +154,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 {
                     group.RightChild.Deinit();
                 }
-
                 if (restDocs.Count > 0)
                 {
                     //Merge the docs into the left node
@@ -183,23 +184,34 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                     {
                         group.RightChild.IsLeaf = true;
                     }
+                    return true;
                 }
                 else
                 {
                     group.IsLeaf = true;
+                    return false;
                 }
-                return false;
             }
             return false;
         }
 
         internal void AddSemanticGroup(string id, SemanticGroup group)
         {
-            if (!list.Keys.Contains(id)) {
+            if (!list.Keys.Contains(id))
+            {
                 list.TryAdd(id, group);
             }
         }
-
+        internal void ResetIndex()
+        {
+            var leaves = list.Values.Where(sn => sn.IsLeaf);
+            int count = 1;
+            foreach (SemanticGroup sg in leaves)
+            {
+                sg.Index = count;
+                count++;
+            }
+        }
         internal void RemoveSemanticGroup(SemanticGroup group)
         {
             SemanticGroup sg;
@@ -214,7 +226,6 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 list.TryRemove(group.Id, out sg);
             }
         }
-
         internal void SetTouchResult(string docID, User owner, bool value)
         {
             foreach (SemanticGroup sg in list.Values)

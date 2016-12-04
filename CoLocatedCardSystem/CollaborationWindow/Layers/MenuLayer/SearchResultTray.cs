@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media.Animation;
 using CoLocatedCardSystem.CollaborationWindow.Layers.Card_Layer;
 using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using System.Collections.Generic;
+using CoLocatedCardSystem.SecondaryWindow.Tool;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
@@ -227,7 +228,8 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                         await resultCard.LoadUI();
                         resultCard.MoveTo(new Point(stackCanvas[i].Width / 2, stackCanvas[i].Height / 2));
                         resultCard.Block = stackCanvas[i];
-
+                        SemanticGroup sg = menuLayerController.Controllers.SemanticGroupController.GetSemanticGroupByDoc(resultCard.Document.DocID);
+                        resultCard.SetBackground(ColorPicker.HsvToRgb(sg.Hue,0.5,0.5));
                         if (menuLayerController.Controllers.CardController.IsCardOnTable(currentSearchResult[i].CardID))
                         {
                             resultCard.DisableCard();

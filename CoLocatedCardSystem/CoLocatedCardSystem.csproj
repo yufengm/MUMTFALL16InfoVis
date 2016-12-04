@@ -153,6 +153,7 @@
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SearchResultTray.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\SemanticGroupBoard.cs" />
     <Compile Include="CollaborationWindow\Layers\MenuLayer\TextInputButton.cs" />
+    <Compile Include="CollaborationWindow\Layers\MenuLayer\UpdateCloudButton.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\ArrayInitializers.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\Constants.cs" />
     <Compile Include="CollaborationWindow\MachineLearningModule\Conversion.cs" />
