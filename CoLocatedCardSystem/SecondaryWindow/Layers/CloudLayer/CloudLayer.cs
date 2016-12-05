@@ -57,7 +57,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                     string line = streamReader.ReadLine();
                     string s = line.Split(',')[0];
                     CanvasBitmap bitMap = await CanvasBitmap.LoadAsync(sender, new Uri(@"ms-appx:///Assets/review/" + s));
-                    if (!loadedImage.ContainsKey(s)) { 
+                    if (!loadedImage.ContainsKey(s))
+                    {
                         loadedImage.Add(s, bitMap);
                     }
                 }
@@ -74,6 +75,51 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         }
         private void Canvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
+            foreach (CloudNode cnode in cloudNodes.Values)
+            {
+                if (cnode.Type == CloudNode.NODETYPE.PICTURE)
+                {
+                    if (loadedImage.ContainsKey(cnode.Image))
+                    {
+                        CanvasBitmap cb = loadedImage[cnode.Image];
+                        Size size = cb.Size;
+                        Rect imgBound = new Rect();
+                        if (size.Width > size.Height)
+                        {
+                            imgBound.Height = cnode.Weight * 3;
+                            imgBound.Width = imgBound.Height * size.Width / size.Height;
+                        }
+                        else
+                        {
+                            imgBound.Width = cnode.Weight * 3;
+                            imgBound.Height = imgBound.Width * size.Height / size.Width;
+                        }
+                        cnode.W = (float)imgBound.Height;
+                        cnode.H = (float)imgBound.Width;
+                        imgBound.X = cnode.X;
+                        imgBound.Y = cnode.Y;
+                        args.DrawingSession.DrawImage(cb, imgBound);
+                    }
+                }
+            }
+            foreach (CloudNode cnode in cloudNodes.Values)
+            {
+                if (cnode.Type == CloudNode.NODETYPE.WORD)
+                {
+                    Color nodeColor = Colors.White;
+                    SemanticNode semantic = cnode.SemanticNode;
+                    nodeColor = ColorPicker.HsvToRgb(semantic.H, 0.75, 0.75);
+                    CanvasTextFormat format = new CanvasTextFormat();
+                    format.FontSize = cnode.Weight;
+                    format.FontStretch = Windows.UI.Text.FontStretch.Expanded;
+                    format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
+                    args.DrawingSession.DrawText(cnode.CloudText,
+                        new Rect(cnode.X, cnode.Y, cnode.W, cnode.H),
+                        nodeColor,
+                        format);
+                }
+
+            }
             foreach (CloudNode cnode in cloudNodes.Values)
             {
                 if (cnode.SemanticNode != null)
@@ -106,46 +152,8 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                             }
                         }
                     }
-                    else if (cnode.Type == CloudNode.NODETYPE.WORD)
-                    {
-                        Color nodeColor = Colors.White;
-                        SemanticNode semantic = cnode.SemanticNode;
-                        nodeColor = ColorPicker.HsvToRgb(semantic.H, 0.75, 0.75);
-                        CanvasTextFormat format = new CanvasTextFormat();
-                        format.FontSize = cnode.Weight;
-                        format.FontStretch = Windows.UI.Text.FontStretch.Expanded;
-                        format.HorizontalAlignment = CanvasHorizontalAlignment.Center;
-                        args.DrawingSession.DrawText(cnode.CloudText,
-                            new Rect(cnode.X, cnode.Y, cnode.W, cnode.H),
-                            nodeColor,
-                            format);
-                    }
-                    else if (cnode.Type == CloudNode.NODETYPE.PICTURE)
-                    {
-                        if (loadedImage.ContainsKey(cnode.Image))
-                        {
-                            CanvasBitmap cb = loadedImage[cnode.Image];
-                            Size size = cb.Size;
-                            Rect imgBound = new Rect();
-                            if (size.Width > size.Height)
-                            {
-                                imgBound.Height = cnode.Weight*3;
-                                imgBound.Width = imgBound.Height * size.Width / size.Height;
-                            }
-                            else
-                            {
-                                imgBound.Width = cnode.Weight*3;
-                                imgBound.Height = imgBound.Width * size.Height / size.Width;
-                            }
-                            cnode.W = (float)imgBound.Height;
-                            cnode.H = (float)imgBound.Width;
-                            imgBound.X = cnode.X;
-                            imgBound.Y = cnode.Y;
-                            args.DrawingSession.DrawImage(cb, imgBound);
-                        }
-                    }
                 }
-            }
+            }       
         }
 
         internal void UpdateCloudNode(ConcurrentDictionary<string, CloudNode> cloudNodes)
