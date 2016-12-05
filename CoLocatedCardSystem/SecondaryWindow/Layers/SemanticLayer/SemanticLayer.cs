@@ -62,10 +62,10 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                         nodeColor,
                         format);
                 }
-                foreach (SemanticNode csnode in snode.Connections)
-                {
-                    args.DrawingSession.DrawLine(snode.X, snode.Y, csnode.X, csnode.Y, semColor);
-                }
+                //foreach (SemanticNode csnode in snode.Connections)
+                //{
+                //    args.DrawingSession.DrawLine(snode.X, snode.Y, csnode.X, csnode.Y, semColor);
+                //}
             }
         }
 
