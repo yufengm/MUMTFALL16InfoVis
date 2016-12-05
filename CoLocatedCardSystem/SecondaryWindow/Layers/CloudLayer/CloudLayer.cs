@@ -79,7 +79,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             {
                 if (cnode.Type == CloudNode.NODETYPE.PICTURE)
                 {
-                    if (loadedImage.ContainsKey(cnode.Image))
+                    if (loadedImage!=null&&cnode!=null&&loadedImage.ContainsKey(cnode.Image))
                     {
                         CanvasBitmap cb = loadedImage[cnode.Image];
                         Size size = cb.Size;
