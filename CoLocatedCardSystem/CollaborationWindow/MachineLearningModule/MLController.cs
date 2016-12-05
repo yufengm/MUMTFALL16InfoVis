@@ -67,7 +67,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                  option.K = topicNum;
                  option.niters = 3;
                  option.savestep = 100;
-                 option.twords = 8;
+                 option.twords = 10;
                  option.data = doctokens;
                  option.est = true;
                  option.modelName = "model-final";

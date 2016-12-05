@@ -25,7 +25,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
         CloudLayerController cloudLayerController;
         CanvasControl canvas;
         ConcurrentDictionary<string, CloudNode> cloudNodes = new ConcurrentDictionary<string, CloudNode>();
-        Dictionary<string, CanvasBitmap> loadedImage = new Dictionary<string, CanvasBitmap>();
+        ConcurrentDictionary<string, CanvasBitmap> loadedImage = new ConcurrentDictionary<string, CanvasBitmap>();
         internal CloudLayer(CloudLayerController ctrls)
         {
             this.cloudLayerController = ctrls;
@@ -59,7 +59,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
                     CanvasBitmap bitMap = await CanvasBitmap.LoadAsync(sender, new Uri(@"ms-appx:///Assets/review/" + s));
                     if (!loadedImage.ContainsKey(s))
                     {
-                        loadedImage.Add(s, bitMap);
+                        loadedImage.TryAdd(s, bitMap);
                     }
                 }
             }
@@ -79,7 +79,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             {
                 if (cnode.Type == CloudNode.NODETYPE.PICTURE)
                 {
-                    if (loadedImage!=null&&cnode!=null&&loadedImage.ContainsKey(cnode.Image))
+                    if (loadedImage!=null&&cnode.Image!=null&&loadedImage.ContainsKey(cnode.Image))
                     {
                         CanvasBitmap cb = loadedImage[cnode.Image];
                         Size size = cb.Size;
@@ -104,7 +104,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.Layers
             }
             foreach (CloudNode cnode in cloudNodes.Values)
             {
-                if (cnode.Type == CloudNode.NODETYPE.WORD)
+                if (cnode.SemanticNode!=null&&cnode.Type == CloudNode.NODETYPE.WORD)
                 {
                     Color nodeColor = Colors.White;
                     SemanticNode semantic = cnode.SemanticNode;

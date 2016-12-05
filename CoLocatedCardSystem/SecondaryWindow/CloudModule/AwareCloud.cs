@@ -201,19 +201,19 @@ namespace CoLocatedCardSystem.SecondaryWindow.CloudModule
                         SetCloudNodeWeight(newID, sg.Topic.GetTopicTokenWeight(tk));
                         SetCloudNodePosition(newID, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
                     }
-                    var imgs = sg.GetKeyImage();
-                    if (imgs != null)
-                    {
-                        foreach (string img in imgs)
-                        {
-                            string newID = rootNode.Guid + img;
-                            CreateCloudNode(newID, CloudNode.NODETYPE.PICTURE);
-                            InitCloudNodeToGroup(newID, rootNode.Guid);
-                            SetCloudNodePicture(newID, img);
-                            SetCloudNodeWeight(newID, 20);
-                            SetCloudNodePosition(newID, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
-                        }
-                    }
+                    //var imgs = sg.GetKeyImage();
+                    //if (imgs != null)
+                    //{
+                    //    foreach (string img in imgs)
+                    //    {
+                    //        string newID = rootNode.Guid + img;
+                    //        CreateCloudNode(newID, CloudNode.NODETYPE.PICTURE);
+                    //        InitCloudNodeToGroup(newID, rootNode.Guid);
+                    //        SetCloudNodePicture(newID, img);
+                    //        SetCloudNodeWeight(newID, 20);
+                    //        SetCloudNodePosition(newID, rootNode.X + Rand.Next(20) - 10, rootNode.Y + Rand.Next(20) - 10);
+                    //    }
+                    //}
                 }
             }
         }

@@ -73,9 +73,9 @@ namespace CoLocatedCardSystem.SecondaryWindow
                 {
                     if (timerCount >= timerExeBound)
                     {
-                        if (semanticCloud.MoveStep * 5 > awareCloud.MoveStep)
+                        if (semanticCloud.MoveStep > awareCloud.MoveStep)
                         {
-                            awareCloud.MoveStep = semanticCloud.MoveStep * 5;
+                            awareCloud.MoveStep = semanticCloud.MoveStep;
                         }
                         semanticCloud.Update();
                         awareCloud.Update();
@@ -105,10 +105,15 @@ namespace CoLocatedCardSystem.SecondaryWindow
                 periodicTimer.Cancel();
             }
         }
-        internal void ResetMoveStep()
+
+        internal void ResetCloudMoveStep()
         {
-            semanticCloud.MoveStep = INITALSTEP/5;
             awareCloud.MoveStep = INITALSTEP;
+        }
+
+        internal void ResetSemanticCloudMoveStep()
+        {
+            semanticCloud.MoveStep = INITALSTEP;
         }
     }
 }

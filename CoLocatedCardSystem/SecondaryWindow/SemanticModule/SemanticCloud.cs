@@ -87,7 +87,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
             //Reload semantic nodes
             foreach (SemanticGroup sg in sgroups) {
                 AddSemanticNode(sg.Id, sg.GetDescription());
-                SetSemanticNodeOptimal(sg.Id, 10);
+                SetSemanticNodeOptimal(sg.Id, 20);
                 SetSemanticNodeColor(sg.Id, sg.Hue, 1, 1);
             }
             //Connect the root node
@@ -117,7 +117,7 @@ namespace CoLocatedCardSystem.SecondaryWindow.SemanticModule
                         AddSemanticNode(newID, sg.GetDescription());
                         SetSemanticNodeIndex(newID, sg.Index);
                         SetSemanticNodeColor(newID, sg.Hue, 1, 1);
-                        SetSemanticNodeOptimal(newID, (int)Calculator.Map(pair.Value.Count, 1, 50, 10, 30));
+                        SetSemanticNodeOptimal(newID, (int)Calculator.Map(pair.Value.Count, 1, 50, 2, 5));
                         ConnectSemanticNode(sg.Id, newID);
                         SemanticNode newSubNode = FindNode(newID);
                         newSubNode.UserActionOnDoc = pair.Key;

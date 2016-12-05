@@ -17,6 +17,20 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         MenuLayerController menuLayerController;
         User owner;
         ComboBoxItem seletedItem = null;
+        SemanticGroup selectedGroup = null;
+
+        internal SemanticGroup SelectedGroup
+        {
+            get
+            {
+                return selectedGroup;
+            }
+
+            set
+            {
+                selectedGroup = value;
+            }
+        }
 
         public SemanticGroupBoard(MenuLayerController ctrls, User owner) {
             this.menuLayerController = ctrls;
@@ -37,12 +51,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
                 SemanticGroup sg = menuLayerController.Controllers.SemanticGroupController.GetSemanticGroupById(semanticID[seletedItem]);
                 if (sg != null)
                 {
+                    selectedGroup = sg;
                     menuLayerController.SearchDocumentCard(owner, sg);
+                }
+                else {
+                    selectedGroup = null;
+                    menuLayerController.SearchDocumentCard(owner, "");
                 }
             }
         }
         internal void AddSemanticGroup(IEnumerable<SemanticGroup> sgroups) {
             ClearGroups();
+            AddSemanticGroup("clear", "Clear", MyColor.Wheat);
             foreach (SemanticGroup group in sgroups)
             {
                 AddSemanticGroup(group.Id, ""+group.Index+" : "+group.GetDescription(), ColorPicker.HsvToRgb(group.Hue, 1, 0.5));

@@ -121,7 +121,8 @@ namespace CoLocatedCardSystem.SecondaryWindow
             var sgroups = controllers.SemanticGroupController.GetSemanticGroup();
             animationController.SemanticCloud.UpdateSemanticNode(sgroups);
             animationController.AwareCloud.UpdateCloudNode(sgroups);
-            animationController.ResetMoveStep();
+            animationController.ResetCloudMoveStep();
+            animationController.ResetSemanticCloudMoveStep();
         }
         internal void Deinit()
         {

@@ -17,7 +17,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
                 isHighLight.Add(user, false);
                 weight.Add(user, -1);
             }
-            weight[User.NONE]= 20;
+            weight[User.NONE]= -1;
         }
 
         internal void SetUserWeight(User user, float w)

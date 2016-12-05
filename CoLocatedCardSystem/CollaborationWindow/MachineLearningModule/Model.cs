@@ -412,7 +412,7 @@ namespace CoLocatedCardSystem.CollaborationWindow.MachineLearningModule
                     }//end foreach word
 
                     //print topic Shuo changed that				
-                    var wordsProbsListOrdered = wordsProbsList.OrderByDescending(e => e.Value).ToList();
+                    var wordsProbsListOrdered = wordsProbsList.OrderBy(e => e.Value).ToList();
 
                     for (int i = 0; i < twords; i++)
                     {

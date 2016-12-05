@@ -15,6 +15,7 @@ using CoLocatedCardSystem.CollaborationWindow.InteractionModule;
 using Windows.UI;
 using System.Collections.Concurrent;
 using CoLocatedCardSystem.SecondaryWindow.Tool;
+using System.Collections.Generic;
 
 namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
 {
@@ -101,7 +102,22 @@ namespace CoLocatedCardSystem.CollaborationWindow.Layers.Menu_Layer
         internal void ShowCardsInSearchResultTray(string content, DocumentCard[] cards)
         {
             searchResultTray.RecycleCurrentCards();
-            searchResultTray.AddCards(content, cards);
+            if (semanticGroupBoard.SelectedGroup != null)
+            {
+                List<DocumentCard> selectedCard = new List<DocumentCard>();
+                foreach (DocumentCard card in cards)
+                {
+                    if (semanticGroupBoard.SelectedGroup.HasDoc(card.Document.DocID))
+                    {
+                        selectedCard.Add(card);
+                    }
+                }
+                searchResultTray.AddCards(content, selectedCard.ToArray());
+            }
+            else
+            {
+                searchResultTray.AddCards(content, cards);
+            }
         }
 
         private void LoadCreatingSortingBoxButton(MenuBarInfo info)

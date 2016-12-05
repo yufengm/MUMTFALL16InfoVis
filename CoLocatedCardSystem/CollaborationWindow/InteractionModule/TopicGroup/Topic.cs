@@ -40,20 +40,18 @@ namespace CoLocatedCardSystem.CollaborationWindow.InteractionModule
             return list;
         }
         internal void SetTopicWeight(User user, Token token, double weight)
-        {
-            float result = 15;
-            float max = tokenAttr.Values.Max(t => t.GetWeight());
-            float min = tokenAttr.Values.Min(t => t.GetWeight());
-            if (weight > 0)
-            {
-                result = (float)Calculator.Map(weight, min, max, 15, 35);
-            }
-            tokenAttr[token].SetUserWeight(user, (float)weight + 20);
+        {           
+            tokenAttr[token].SetUserWeight(user, (float)weight);
         }
 
         internal float GetTopicTokenWeight(Token tk)
         {
-            return tokenAttr[tk].GetWeight();
+            float result = 15;
+            float max = tokenAttr.Values.Max(t => t.GetWeight());
+            float min = tokenAttr.Values.Min(t => t.GetWeight());
+            float weight = tokenAttr[tk].GetWeight();
+            result = (float)Calculator.Map(weight, min, max+0.001, 15, 20);
+            return result;
         }
     }
 }
